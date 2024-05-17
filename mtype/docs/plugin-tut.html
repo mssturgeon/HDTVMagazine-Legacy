@@ -1,0 +1,378 @@
+<html>
+<head>
+<title>Writing a plugin</title>
+<link rel="stylesheet" href="doc-styles.css" type="text/css">
+</head>
+
+<body>
+<h3>How to Write a Plugin</h3>
+
+
+<a name="__index__"></a>
+
+<ul>
+
+	<li><a href="#writing a plugin">Writing a plugin</a></li>
+	<ul>
+
+		<li><a href="#overview">Overview</a></li>
+		<li><a href="#mt::plugin class">MT::Plugin class</a></li>
+		<ul>
+
+			<li><a href="#there's more than one way to do it">There's More Than One Way To Do It</a></li>
+		</ul>
+
+		<li><a href="#adding a plugin to the interface">Adding a Plugin to the Interface</a></li>
+		<li><a href="#adding tags">Adding tags</a></li>
+		<ul>
+
+			<li><a href="#add_container_tag">add_container_tag</a></li>
+			<li><a href="#add_conditional_tag">add_conditional_tag</a></li>
+		</ul>
+
+		<li><a href="#postprocessing tag output">Post-Processing Tag Output</a></li>
+		<li><a href="#plugin callbacks">Plugin Callbacks</a></li>
+		<ul>
+
+			<li><a href="#callback priorities">Callback Priorities</a></li>
+			<li><a href="#error handling">Error handling</a></li>
+		</ul>
+
+		<li><a href="#text filters">Text Filters</a></li>
+		<ul>
+
+			<li><a href="#adding a text filter">Adding a Text Filter</a></li>
+		</ul>
+
+		<li><a href="#adding an action to a movable type application page">Adding an Action to a Movable Type Application Page</a></li>
+	</ul>
+
+</ul>
+<hr size="1" color="#CCCCCC">
+<p>
+<h1><a name="writing a plugin"></a>Writing a plugin</h1>
+<p>
+<h2><a name="overview"></a>Overview</h2>
+<p>A plugin is a piece of software that extends the Movable Type
+publishing platform in one of a number of ways. A plugin can create
+new Movable Type template tags, they can add attributes to existing
+tags (these are called ``global filters''), they can process entry text
+when it is being built, and they can install callbacks to process
+objects whenever database events occur. Plugins</p>
+<p>
+<h2><a name="mt::plugin class"></a>MT::Plugin class</h2>
+<p>New in MT3, the MT::Plugin class encapsulates all the data about a
+plugin that a user would interact with. This allows users to manage
+their installed plugins within the graphical UI.</p>
+<p>It is recommended that every plugin register an MT::Plugin object so
+that users always know what plugins are installed. However, if a
+plugin does not register itself this way, it is still expected that
+other plugin functions will work.</p>
+<p>In particular, MT::Plugin holds the name &amp; version of the plugin, as
+well as a short description, and links to documentation and a
+configuration interface. To supply this information, there are at
+least two styles that plugins can employ.</p>
+<p>
+<h3><a name="there's more than one way to do it"></a>There's More Than One Way To Do It</h3>
+<p>A plugin may choose to write a subclass of MT::Plugin which implements
+the methods name(), description(), <code>doc_link()</code> and config_link(),
+returning the appropriate piece of data in each case.</p>
+<p>Alternatively, a plugin may simply use an instance of MT::Plugin, and
+set the appropriate fields using its methods:</p>
+<pre>$plugin = new MT::Plugin();
+$plugin-&gt;name(&quot;Arthur Dent's Duplicator Plugin, v.0.45&quot;);
+$plugin-&gt;description(&quot;Duplicates weblog posts with a minimum of fuss.&quot;);
+</pre><p>
+<h2><a name="adding a plugin to the interface"></a>Adding a Plugin to the Interface</h2>
+<p>Once an MT::Plugin object has been created, the plugin can establish
+its foothold in the MT interface by calling the MT method
+<code>add_plugin_slug($plugin)</code>. This will create a slot on the Main Menu
+where the plugin's name and description are listed, and containing
+links to the configuration interface and the documentation pages.</p>
+<p>Your plugin file should have an extension of <code>pl</code> (files with other
+extensions will be ignored when searching for plugins). Your
+configuration page will normally have an extension of <code>cgi</code>, because
+it needs to be executed as a CGI program by the webserver. But keep in
+mind that some webservers will want CGI programs to be renamed with a
+<code>pl</code> extension. Therefore, it's a good idea to keep distinct the
+basenames (without extension) of your files.</p>
+<p>
+<h2><a name="adding tags"></a>Adding tags</h2>
+<p>Movable Type comes shipped with a wide variety of template tags that
+authors and designers can use in developing a customized look and feel
+for their site.</p>
+<p>Plugin authors can extend this system by adding new template tags,
+which can produce any string that can be computed. Tags are added
+using the add_tag and add_conditional_tag methods of
+<code>MT::Template::Context</code>.</p>
+<pre>MT::Template::Context-&gt;add_tag($name, \&amp;subroutine)
+</pre><p><i>add_tag</i> registers a simple ``variable tag'' with the system. An
+example of such a tag might be <code>&lt;$MTEntryTitle$&gt;</code>.</p>
+<p><i>$name</i> is the name of the tag, without the <i>MT</i> prefix, and
+<i>\&amp;subroutine</i> a reference to a subroutine (either anonymous or
+named).  <i>\&amp;subroutine</i> should return either an error (see <a href="#error handling">ERROR HANDLING</a>) or a defined scalar value (returning <code>undef</code> will be
+treated as an error, so instead of returning <code>undef</code>, always return
+the empty string instead).</p>
+<p>For example:</p>
+<pre>MT::Template::Context-&gt;add_tag(ServerUptime =&gt; sub { `uptime` });
+</pre><p>This tag would be used in a template as <code>&lt;$MTServerUptime$&gt;</code>.</p>
+<p>The subroutine reference will be passed two arguments: the
+<i>MT::Template::Context</i> object with which the template is being
+built, and a reference to a hash containing the arguments passed in
+through the template tag. For example, if a tag
+<code>&lt;$MTFooBar$&gt;</code> were called like</p>
+<pre>&lt;$MTFooBar baz=&quot;1&quot; quux=&quot;2&quot;$&gt;
+</pre><p>the second argument to the subroutine registered with this tag would
+be</p>
+<pre>{
+    'quux' =&gt; 2,
+    'bar' =&gt; 1
+};
+</pre><p>
+<h3><a name="add_container_tag"></a>add_container_tag</h3>
+<pre>MT::Template::Context-&gt;add_container_tag($name, \&amp;subroutine)
+</pre><p>Registers a ``container tag'' with the template system.  Container tags
+are generally used to represent either a loop or a conditional. In
+practice, you should probably use <i>add_container_tag</i> just for
+loops--use <i>add_conditional_tag</i> for a conditional, because it will
+take care of much of the backend work for you (most conditional tag
+handlers have a similar structure).</p>
+<p><i>$name</i> is the name of the tag, without the <i>MT</i> prefix, and
+<i>\&amp;subroutine</i> a reference to a subroutine (either anonymous or
+named).  <i>\&amp;subroutine</i> should return either an error (see 
+<a href="#error handling">ERROR HANDLING</a>) or a defined scalar value (returning <code>undef</code> will 
+be treated as an error, so instead of returning <code>undef</code>, always 
+return the empty string instead).</p>
+<p>The subroutine reference will be passed two arguments: the
+<i>MT::Template::Context</i> object with which the template is being
+built, and a reference to a hash containing the arguments passed in
+through the template tag.</p>
+<p>Since a container tag generally represents a loop, inside of your
+subroutine you will need to use a loop construct to loop over some
+list of items, and build the template tags used inside of the
+container for each of those items. These inner template tags have
+<strong>already been compiled into a list of tokens</strong>. You need only use the
+<i>MT::Builder</i> object to build this list of tokens into a scalar
+string, then add the string to your output value. The list of tokens
+is in <code>$ctx-&gt;stash('tokens')</code>, and the <i>MT::Builder</i> object is
+in <code>$ctx-&gt;stash('builder')</code>.</p>
+<p>For example, if a tag <code>&lt;MTLoop&gt;</code> were used like this:</p>
+<pre>&lt;MTLoop&gt;
+The value of I is: &lt;$MTLoopIValue$&gt;
+&lt;/MTLoop&gt;
+</pre><p>a sample implementation of this set of tags might look
+like this:</p>
+<pre>MT::Template::Context-&gt;add_container_tag(Loop =&gt; sub {
+    my $ctx = shift;
+    my $res = '';
+    my $builder = $ctx-&gt;stash('builder');
+    my $tokens = $ctx-&gt;stash('tokens');
+    for my $i (1..5) {
+        $ctx-&gt;stash('i_value', $i);
+        defined(my $out = $builder-&gt;build($ctx, $tokens))
+            or return $ctx-&gt;error($builder-&gt;errstr);
+        $res .= $out;
+    }
+    $res;
+});
+MT::Template::Context-&gt;add_tag(LoopIValue =&gt; sub {
+    my $ctx = shift;
+    $ctx-&gt;stash('i_value');
+});
+</pre><p><code>&lt;$MTLoopIValue$&gt;</code> is a simple variable tag.
+<code>&lt;MTLoop&gt;</code> is registered as a container tag, and it loops
+over the numbers 1 through 5, building the list of tokens between
+<code>&lt;MTLoop&gt;</code> and <code>&lt;/MTLoop&gt;</code> for each number. It
+checks for an error return value from the <code>$builder-&gt;build</code>
+invocation each time through.</p>
+<p>Use of the tags above would produce:</p>
+<pre>The value of I is: 1
+The value of I is: 2
+The value of I is: 3
+The value of I is: 4
+The value of I is: 5
+</pre><p>
+<h3><a name="add_conditional_tag"></a>add_conditional_tag</h3>
+<pre>MT::Template::Context-&gt;add_conditional_tag($name, $condition)
+</pre><p>Registers a conditional tag with the template system.</p>
+<p>Conditional tags are technically just container tags, but in order to
+make it very easy to write conditional tags, you can use the
+<i>add_conditional_tag</i> method. <i>$name</i> is the name of the tag,
+without the <i>MT</i> prefix, and <i>$condition</i> is a reference to a
+subroutine which should return true if the condition is true, and
+false otherwise. If the condition is true, the block of tags and
+markup inside of the conditional tag will be executed and displayed;
+otherwise, it will be ignored.</p>
+<p>For example, the following code registers two conditional tags:</p>
+<pre>MT::Template::Context-&gt;add_conditional_tag(IfYes =&gt; sub { 1 });
+MT::Template::Context-&gt;add_conditional_tag(IfNo =&gt; sub { 0 });
+</pre><p><code>&lt;MTIfYes&gt;</code> will always display its contents, because it
+always returns 1; <code>&lt;MTIfNo&gt;</code> will never display is contents,
+because it always returns 0. So if these tags were to be used like
+this:</p>
+<pre>&lt;MTIfYes&gt;Yes, this appears.&lt;/MTIfYes&gt;
+&lt;MTIfNo&gt;No, this doesn't appear.&lt;/MTIfNo&gt;
+</pre><p>Only ``Yes, this appears.'' would be displayed.</p>
+<p>A more interesting example is to add a tag
+<code>&lt;MTEntryIfTitle&gt;</code>, to be used in entry context, and which
+will display its contents if the entry has a title.</p>
+<pre>MT::Template::Context-&gt;add_conditional_tag(EntryIfTitle =&gt; sub {
+            my $e = $_[0]-&gt;stash('entry') or return;
+            defined($e-&gt;title) &amp;&amp; $e-&gt;title ne '';
+        });
+</pre><p>To be used like this:</p>
+<pre>&lt;MTEntries&gt;
+  &lt;MTEntryIfTitle&gt;
+    This entry has a title: &lt;$MTEntryTitle$&gt;
+  &lt;/MTEntryIfTitle&gt;
+&lt;/MTEntries&gt;
+</pre><p>
+<h2><a name="postprocessing tag output"></a>Post-Processing Tag Output</h2>
+<p>In addition to adding new tags, a plugin can add an attribute which
+the template author can apply to any tag. The code associated with the
+attribute will be called to transform the output of the tag.</p>
+<pre>MT::Template::Context-&gt;add_global_filter($name, \&amp;subroutine)
+</pre><p>The $name is the name of the tag, for example, ``encode_html''. Any MT
+template tag that contains an attribute encode_html=value will trigger
+the given subroutine.</p>
+<p>The code reference \&amp;subroutine will be called as follows:</p>
+<pre>$string = &amp;subroutine($string, $attribute_value, $context)
+</pre><p>The $string parameter is the text to be transformed.  The
+$attribute_value is the value given to the attribute in this
+invocation, for example:</p>
+<pre>&lt;MTEntryTitle encode_html=1&gt;
+</pre><p>The <code>&amp;subroutine</code> would be invoked with <code>$attribute_value</code> set to
+<code>1</code>. The final argument to the subroutine, $context, is a reference
+to the <code>MT::Template::Context</code> object, which contains information
+about the context in which the tag was used.</p>
+<p>
+<h2><a name="plugin callbacks"></a>Plugin Callbacks</h2>
+<p>Most <code>MT::Object</code> operations can trigger callbacks to plugin code. Some
+notable uses of this feature are: to be notified when a database record is
+modified, or to pre- or post-process the data being flowing to the
+database.</p>
+<p>To add a callback, invoke the <code>add_callback</code> method of the <i>MT::Object</i>
+subclass, as follows:</p>
+<pre>MT::Foo-&gt;add_callback(&quot;pre_save&quot;, &lt;priority&gt;, 
+                      &lt;plugin object&gt;, \&amp;callback_function);
+</pre><p>The first argument is the name of the hook point. Any <i>MT::Object</i>
+subclass has a <code>pre_</code> and a <code>post_</code> hook point for each of the following
+operations:</p>
+<pre>load
+save
+remove
+remove_all
+(load_iter operations will call the load callbacks)
+</pre><p>The second argument, &lt;priority&gt;, is the relative order in
+which the callback should be called. Normally, the value should be
+between 1 and 10, inclusive. Callbacks with priority 1 will be called
+before those with priority 2, 2 before 3, and so on.</p>
+<p>Plugins which know they need to run first or last can use the priority
+values 0 and 11. A callback with priority 0 will run before all
+others, and if two callbacks try to use that value, an error will
+result. Likewise priority 11 is exclusive, and runs last.</p>
+<p>How to remember which callback priorities are special? As you know,
+most guitar amps have a volume knob that goes from 1 to 10. But, like
+that of certain rock stars, our amp goes up to 11. A callback with
+priority 11 is the ``loudest'' or most powerful callback, as it will be
+called just before the object is saved to the database (in the case of
+a pre-op callback), or just before the object is returned (in the case
+of a post-op callback). A callback with priority 0 is the ``quietest''
+callback, as following callbacks can completely overwhelm it. This may
+be a good choice for your plugin, as you may want your plugin to work
+well with other plugins. Determining the correct priority is a matter
+of thinking about your plugin in relation to others, and adjusting the
+priority based on experience so that users get the best use out of the
+plugin.</p>
+<p>The <code>&lt;plugin object&gt;</code> is an object of type <code>MT::Plugin</code> which
+gives some information about the plugin. This is used to include
+the plugin's name in any error messages.</p>
+<p><code>&lt;callback function&gt;</code> is a code referense for a subroutine that
+will be called. The arguments to this function vary by operation (see
+<code>MT::Callback</code> for details), but in each case the first parameter is
+the <code>MT::Callback</code> object itself:</p>
+<pre>sub my_callback {
+    my ($cb, ...) = @_;
+      if ( &lt;error condition&gt; ) {
+        return $cb-&gt;error(&quot;Error message&quot;);
+    }
+}
+</pre><p>Strictly speaking, the return value of a callback is ignored. Calling
+the <code>error()</code> method of the <code>MT::Callback</code> object (<code>$cb</code> in this case)
+propagates the error message up to the Movable Type activity log.</p>
+<p>Another way to handle errors is to call <code>die</code>. If a callback dies,
+<i>MT</i> will warn the error to the activity log, but will continue
+processing the <code>MT::Object</code> operation: so other callbacks will still
+run, and the database operation should still occur.</p>
+<p>
+<h3><a name="callback priorities"></a>Callback Priorities</h3>
+<p>Each time you register a callback, you supply a 'priority' which
+controls the order in which plugins will run. Priorities range from 1
+to 10, with priority 1 callbacks being the first to run at any event
+and priority 10 being the last.</p>
+<p>When writing a plugin, think about how it relates to other
+plugins. Your plugin might be a fairly gentle transformation upon the
+data, or it might be something more dramatic, which leaves the data in
+a state that other plugins won't be able to use. The more dramatic
+plugin will want to use a high priority for its 'save' callback,</p>
+<p>
+<h3><a name="error handling"></a>Error handling</h3>
+<p>When a plugin callback dies, MT will continue and will call other
+callbacks.</p>
+<p>Note that if you have one callback that relies on another having
+returned successfully, you should be prepared if for some reason one
+callback doesn't in fact run. For example, if you have symmetrical
+callbacks that run respectively on <code>load()</code> and on save(), and the save
+callback fails, the data in the database may not be in the form
+expected by the load callback.</p>
+<p>
+<h2><a name="text filters"></a>Text Filters</h2>
+<p>Movable Type offers users a extensible selection of text filters to
+assist in composing entries with formatting properties. Rather than
+author an entry in HTML, a user can choose a text filter which will
+transform the text of the entry, replacing certain symbols with
+sophisticated formatting commands. Text filters appear in a pop-up
+menu on the entry-editing screen, so text filters are chosen on an
+entry-by-entry basis.</p>
+<p>
+<h3><a name="adding a text filter"></a>Adding a Text Filter</h3>
+<p>A text filter is added by calling <code>MT-&gt;add_text_filter()</code>,
+as follows:</p>
+<pre>MT-&gt;add_text_filter($key, {label =&gt; $label, 
+                            on_format =&gt; &lt;executable code&gt;});
+</pre><p><i>$label</i> is the human-readable text which identifies the filter to
+the user; this text appears in the pop-up menu on the entry-editing
+screen. <i>$key</i> is an identifier that will be used as an HTML <code>name</code>
+attribute, and the filters in the menu are sorted alphabetically by
+their <i>$key</i> values.</p>
+<p>The value passed in the value of the <code>on_format</code> key is a code
+reference. This is the code reference that will be called to transform
+the entry text before displaying it.</p>
+<p>The code reference is called everywhere the entry is displayed, except
+in the entry-editing screen itself.  This includes the entry preview,
+the result of the <code>&lt;MTEntryBody&gt;</code> tag, and in a TrackBack ping or
+newsfeed.</p>
+<p>
+<h2><a name="adding an action to a movable type application page"></a>Adding an Action to a Movable Type Application Page</h2>
+<p>Some of the pages in Movable Type's application interface list objects
+of some type, or allow users to edit an object. Many of these pages
+admit natural extension in the form of additional actions that the
+user may wish to make on those objects.</p>
+<p>To add an action to one of these pages, call the <code>add_plugin_action</code>
+method of the <code>MT</code> class:</p>
+<pre>MT-&gt;add_plugin_action('entry', $link,
+                      'Add one xyzzy monster to this entry');
+</pre><p>Here, <code>entry</code> indicates the page on which the link should
+appear. Passing asimple object type indicates that the action link
+should appear on the 'edit' page for an object of that type. Other
+values that would be valid here include <code>comment</code>, <code>category</code>,
+<code>template</code> and <code>author</code>.</p>
+<p>Additionally, passing one of the following values in the first
+argument will place the action link on one of the object lists:
+<code>list_comments</code>, <code>list_commenters</code>, <code>list_entries</code>.</p>
+
+<hr size="1" color="#CCCCCC">
+<span class="copyright">Copyright &copy; 2001-2005 Six Apart. All Rights Reserved.</span>
+</body>
+
+</html>

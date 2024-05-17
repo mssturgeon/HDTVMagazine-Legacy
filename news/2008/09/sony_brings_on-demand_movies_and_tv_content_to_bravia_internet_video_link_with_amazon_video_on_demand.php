@@ -1,0 +1,409 @@
+<?
+	### ARCHIVE_IND.PHP.TPL ###
+	require('/var/www/html/global.php');
+	
+	# Get Digg URL, if one exists
+	$sql = "SELECT digg_url FROM aux_mt_entry WHERE entry_id = 1546";
+	$result = mQuery($sql);
+	$row = mysql_fetch_assoc($result);
+	$digg_url = urldecode($row[digg_url]);
+	
+	# Author Title & Bio
+	$res_author = mQuery("SELECT title, channel, img, bio_short FROM aux_author au, mt_author a WHERE au.author_id = a.author_id AND a.author_name = 'Shane Sturgeon'");
+	$author = mysql_fetch_assoc($res_author);
+	$author_title = ($author[title] == '') ? '' : "$author[title]<br />";
+	
+	# Get category ID
+	$sql = "SELECT placement_category_id FROM mt_placement WHERE placement_entry_id = 1546 AND placement_is_primary = 1";
+	$res_category = mQuery($sql);
+	$row_category = mysql_fetch_assoc($res_category);
+	$category_id = $row_category[placement_category_id];
+	
+	# Still need this to track page views. Used in the Links unit in the footer
+	$google_links_channel = $author[channel];
+
+	# Set variables based on entry type. NOTE: Podcasts has its own entry template, so it is not included amongst the choices below.
+	switch (7) {
+		case 1: # Articles
+			$feed_name = 'hdtv-articles';
+			$container = 'article_container';
+			$sub_type = SUB_ARTICLES;
+			$sub_label = 'Receive instant notification of new articles';
+			$sub_desc_logged_in = '<a href="'. URL_PROFILE_SUBSCRIPTIONS .'">Modify your subscription profile</a> to receive notification of new HDTV Magazine Articles via email as soon as they are published.';
+			$sub_desc_anon = '<a href="'. URL_PROFILE_CREATE .'">Register Now</a> to receive notification of new HDTV Magazine Articles via email as soon as they are published.';
+			break;
+		case 4: # Interviews
+			$feed_name = 'hdtv-interviews';
+			break;
+		case 5: # History
+			$feed_name = 'hdtv-archive';
+			break;
+		case 6: # Test
+			$container = 'article_container';
+			$sub_type = 0;
+			break;
+		case 7: # Bulletins
+			$google_links_channel = ''; # Don't count bulletins
+			$feed_name = 'hdtv-news';
+			$container = 'bulletin_container';
+			$sub_type = SUB_BULLETINS;
+			$sub_label = 'Receive instant notification of HDTV Bulletins';
+			$sub_desc_logged_in = '<a href="'. URL_PROFILE_SUBSCRIPTIONS .'">Modify your subscription profile</a> to receive notification of HDTV Bulletins via email as soon as they are published.';
+			$sub_desc_anon = '<a href="'. URL_PROFILE_CREATE .'">Register Now</a> to receive notification of HDTV Bulletins via email as soon as they are published.';
+			break;
+		case 8: # Reviews
+			$feed_name = 'hdtv-reviews';
+			$container = 'article_container';
+			$sub_type = SUB_REVIEWS;
+			$sub_label = 'Receive instant notification of new reviews';
+			$sub_desc_logged_in = '<a href="'. URL_PROFILE_SUBSCRIPTIONS .'">Modify your subscription profile</a> to receive notification of new HDTV Magazine Reviews via email as soon as they are published.';
+			$sub_desc_anon = '<a href="'. URL_PROFILE_CREATE .'">Register Now</a> to receive notification of new HDTV Magazine Reviews via email as soon as they are published.';
+			break;
+#		case 9: # Podcasts
+		case 10: # Columns
+			$feed_name = 'hdtv-columns';
+			$container = 'article_container';
+			$sub_type = SUB_COLUMNS;
+			$sub_label = 'Receive instant notification of new columns';
+			$sub_desc_logged_in = '<a href="'. URL_PROFILE_SUBSCRIPTIONS .'">Modify your subscription profile</a> to receive notification of new HDTV Magazine Columns via email as soon as they are published.';
+			$sub_desc_anon = '<a href="'. URL_PROFILE_CREATE .'">Register Now</a> to receive notification of new HDTV Magazine Columns via email as soon as they are published.';
+			$about = 'HDTV Magazine Columns are written by various personalities within the HDTV industry. They are typically shorter than our standard <a href="/articles">Article</a> and quite often express the opinion of the author(s). And of course, opinions expressed by these authors are not necessarily those of HDTV Magazine.';
+			break;
+		default:
+			$container = 'body_container';
+			break;
+	}
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<?require(BASE_DIR .'/includes/common_header.php');?>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="generator" content="http://www.movabletype.org/" />
+	<meta name="keywords" content="video link, internet video, bravia internet, amazon video, video demand, sony, Sony, Video, video, bravia, BRAVIA, internet, Internet, Link, link, Amazon, amazon, demand, content, Demand, channels, movies, dailymotion, Dailymotion, service" />
+	<meta name="description" content="Sony today announced that Amazon Video On Demand is now available live through the Sony(R) BRAVIA(R) Internet Video Link, offering tens of thousands of premium movies and TV shows.
+
+Amazon Video On Demand offers immediate access to premium, commercial-free movies and television shows purchased or rented by users who stream them directly to compatible Sony BRAVIA televisions equipped with the optional BRAVIA Internet Video Link through an in-home broadband service.
+
+Sony also announced that streaming high-definition content is now available on the service from..." />
+	<title>HDTV Magazine Bulletins - Sony Brings On-Demand Movies and TV Content to BRAVIA Internet Video Link With Amazon Video On Demand</title>
+	<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://feeds.hdtvmagazine.com/<?=$feed_name?>" />
+	<script type="text/javascript">
+		var digg_url = '<?=$digg_url?>';
+	</script>
+</head>
+<body><div id="body_container">
+	<?
+		include(BASE_DIR .'/includes/body_header.php');
+		include(BASE_DIR .'/ads/leaderboard.php');
+		
+		$base_url = strleftback(PHP_SELF, '/') . '/sony_brings_on-demand_movies_and_tv_content_to_bravia_internet_video_link_with_amazon_video_on_demand';
+		$print_url = $base_url .'-print.php';
+		$save_url = $base_url .'-save.php';
+		$title_encoded = rawurlencode(addslashes('Sony Brings On-Demand Movies and TV Content to BRAVIA Internet Video Link With Amazon Video On Demand'));
+		$email_url = "mailto:?subject=HDTV Magazine: $title_encoded&amp;body=http://www.hdtvmagazine.com/news/2008/09/sony_brings_on-demand_movies_and_tv_content_to_bravia_internet_video_link_with_amazon_video_on_demand.php";
+		if ($author[img] != '' && 7 != 7) {
+			$img = '<img src="/images/portraits/'. $author[img] .'" alt="Shane Sturgeon" />';
+		} else {$img = '';}
+	?>
+
+	<!-- Article Header -->
+	<table class="bare" cellpadding="0" cellspacing="0" style="width:100%;">
+		<tr>
+			<td rowspan="2" style="padding-right:5px; vertical-align:top"><?=$img?></td>
+			<td class="article_title" colspan="2">Sony Brings On-Demand Movies and TV Content to BRAVIA Internet Video Link With Amazon Video On Demand</td>
+		</tr><tr>
+			<td id="article_byline" nowrap="nowrap">
+				By <b>Shane Sturgeon</b><br />
+				<?=$author_title?>
+				Posted on <b>September 11, 2008</b><br />
+				Category: <b><a href="/category.php?id=<?=$category_id?>&category=Products & Equipment">Products & Equipment</a></b><br />
+			</td><td id="article_links">
+				<!--span><img src="/images/digg.png" alt="Digg Article" align="absmiddle" /><a target="_blank" href="http://digg.com/submit?url=http://www.hdtvmagazine.com/news/2008/09/sony_brings_on-demand_movies_and_tv_content_to_bravia_internet_video_link_with_amazon_video_on_demand.php&amp;phase=2">Digg</a></span-->
+				<span><img src="/images/newsvine.gif" alt="Add to Newsvine" align="absmiddle" /><a href="javascript:addToNewsvine('http://www.hdtvmagazine.com/news/2008/09/sony_brings_on-demand_movies_and_tv_content_to_bravia_internet_video_link_with_amazon_video_on_demand.php', '<?=$title_encoded?>')">Newsvine</a></span>
+				<span><img src="/images/delicious.gif" alt="Add to Del.icio.us" align="absmiddle" /><a target="_blank" href="http://del.icio.us/post?url=http://www.hdtvmagazine.com/news/2008/09/sony_brings_on-demand_movies_and_tv_content_to_bravia_internet_video_link_with_amazon_video_on_demand.php&amp;title=<?=$title_encoded?>">Del.icio.us</a></span>
+				<span><img src="/images/save.gif" alt="Save Article" align="absmiddle" /><a target="_blank" href="<?=$save_url?>">Save</a></span>
+				<span><img src="/images/email.gif" alt="Email Article" align="absmiddle" /><a href="<?=$email_url?>">Email</a></span>
+				<span><img src="/images/print.png" alt="Print Article" align="absmiddle" /><a target="_blank" href="<?=$print_url?>">Print</a></span><br />
+				<br /><br />
+			</td>
+		</tr>
+	</table>
+	<?if ($sub_type > 0 && ($userdata[subscriptions] & $sub_type) || $_SERVER[HTTP_USER_AGENT] == 'Googlebot') {} else {
+		if ($userdata[session_logged_in]) {?>
+			<div class="important"><span class="corners-top"><span></span></span>
+				<img src="/images/i_inbox.gif" align="left" style="padding-right:10px" />
+				<span class="label"><?=$sub_label?>:</span>
+				<?=$sub_desc_logged_in?>
+			<span class="corners-bottom"><span></span></span></div>
+		<?} else {?>
+			<div class="important"><span class="corners-top"><span></span></span>
+				<img src="/images/i_inbox.gif" align="left" style="padding-right:10px" />
+				<span class="label"><?=$sub_label?>:</span>
+				<?=$sub_desc_anon?>
+			<span class="corners-bottom"><span></span></span></div>
+		<?}
+	}?>
+	<div>
+		<div style="float:left; margin:0 5px 5px 0;"><?
+			if ($digg_url == '') {
+				echo '<a target="_blank" href="http://digg.com/submit?url=http://www.hdtvmagazine.com/news/2008/09/sony_brings_on-demand_movies_and_tv_content_to_bravia_internet_video_link_with_amazon_video_on_demand.php&amp;phase=2&amp;title=Sony%20Brings%20On-Demand%20Movies%20and%20TV%20Content%20to%20BRAVIA%20Internet%20Video%20Link%20With%20Amazon%20Video%20On%20Demand&amp;bodytext=Sony%20today%20announced%20that%20Amazon%20Video%20On%20Demand%20is%20now%20available%20live%20through%20the%20Sony%28R%29%20BRAVIA%28R%29%20Internet%20Video%20Link%2C%20offering%20tens%20of%20thousands%20of%20premium%20movies%20and%20TV%20shows.%0A%0AAmazon%20Video%20On%20Demand%20offers%20immediate%20access%20to%20premium%2C%20commercial-free%20movies%20and%20television%20shows%20purchased%20or%20rented%20by%20users%20who%20stream%20them%20directly%20to%20compatible%20Sony%20BRAVIA%20televisions%20equipped%20with%20the%20optional%20BRAVIA%20Internet%20Video%20Link%20through%20an%20in-home%20broadband%20service.%0A%0ASony%20also%20announced%20that%20streaming%20high-definition%20content%20is%20now%20available%20on%20the%20service%20from...&amp;topic=television"><img src="/images/digg-this.gif" alt="Digg This" style="padding:0"></a>';
+			} else {
+				echo '<script src="http://digg.com/api/diggthis.js"></script>';
+			}
+		?></div>
+		<div id="right" style="float:right; margin:0 0 5px 5px; text-align:center;" align="center">
+			<?include(BASE_DIR .'/ads/mrectangle.php');?>
+			<br />
+			<div align="center">
+				<?include(BASE_DIR .'/ads/skyscraper.php');?>
+			</div>
+		</div>
+		<div id="<?=$container?>">
+			<p class="prtitle">Sony Brings On-Demand Movies and TV Content to BRAVIA Internet Video Link With Amazon Video On Demand</p>
+
+<center><i>Service Also Now Offers Free High-Definition Content From Dailymotion And Others</i></center><br />
+<br />
+
+<p><B>SAN DIEGO, Sept. 11 /PRNewswire/</B> -- Sony today announced that Amazon Video On Demand is now available live through the Sony(R) BRAVIA(R) Internet Video Link, offering tens of thousands of premium movies and TV shows.</p>
+
+<p>Amazon Video On Demand offers immediate access to premium, commercial-free movies and television shows purchased or rented by users who stream them directly to compatible Sony BRAVIA televisions equipped with the optional BRAVIA Internet Video Link through an in-home broadband service.</p>
+
+<p>Sony also announced that streaming high-definition content is now available on the service from Dailymotion and other providers at no additional cost.</p>
+
+<p>"Consumers want immediate access to premium on-demand movies and top TV shows in their living room and the BRAVIA Internet Video Link service now offers one of the largest on-demand streaming libraries available," said Randy Waynick, senior vice president of Sony Electronics' Home Products Division in the U.S. "From high-quality, full HD movies on Blu-ray Disc(TM) players, to the immediate satisfaction of streaming feature-length videos directly to BRAVIA TVs over the Internet, we are in a position to deliver entertainment for any consumer taste."</p>
+
+<p>Amazon Video On Demand and Dailymotion channels add to existing BRAVIA Internet Video Link lineup, which already includes YouTube; CBS, Yahoo!; Sports Illustrated; blip.tv; CondeNet's Style.com, Men.Style.com, Epicurious, Wired.com and Concierge.com channels; Sony Pictures' Crackle, The Minisode Network, Timeless TV and Inside Sony Pictures channels; FEARnet; Ford Models; SingingFool; and VideoDetective.</p>
+
+<p>Once a BRAVIA Internet Video Link is registered with an Amazon.com account, customers can purchase or rent programming directly from their TV or online at Amazon's web site and begin watching the streaming content immediately on their BRAVIA television.</p>
+
+<p>When a title is ordered, it is automatically added to consumers' Amazon Video On Demand "Your Video Library," providing easy access to purchased and rented content. A backup version can also be found in the library, which is accessible from the Sony BRAVIA Internet Video Link device user interface or on Amazon.com.</p>
+
+<p>New to the BRAVIA Internet Link lineup, Dailymotion offers HD and standard definition content including videos from across Dailymotion's most popular channels and categories such as comedy, extreme sports, news, music and independent film.</p>
+
+<p>BRAVIA Internet Video Link users now also have access to select high-definition content from various existing channels including FEARnet, VideoDetective, Blip.tv and Sony Pictures Entertainment. High-definition content found on these channels, as well as Dailymotion, is free of additional charge.</p>
+
+<p>Sony's BRAVIA Internet Video Link module is currently available for about $300. It can be purchased online at sonystyle.com and Amazon.com, as well as at Sony Style stores and authorized retailers across the country. The module, used with a consumer's existing broadband Internet connection, is compatible with the majority of Sony's line of 2007 and 2008 BRAVIA televisions.</p>
+
+<p>Note: Broadband Internet connection speed of at least 2.5 Mbps recommended. News releases and digital images with captions are available at http://www.sony.com/news. For information regarding the nearest Sony authorized dealer or service location, your readers can call 1-800-222-SONY.</p>
+
+<p>   Sony Contacts:<br />
+   Greg Belloni<br />
+   Sony Electronics, Inc.<br />
+   858-942-4460<br />
+   greg.belloni@am.sony.com</p>
+
+<p>   Tania Scheer<br />
+   PainePR<br />
+   949-809-6782<br />
+   tscheer@painepr.com</p>
+
+<p>Source: Sony Electronics, Inc. </p>
+		</div>
+	</div>
+	<p class="posted">Posted by <b>Shane Sturgeon</b>, <b>September 11, 2008 05:29 AM</b></p>
+
+	<table class="bare" cellpadding="0" cellspacing="0" style="width:100%"><tr>
+  <td id="left"><!-- Comments -->
+ 		<div><?
+ 			$sql = "
+ 			SELECT p.topic_id, p.post_id, post_time dt, post_subject, topic_replies, topic_title, LEFT(post_text ,255) post_text
+ 			FROM aux_mt_entry a, phpbb_topics t, phpbb_posts p, phpbb_posts_text pt
+ 			WHERE entry_id = 1546
+ 				AND a.topic_id = t.topic_id
+ 				AND t.topic_id = p.topic_id
+ 				AND p.post_id = pt.post_id
+ 			ORDER BY post_time";
+ 			$result = mQuery($sql);
+ 			$num_comments = mysql_num_rows($result);
+ 			
+ 			if ($num_comments > 0) {
+ 				# Skip the first one, as it's just the excerpt post.
+ 				$row = mysql_fetch_assoc($result);
+ 				$thread_url = URL_FORUM_VIEWTOPIC .'?t='. $row[topic_id];
+ 				echo '<h2 style="margin-bottom:10px"><a href="'. $thread_url .'">Reader Commentary</a></h2>'.
+ 				'<div class="item"><span class="corners-top"><span></span></span>'.
+ 					'<img src="/images/icon_topic.gif" alt="" /><b> See Forum Topic</b>: '.
+ 					'<a href="'. $thread_url .'">'. $row[topic_title] .'</a> <span class="grey">('. $row[topic_replies] .' replies)</span>'.
+ 				'<span class="corners-bottom"><span></span></span></div>';
+ 				
+ 				$x = 0;
+ 				while ($row = mysql_fetch_assoc($result)) {
+ 					if ($x == 10) break;
+ 					$x++;
+ 					$comment_url = URL_FORUM_VIEWTOPIC .'?p='. $row[post_id] .'#'. $row[post_id];
+ 					$text = strip_tags(str_replace('[', '<', str_replace(']', '>', $row[post_text])));
+ 					if ($row[post_subject] != '') {
+ 						$subject = $row[post_subject];
+ 					} else {
+ 						$subject = "Re: $row[topic_title]";
+ 					}
+ 	
+ 					$class = ($x % 2 == 0) ? 'item' : 'item_odd';
+ 					echo '<div class="'. $class .'"><span class="corners-top"><span></span></span>'.
+ 						'<div style="font-size:1.2em; font-weight:bold"><a href="'. $comment_url .'">'. $subject .'</a></div>'.
+ 						'<b>'. $row[poster_id] .'</b> '. date('M j, g:ia', $row[dt]) .'<br />'.
+ 						$text .
+ 					'<span class="corners-bottom"><span></span></span></div>';
+ 				}
+ 			}
+ 			if ($num_comments > $x) {
+ 				echo '<div align="center" class="important"><span class="corners-top"><span></span></span>'.
+ 				"Showing only excerpts from $x out of $num_comments, <a href='$thread_url'>Read More</a>".
+ 				'<span class="corners-bottom"><span></span></span></div>';
+ 			}
+ 		?><div class="dottedline"></div></div>
+
+ 		<div class="item"><span class="corners-top"><span></span></span>
+ 			<h2>More on Products & Equipment</h2><ul><?
+ 			$sql = "
+ 			SELECT DISTINCT entry_blog_id, entry_created_on, entry_title, author_name
+ 			FROM mt_entry e, mt_author a, mt_placement p, mt_category c
+ 			WHERE entry_author_id = author_id
+ 				AND e.entry_id = p.placement_entry_id
+ 				AND p.placement_category_id = c.category_id
+ 				AND category_label = 'Products & Equipment'
+ 				AND e.entry_status = 2
+ 				AND e.entry_blog_id IN (". INCLUDE_BLOGS_ALL .")
+ 				AND entry_author_id = a.author_id
+ 			ORDER BY entry_created_on DESC LIMIT 25";
+ 			$result = mQuery($sql);
+ 			while ($row = mysql_fetch_assoc($result)) {
+ 				$ts = strtotime($row[entry_created_on]);
+ 				$y = date('Y', $ts);
+ 				$m = date('m', $ts);
+ 				$entry = getEntryInfo($row[entry_blog_id]);
+ 	
+ 				$entry[date] = getDateString($ts);
+ 				$entry[link] = "/$entry[blog_dir]/$y/$m/". dirify($row[entry_title]) .".php";
+ 				$entry[title] = $row[entry_title];
+ 				$entry[author] = $row[author_name];
+
+ 				echo '<li><a href="'. $entry[link] .'">'. $entry[title] .'</a> - <span class="grey">'. $entry[author] .'</span> - '. $entry[date] .'</li>';
+ 			}
+ 		?></ul><span class="corners-bottom"><span></span></span></div>
+			
+ 		<?if (7 <> 7) {
+ 			# Recent Articles by Author (exclude this one)
+ 			# Do not show recent articles for Bulletins.
+ 			$qry = "
+ 			SELECT entry_id, entry_blog_id, entry_created_on, entry_title, author_id, author_name
+ 			FROM mt_entry e, mt_author a
+ 			WHERE entry_blog_id = 7
+ 				AND entry_id <> 1546
+ 				AND entry_status = 2
+ 				AND entry_author_id = a.author_id
+ 				AND a.author_name = 'Shane Sturgeon'
+ 			ORDER BY entry_created_on DESC LIMIT 10";
+ 			$result = mQuery($qry);
+ 			
+ 			if (mysql_num_rows($result) > 0) {
+ 				$row = mysql_fetch_assoc($result);
+ 				echo '<div class="item"><span class="corners-top"><span></span></span>'.
+ 				'<h2><a href="/author.php?author='. urlencode($row[author_name]) .'&id='. $row[author_id] .'">More from '. $row[author_name] .'</a></h2><ul>';
+ 				mysql_data_seek($result, 0);
+ 				while ($row = mysql_fetch_assoc($result)) {
+ 					# Get categories
+ 					$sql = "
+ 					SELECT category_label FROM mt_category c, mt_placement p
+ 					WHERE $row[entry_id] = p.placement_entry_id
+ 						AND c.category_id = p.placement_category_id";
+ 					$res_categories = mQuery($sql);
+ 					$row_categories = mysql_fetch_assoc($res_categories);
+ 					$category = $row_categories[category_label];
+
+ 					$ts = strtotime($row[entry_created_on]);
+ 					$y = date('Y', $ts);
+ 					$m = date('m', $ts);
+ 					$blog_dir = getBlogDir($row[entry_blog_id]);
+ 					$date = getDateString($ts);
+ 					$link = "/$blog_dir/$y/$m/". dirify($row[entry_title]) .".php";
+ 					echo '<li><a href="'. $link .'">'. $row[entry_title] .'</a> - <span class="grey">'. $category .'</span> - '. $date .'</li>';
+ 				}
+ 				echo '</ul><span class="corners-bottom"><span></span></span></div>';
+				}
+			}
+
+ 		if ($author[bio_short] != '') {?>
+ 			<div class="item"><span class="corners-top"><span></span></span>
+ 				<h2>About Shane Sturgeon</h2>
+ 				<?=stripslashes($author[bio_short])?>
+ 			<span class="corners-bottom"><span></span></span></div>
+ 		<?}?>
+		</td><td id="right">
+
+ 		<?if ($about != '') {?>
+ 			<div class="item"><span class="corners-top"><span></span></span>
+ 				<h2>About Bulletins</h2>
+ 				<?=$about?>
+ 			<span class="corners-bottom"><span></span></span></div>
+		<?}?>
+		
+ 		<div class="item"><span class="corners-top"><span></span></span>
+ 			<h2><a href="/forum/index.php">Other Recent Discussion</h2><ul class="brownsquare"><?
+ 				$qry = "
+ 				SELECT topic_title, t.topic_id, username as post_author, post_time, post_id
+ 				FROM phpbb_topics t, phpbb_users u, phpbb_posts p
+ 				WHERE
+ 					t.forum_id NOT IN (". EXCLUDE_FORUMS .")
+ 					AND p.poster_id = u.user_id
+ 					AND t.topic_id = p.topic_id
+ 					AND t.topic_last_post_id = p.post_id
+ 				ORDER BY post_time DESC LIMIT 10";
+ 				$result = mQuery($qry);
+ 				
+ 				while ($row = mysql_fetch_assoc($result)) {
+   					$last_post = date('n/j g:ia T', $row[post_time]);
+   					$title = html_entity_decode($row[topic_title]);
+ 		  					
+ 					echo '<li><a href="'. FULL_URL_FORUM_VIEWTOPIC .'?t='. $row[topic_id] .'">'. $title .'</a> - <span class="grey">'. $row[post_author] .'</span> - '. $last_post .'</li>';
+ 				}
+ 			?></ul>
+ 		<span class="corners-bottom"><span></span></span></div>
+
+ 		<div class="item"><span class="corners-top"><span></span></span>
+ 			<h2>Authors</h2>
+ 			<ul class="brownsquare"><?
+ 				$qry = "
+ 				SELECT author_id, author_name, COUNT(*) num
+ 				FROM mt_author a, mt_entry e
+ 				WHERE e.entry_blog_id IN (". INCLUDE_BLOGS_NO_BULLETINS .")
+ 					AND entry_status = 2
+ 					AND entry_author_id = author_id
+ 				GROUP BY author_id, author_name
+ 				ORDER BY num DESC";
+ 				$res_authors = mQuery($qry);
+ 				while ($row_authors = mysql_fetch_assoc($res_authors)) {
+ 					echo '<li><a href="/author.php?author='. urlencode($row_authors[author_name]) .'&id='. $row_authors[author_id] .'">'. $row_authors[author_name] .'</a><span class="grey"> ('. $row_authors[num] .')</span></li>';
+ 				}
+ 			?></ul>
+ 		<span class="corners-bottom"><span></span></span></div>
+
+ 		<div class="item"><span class="corners-top"><span></span></span>
+ 			<h2>Categories</h2>
+ 			<ul class="brownsquare"><?
+ 				$qry = "
+ 				SELECT category_label label, COUNT(*) num
+ 				FROM mt_entry e, mt_placement p, mt_category c
+ 				WHERE e.entry_blog_id IN (". INCLUDE_BLOGS_ALL .")
+ 					AND entry_status = 2
+ 					AND entry_id = p.placement_entry_id
+ 					AND p.placement_category_id = c.category_id
+ 				GROUP BY label
+ 				ORDER BY label";
+ 				$result = mQuery($qry);
+ 				while ($category = mysql_fetch_assoc($result)) {
+ 					echo '<li><a href="/category.php?category='. urlencode($category[label]) .'">'. $category[label] .'</a><span class="grey"> ('. $category[num] .')</span></li>';
+ 				}
+ 			?></ul>
+ 		<span class="corners-bottom"><span></span></span></div>
+
+		</td>
+	</tr></table>
+
+	<?
+		include(BASE_DIR .'/includes/body_footer.php');
+	?>
+	<script src="http://feeds.feedburner.com/~s/<?=$feed_name?>?i=http://www.hdtvmagazine.com/news/2008/09/sony_brings_on-demand_movies_and_tv_content_to_bravia_internet_video_link_with_amazon_video_on_demand.php" type="text/javascript" charset="utf-8"></script>
+</div></body>
+</html>

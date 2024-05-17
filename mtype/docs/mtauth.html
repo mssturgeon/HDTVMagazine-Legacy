@@ -1,0 +1,293 @@
+<html>
+<head>
+<title>Summary</title>
+<link rel="stylesheet" href="doc-styles.css" type="text/css">
+</head>
+
+<body>
+<h3>Creating a Drop-in Authentication Service for Movable Type</h3>
+
+
+<a name="__index__"></a>
+
+<ul>
+
+	<li><a href="#summary">Summary</a></li>
+	<li><a href="#the user experience">The User Experience</a></li>
+	<li><a href="#the user model">The User Model</a></li>
+	<li><a href="#configuring movable type">Configuring Movable Type</a></li>
+	<li><a href="#parameters passed by the client">Parameters Passed by the Client</a></li>
+	<li><a href="#parameters for the authentication response">Parameters for the Authentication Response</a></li>
+	<ul>
+
+		<li><a href="#response parameters in version 1.1">Response Parameters in Version 1.1</a></li>
+		<li><a href="#response parameters in version 1">Response Parameters in Version 1</a></li>
+	</ul>
+
+	<li><a href="#format of the dsa key">Format of the DSA key</a></li>
+	<ul>
+
+		<li><a href="#hidden email addresses">Hidden email addresses</a></li>
+	</ul>
+
+	<li><a href="#encoding issues">Encoding Issues</a></li>
+	<li><a href="#references">References</a></li>
+</ul>
+<hr size="1" color="#CCCCCC">
+<p>
+<hr size="1" color="#CCCCCC">
+<h1><a name="summary"></a>Summary</h1>
+<p>Movable Type 3.0 provides a new suite of features for comment
+management, and part of that suite is an interface for authenticating
+users via an outside system. Six Apart's own TypeKey system is an example
+authentication system, but others can be made to interact with Movable
+Type.</p>
+<p>For developers who wish to develop a custom authentication service to
+replace TypeKey, this document specifies the interface.</p>
+<p>The heart of the system is based on digital signatures using the
+Digital Signature Algorithm [1] and the SHA1 hash function. The
+authentication service has a private key, and the MT installation has
+the corresponding public key available. Once the authentication
+service has authenticated a user, it passes the user's profile
+information, together with a digital signature of that information, to
+the MT installation. MT verifies the signature using the public key,
+and if it is correct, it sets a browser cookie so that it can identify
+the user again.</p>
+<p>To create an alternate authentication service, you need to create a
+set of HTTP handlers that follow the calling conventions below. To use
+an alternate authentication service, you need to configure the MT
+parameters described under `Configuring Movable Type.'</p>
+<p>
+<hr size="1" color="#CCCCCC">
+<h1><a name="the user experience"></a>The User Experience</h1>
+<p>Typically, the user starts at an MT comment page</p>
+<p>!TBD!</p>
+<p>MT comment page -&gt; Authentication login
+   -&gt; Authentication registration -&gt; MT comment page
+   -&gt; Authentication logout -&gt; MT comment page</p>
+<p>
+<hr size="1" color="#CCCCCC">
+<h1><a name="the user model"></a>The User Model</h1>
+<p>The authentication service should store data for a collection of users
+who are identified by a unique key, known as the <a href="#item_name"><code>name</code></a>. The name is
+a textual value of no more than 50 characters, encoded in ASCII in the
+character set [A-Za-z0-9_]. It should also store, for each user, at
+least the following fields:</p>
+<ul>
+<li><strong><a name="item_nick"></a>nick</strong><br>
+
+The user's human-readable name. Should be an HTML-encoded string of
+characters taken from the Unicode character set.
+<p></p></ul>
+<p>
+<hr size="1" color="#CCCCCC">
+<h1><a name="configuring movable type"></a>Configuring Movable Type</h1>
+<p>An outside authentication system hooks into the Movable Type interface
+simply by using a handful of configuration options in mt.cfg. These are:</p>
+<ul>
+<li><strong><a name="item_SignOnURL"></a>SignOnURL</strong><br>
+
+This is the base URL of a web interface where the user can sign on to
+the authentication service. This is the link that will appear on
+comment pages, at the point where users are invited to sign in.
+<p>MT will append a CGI parameter <code>_return</code> whose value is the URL to
+return to once the log in is completed. The <code>_return</code> parameter
+points to an MT handler which will decode a DSA signature [2] passed
+by the authentication service. The arguments which the auth service
+needs to pass are documented below, under <a href="#parameters for the authentication response">Parameters for the Authentication Response</a>.</p>
+<p></p>
+<li><strong><a name="item_SignOffURL"></a>SignOffURL</strong><br>
+
+This is the URL which will be hit by the user's browser when he or she
+clicks the <code>logout</code> link on a commenting page. The authentication
+service is expected to do whatever is necessary to reset that user's
+browser to a logged out state, and redirect to the value of the
+<code>_return</code> parameter.
+<p></p>
+<li><strong><a name="item_RegKeyURL"></a>RegKeyURL</strong><br>
+
+Normally, the public key used by MT to verify the signature is loaded
+over HTTP from this URL. This way, the administrators of the
+authentication service can update the key pair as needed, without
+having to end-users' installations. A GET request to this URL should
+return the key in the body of the response, and the key is serialized
+in a simple format which is documented below, under 'Format of the DSA
+key.'
+<p>The value loaded from this URL is cached by MT for 24 hours.</p>
+<p></p>
+<li><strong><a name="item_SignOnPublicKey"></a>SignOnPublicKey</strong><br>
+
+As an alternative to 'RegKeyURL', the DSA public key can be supplied
+directly into this configuration variable. The format of this
+parameter is described below, under 'Format of the DSA key.'
+<p></p>
+<li><strong><a name="item_IdentityURL"></a>IdentityURL</strong><br>
+
+This is the base of the URL that points to the ``profile page'' for a
+given user. The full URL will be formed as follows:
+<pre>&lt;IdentityURL&gt;/&lt;username&gt;
+</pre><p>where &lt;username&gt; is the the unique key of the user, which is taken
+from the <a href="#item_name"><code>name</code></a> parameter supplied by the authentication service (see
+<a href="#parameters for the authentication response">Parameters for the Authentication Response</a>, below);</p>
+<p></p></ul>
+<p>
+<hr size="1" color="#CCCCCC">
+<h1><a name="parameters passed by the client"></a>Parameters Passed by the Client</h1>
+<p>When creating the user link to the authentication service, Movable
+Type will include a CGI parameter with the name <code>v</code>, which identifies
+the version of the protocol that it expects the service to use. If
+this parameter is not given, it should be assumed to have the value 1.</p>
+<p>It is acceptable for the service to refuse to support requests for
+sufficiently old versions of the TypeKey protocol, however, older
+versions of Movable Type still in use may then be unable to use the
+service.</p>
+<p>
+<hr size="1" color="#CCCCCC">
+<h1><a name="parameters for the authentication response"></a>Parameters for the Authentication Response</h1>
+<p>When the authentication service has authenticated a user, it redirects
+the browser to the <code>_return</code> address, with some additional CGI
+parameters appended. The parameters are determined by the version of
+the protocol passed by the client in the CGI parameter <code>v</code>, which
+should be considered to have the value 1 if it is not passed.</p>
+<p>
+<h2><a name="response parameters in version 1.1"></a>Response Parameters in Version 1.1</h2>
+<ul>
+<li><strong><a name="item_email"></a>email</strong><br>
+
+This is the user's email address, OR a unique identifier for that
+address. It is up to the authentication system whether email addresses
+should be revealed to the client app. If this field is the SHA1 hash
+[3] of the string ``mailto:&lt;email&gt;'' then Movable Type weblogs owners
+will be able to search using the &lt;email&gt; value and find the user with
+that hash.
+<p></p>
+<li><strong><a name="item_name"></a>name</strong><br>
+
+This field supplies the user's unique login name. The login should be
+unique within the scope of the auth service. This is simply used to
+create the link to the unique profile page. Other than that, it's
+normally not displayed anywhere on the website, although MT template
+writers may use it in other ways.
+<p></p>
+<li><strong>nick</strong><br>
+
+This field gives the ``Display Name'': the name by which the user wants
+to be known publicly. This need not be unique. It is displayed on the
+MT weblog.
+<p></p>
+<li><strong><a name="item_ts"></a>ts</strong><br>
+
+This is the timestamp when the signature was generated, expressed as
+seconds since the epoch (1970-01-01 00:00:00 UTC). MT will ensure that
+the timestamp was generated within n seconds of it's own local notion
+of time, where n is a reasonably small window. This implies that MT
+sites should be time-synchronized (using ntp or the like) with the
+authentication service.
+<p></p>
+<li><strong><a name="item_sig"></a>sig</strong><br>
+
+This value is the signature which Movable Type will use to verify that
+the above parameters are being passed by a trusted service. The
+signature is computed using the DSA algorithm, which produces a value
+with two parts, <i>r</i> and <i>s</i>. The value of the <a href="#item_sig"><code>sig</code></a> parameter is
+formed by concatenating the base64 representation [4] of <i>r</i> and <i>s</i>,
+joined by a colon:
+<pre>&lt;r-base64&gt;:&lt;s-base64&gt;
+</pre><p>The ``message'' to be signed by the authentication service is a string
+formed by concatenating several values, separated by double-colons
+(``::'').</p>
+<pre>&lt;email&gt;::&lt;name&gt;::&lt;nick&gt;::&lt;ts&gt;::&lt;site token&gt;
+</pre><p>All of these values are also given in the cleartext of the response
+(as above) except for the site token, which was passed by the
+client. For example, If I was ``Napoleon Bonaparte''
+&lt;<a href="mailto:napoleon@france.fr">napoleon@france.fr</a>&gt; with a login name of 'napster', and I logged in
+at 2001-09-08 19:00:00 (or 1000000800 seconds from the epoch), sig
+would be the signature for this string:</p>
+<pre>napoleon@france.fr::Napolon Bonaparte::napster::1000000800::6jTGQ2MF1focBR5vODfC
+</pre><p></p></ul>
+<p>
+<h2><a name="response parameters in version 1"></a>Response Parameters in Version 1</h2>
+<p>Version 1 of the protocol is exactly as specified for version 1.1,
+except that the site token is not included in the response
+signature. The value which is passed to the DSA algorithm is thus:</p>
+<pre>   &lt;email&gt;::&lt;name&gt;::&lt;nick&gt;::&lt;ts&gt;
+</pre><p>
+<hr size="1" color="#CCCCCC">
+<h1><a name="format of the dsa key"></a>Format of the DSA key</h1>
+<p>A public key for the Digital Signature Algorithm consists of four
+fields: p, q, g, and pub_key. When MT searches for a DSA key, it
+expects the four fields to be given in decimal, on one line of text,
+separated by whitespace. The fields are separated from their names by
+a '=' character. For example:</p>
+<pre>p=11671236708387678327224206536086899180337891539414163231548040398520841845883184000627860280911468857014406210406182985401875818712804278750455023001090753 g=8390523802553664927497849579280285206671739131891639945934584937465879937204060160958306281843225586442674344146773393578506632957361175802992793531760152 q=1096416736263180470838402356096058638299098593011 pub_key=10172504425160158571454141863297493878195176114077274329624884017831109225358009830193460871698707783589128269392033962133593624636454152482919340057145639
+</pre><p>
+<h2><a name="hidden email addresses"></a>Hidden email addresses</h2>
+<p>MT3 has a feature to allow authentication services to protect
+commenters' email addresses while still providing identity for those
+people. When this feature is used, the authentication service doesn't
+pass email addresses to MT, but instead passes a value that is
+computed from the email address by a one-way hash function.</p>
+<p>Let's use an example. You're using an authentication system that isn't
+passing Luke's email address to you. A commenter comes to your site
+who you don't know, and uses the name 'Luke Skywalker.' After reading
+the comment, you decide it is relevant to the discussion and you
+approve him. Some time later you see another comment, which is
+malicious and off-topic, bearing the name Luke Skywalker. Is this the
+same person? To find out, you go into the ``Comments'' screen in Movable
+Type, and find the recent comment by ``Luke Skywalker.'' To search for
+all comments by that particular user, you just click the
+magnifying-glass icon next to his name. He may have used a different
+name at some time, but nonetheless all comments posted by that account
+will appear as the result of this search.</p>
+<p>Now suppose that someone named Grover has posted on your site and you
+want to know if that's your friend <a href="mailto:grover@sesamestreet.com.">grover@sesamestreet.com.</a> You can
+type that email address into the search box on the comment screen, and
+it will even find the comments of his where his email address is
+hidden.</p>
+<p>It's a lot like magic, but it's possible because of a one-way
+mathematical 'hash' function which hides the email address while still
+making it searchable.</p>
+<p>When this feature is used, the value passed is the same as the value
+used in FOAF files [5], so you can also determine whether a commenter
+is the same person identified by a given FOAF file.</p>
+<p>Specifically, the hashed email address is formed by prepending
+<code>mailto:</code> to the address and hashing the result.</p>
+<p>
+<hr size="1" color="#CCCCCC">
+<h1><a name="encoding issues"></a>Encoding Issues</h1>
+<p>The <a href="#item_nick"><code>nick</code></a> field stored by the service will be displayed by Movable
+Type in HTML pages, and may include encode characters from a very
+large set. Since the target pages (generally, weblogs) may be use a
+variety of encodings, which are not known to the authentication
+service, the safest practice is to encode the <a href="#item_nick"><code>nick</code></a> field with HTML
+entities.</p>
+<p>The <a href="#item_nick"><code>nick</code></a> CGI parameter in the authentication response must be
+byte-for-byte identical to the value used to compute the
+signature. Aside from URL-decoding the query string, Movable Type will
+not do any re-coding when verifying the signature.</p>
+<p>However, the <a href="#item_nick"><code>nick</code></a> value is not restricted to the US-ASCII character
+set, and authentication services are free to assume a particular encoding
+if desired.</p>
+<p>
+<hr size="1" color="#CCCCCC">
+<h1><a name="references"></a>References</h1>
+<DL>
+<li><strong><a name="item_%5B1%5D_Digital_Signature_Algorithm%2C_%3Chttp%3A%"></a>[1] Digital Signature Algorithm, &lt;http://www.itl.nist.gov/fipspubs/fip180-1.htm&gt;</strong><br>
+<DD>
+<li><strong><a name="item_%5B2%5D_FIPS_PUB_186%2C_Digital_Signature_Standard"></a>[2] FIPS PUB 186, Digital Signature Standard, &lt;http://www.itl.nist.gov/fipspubs/fip186.htm&gt;</strong><br>
+<DD>
+<li><strong><a name="item_%5B3%5D_FIPS_PUB_180%2D1%2C_Secure_Hash_Standard%2"></a>[3] FIPS PUB 180-1, Secure Hash Standard, &lt;http://www.itl.nist.gov/fipspubs/fip180-1.htm&gt;</strong><br>
+<DD>
+<li><strong><a name="item_Extensions"></a>[4] RFC 2045 - Multipurpose Internet Mail Extensions (MIME) Part
+One: Format of Internet Message Bodies (Section 6.8. describes
+Base64), &lt;http://www.faqs.org/rfcs/rfc2045.html&gt;</strong><br>
+<DD>
+<li><strong><a name="item_%5B5%5D_Friend_of_a_Friend_project%2C_%3Chttp%3A%2"></a>[5] Friend of a Friend project, &lt;http://www.foaf-project.org/&gt;</strong><br>
+<DD>
+</DL>
+
+<hr size="1" color="#CCCCCC">
+<span class="copyright">Copyright &copy; 2001-2005 Six Apart. All Rights Reserved.</span>
+</body>
+
+</html>

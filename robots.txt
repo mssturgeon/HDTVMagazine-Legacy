@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: *-new.php
+Disallow: /admin/
+Disallow: /test/
+Disallow: /xml/
+Disallow: /cgi-bin/ntlinktrack.cgi
+Disallow: /forum/memberlist.php
+http://www.hdtvmagazine.com/web_sitemap_d6f98985.xml.gz # Added by Google Sitemap Generator

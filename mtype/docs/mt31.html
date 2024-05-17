@@ -1,0 +1,210 @@
+<html>
+<head>
+<title>mt31 - Guide to the New Features in Movable Type 3.1</title>
+<link rel="stylesheet" href="doc-styles.css" type="text/css">
+</head>
+
+<body>
+<h3>Movable Type 3.1 Guide</h3>
+
+
+<a name="__index__"></a>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#features">FEATURES</a></li>
+	<ul>
+
+		<li><a href="#dynamic pages">Dynamic Pages</a></li>
+		<li><a href="#scheduled posting">Scheduled Posting</a></li>
+		<li><a href="#subcategories">Sub-Categories</a></li>
+		<li><a href="#applicationlevel callbacks">Application-Level Callbacks</a></li>
+	</ul>
+
+	<li><a href="#authors">AUTHORS</a></li>
+</ul>
+<hr size="1" color="#CCCCCC">
+<p>
+<h1><a name="name"></a>NAME</h1>
+<p>mt31 - Guide to the New Features in Movable Type 3.1</p>
+<p>
+<hr size="1" color="#CCCCCC">
+<h1><a name="synopsis"></a>SYNOPSIS</h1>
+<p>This document describes the new features in Movable Type 3.1, and the steps
+for new and upgrading users to take advantage of these features.</p>
+<p>
+<hr size="1" color="#CCCCCC">
+<h1><a name="features"></a>FEATURES</h1>
+<p>
+<h2><a name="dynamic pages"></a>Dynamic Pages</h2>
+<p>The most prominent new feature in Movable Type 3.1 is the dynamic page
+functionality, allowing you to combine static page generation with dynamic
+pages on a per-template basis. This allows you to balance the publishing
+and traffic for your weblog, and gives you the best of both worlds: you can
+turn on static page generation for frequently-requested pages like your site
+index and feeds, and use dynamic pages for your monthly, individual, and
+other archive pages. This completely eliminates the need to manually rebuild
+your files; when you update the design of your archive templates, for example,
+the design of your site will immediately be updated without requiring you to
+rebuild.</p>
+<p>To enable dynamic rendering of your templates:</p>
+<ol>
+<li><strong><a name="item_Turn_on_the_dynamic_page_option_in_Movable_Type%2E"></a>Turn on the dynamic page option in Movable Type.</strong><br>
+
+Go to the ``Templates'' panel in Movable Type and choose either ``Build
+archives dynamically'' or ``Set Each Template's Build Options
+Separately'' from the ``Dynamic Building Options'' menu.  If you choose
+``Set Each Template's Build Options Separately'', you will need to edit
+each template you want to enable as dynamic and select the ``Enable
+dynamic building for this template'' option.
+<p></p>
+<li><strong><a name="item_Set_up_the_template_cache_directory%2E"></a>Set up the template cache directory.</strong><br>
+
+In your weblog's root directory, create a new subdirectory named
+<code>templates_c</code>. It should have a permission mask of <code>777</code>.
+<p></p>
+<li><strong><a name="item_Set_up_your_%2Ehtaccess_file%2E"></a>Set up your <i>.htaccess</i> file.</strong><br>
+
+In your weblog root directory, you need to create a <i>.htaccess</i> file which
+will handle request for dynamic pages. This file should look like this:
+<pre># Disable fancy indexes, so mtview.php gets a chance...
+Options -Indexes
+  &lt;IfModule mod_rewrite.c&gt;
+  # The mod_rewrite solution is the preferred way to invoke
+  # dynamic pages, because of its flexibility.
+   # Add mtview.php to the list of DirectoryIndex options, listing it last, 
+  # so it is invoked only if the common choices aren't present...
+  &lt;IfModule mod_dir.c&gt;
+    DirectoryIndex index.php index.html index.htm default.htm default.html default.asp /mtview.php
+  &lt;/IfModule&gt;
+   RewriteEngine on
+   # don't serve mtview.php if the request is for a real directory
+  # (allows the DirectoryIndex lookup to function)
+  RewriteCond %{REQUEST_FILENAME} !-d
+   # don't serve mtview.php if the request is for a real file
+  # (allows the actual file to be served)
+  RewriteCond %{REQUEST_FILENAME} !-f
+  # anything else is handed to mtview.php for resolution
+  RewriteRule ^(.*)$ /mtview.php [L,QSA]
+&lt;/IfModule&gt;
+ &lt;IfModule !mod_rewrite.c&gt;
+  # if mod_rewrite is unavailable, we forward any missing page
+  # or unresolved directory index requests to mtview
+  # if mtview.php can resolve the request, it returns a 200
+  # result code which prevents any 4xx error code from going
+  # to the server's access logs. However, an error will be
+  # reported in the error log file. If this is your only choice,
+  # and you want to suppress these messages, adding a &quot;LogLevel crit&quot;
+  # directive within your VirtualHost or root configuration for
+  # Apache will turn them off.
+  ErrorDocument 404 /mtview.php
+  ErrorDocument 403 /mtview.php
+&lt;/IfModule&gt;
+</pre><p>If your weblog is under a subdirectory, like <i>/weblog</i>, then you should
+prefix the location of <i>mtview.php</i> with that path
+(ie: <i>/weblog/mtview.php</i>).</p>
+<p>If you already have a <i>.htaccess</i> file, append the above lines to the
+bottom of it.</p>
+<p></p>
+<li><strong><a name="item_Your_final_%22Rebuild_All%22%2E"></a>Your final ``Rebuild All''.</strong><br>
+
+Finally, do a ``Rebuild All'' step to reconfigure your existing entries with
+this new option.
+<p></p></ol>
+<p>An optional step is to turn on dynamic caching of your pages. If you want
+to try this option to see how it works, create a <i>cache</i> subdirectory in
+your weblog's root directory and set the permissions to <code>777</code>. Then add
+this line to your <strong>Dynamic Site Bootstrapper</strong> template:</p>
+<pre>$mt-&gt;caching = true;
+</pre><p>That should be placed just above the <code>$mt-&gt;view()</code> line.</p>
+<p>Please note that at this time, only the standard Movable Type tags are
+supported with the dynamic rendering option. Existing plugins are not
+compatible with this new feature, since they are written in Perl and not
+PHP. If you are seeing errors due to using plugin tags, you will either need
+to remove the <code>tag(s)</code> or change that template to render statically.</p>
+<p>
+<h2><a name="scheduled posting"></a>Scheduled Posting</h2>
+<p>Using post scheduling, you can set a time and date for your posts to appear,
+permitting automatic updates to your weblog even when you're away. Using post
+scheduling, you can keep your weblog community up to date and involved, even
+if you're not at your computer to create new posts.</p>
+<p>To set up scheduled posting, you need to be able to set up a <i>cron</i> job on
+your server. If you have shell access, you can do this as follows:</p>
+<ol>
+<li><strong><a name="item_Log_in_to_the_server%2E"></a>Log in to the server.</strong><br>
+
+<li><strong><a name="item_Edit_your_crontab%3A"></a>Edit your crontab:</strong><br>
+
+<pre>% crontab -e
+</pre><li><strong><a name="item_Add_the_following_line%3A"></a>Add the following line:</strong><br>
+
+<pre>0,15,30,45 * * * * cd &lt;path to mt&gt;; ./tools/run-periodic-tasks
+</pre></ol>
+<p>This instructs the cron monkey to run the script at zero, fifteen, thirty,
+and forty-five minutes after the hour, every hour. The asterisks are a way
+of telling cron to do this every hour, every day, every day of the week and
+month. Make sure you have exactly four asterisks separated by spaces.</p>
+<p><i>&lt;path to mt&gt;</i> should be the path to your Movable Type application
+directory.</p>
+<p>After that, just save the file, exiting your editor, and cron will report
+that it installed a new crontab.</p>
+<p><strong>Note:</strong> if you have a cPanel account, you can set up cron jobs through the
+cPanel web interface. See <a href="./mtmanual_advanced.html#scheduled posting">the manual</a>
+for more information.</p>
+<p>To specify the time when the entry should appear on the site, use the
+field labeled ``Authored On'' on the Edit Entry screen.</p>
+<p>
+<h2><a name="subcategories"></a>Sub-Categories</h2>
+<p>The new category management interface in 3.1 gives you fine-grained control
+over the organization and display of your posts. You can easily create new
+subcategories, and move a subcategory from one parent category to another
+using a slick, easy interface. Not only that, the subcategory support is
+extremely powerful, because it builds upon David Raynes' SubCategories plugin
+and thus inherits all of the tags included in that plugin. David has done a
+great job helping us with integrating the plugin into the core Movable Type
+engine.</p>
+<p>To start managing the sub-categories in your Movable Type weblog, log in to
+Movable Type, click on the weblog name that you wish to edit, then click on
+the ``Categories'' tab.</p>
+<p>For new users, the default templates in Movable Type 3.1 have been updated
+to take advantage of the new subcategories functionality. If you're an
+upgrading user, you can add a list of your subcategories to your template
+using the following code:</p>
+<pre>&lt;MTSubCategories&gt;
+&lt;MTSubCatIsFirst&gt;&lt;ul&gt;&lt;/MTSubCatIsFirst&gt;
+&lt;MTIfNonZero tag=&quot;MTCategoryCount&quot;&gt;
+&lt;li&gt;&lt;a href=&quot;&lt;$MTCategoryArchiveLink$&gt;&quot; title=&quot;&lt;$MTCategoryDescription$&gt;&quot;&gt;&lt;MTCategoryLabel&gt;&lt;/a&gt;
+&lt;MTElse&gt;
+&lt;li&gt;&lt;MTCategoryLabel&gt;
+&lt;/MTElse&gt;
+&lt;/MTIfNonZero&gt;
+&lt;MTSubCatsRecurse max_depth=&quot;3&quot;&gt;
+&lt;/li&gt;
+&lt;MTSubCatIsLast&gt;&lt;/ul&gt;&lt;/MTSubCatIsLast&gt;
+&lt;/MTSubCategories&gt;
+</pre><p>More documentation about the new subcategories tags is available in
+<a href="./mtmanual_tags.html">the manual</a>.</p>
+<p>
+<h2><a name="applicationlevel callbacks"></a>Application-Level Callbacks</h2>
+<p>Building on the new extensibility in Movable Type 3.0 are new features in 3.1
+that developers will appreciate. The object callback interface added in 3.0
+allowed developers to intercept all calls to save, remove, and update data
+objects in the database. This added an infinite new amount of options for
+developers to hook into, but 3.1 adds even more.</p>
+<p>We've added a number of new application callbacks, hooks that allow developers
+to associate new actions with critical pieces of the application code. Plugins
+can now add code to be executed to filter comments and TrackBacks before
+they're posted; to hook into the publishing process, filtering and modifying
+the list of files that will be published; etc.</p>
+<p>
+<hr size="1" color="#CCCCCC">
+<h1><a name="authors"></a>AUTHORS</h1>
+<p>Six Apart, <i><a href="http://sixapart.com/">http://sixapart.com/</a></i></p>
+
+<hr size="1" color="#CCCCCC">
+<span class="copyright">Copyright &copy; 2001-2005 Six Apart. All Rights Reserved.</span>
+</body>
+
+</html>

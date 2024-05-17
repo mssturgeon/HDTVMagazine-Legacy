@@ -1,0 +1,206 @@
+<html>
+<head>
+<title>mt30 - Guide to the New Features in Movable Type 3.0</title>
+<link rel="stylesheet" href="doc-styles.css" type="text/css">
+</head>
+
+<body>
+<h3>Movable Type 3.0 Guide</h3>
+
+
+<a name="__index__"></a>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#features">FEATURES</a></li>
+	<ul>
+
+		<li><a href="#comment management">Comment Management</a></li>
+		<li><a href="#comment registration">Comment Registration</a></li>
+		<ul>
+
+			<li><a href="#upgrading templates to enable comment registration">Upgrading Templates to Enable Comment Registration</a></li>
+		</ul>
+
+		<li><a href="#object callbacks for plugin developers">Object Callbacks for Plugin Developers</a></li>
+		<li><a href="#internationalization">Internationalization</a></li>
+		<li><a href="#background tasks">Background Tasks</a></li>
+	</ul>
+
+	<li><a href="#new archive filenames">New Archive Filenames</a></li>
+	<li><a href="#upgrading">UPGRADING</a></li>
+	<li><a href="#developer notes">DEVELOPER NOTES</a></li>
+	<ul>
+
+		<li><a href="#lazy loading of entries">Lazy Loading of Entries</a></li>
+	</ul>
+
+</ul>
+<hr size="1" color="#CCCCCC">
+<p>
+<hr size="1" color="#CCCCCC">
+<h1><a name="name"></a>NAME</h1>
+<p>mt30 - Guide to the New Features in Movable Type 3.0</p>
+<p>
+<hr size="1" color="#CCCCCC">
+<h1><a name="synopsis"></a>SYNOPSIS</h1>
+<p>This document describes the new features in Movable Type 3.0, and the
+steps for upgrading users to take advantage of these features.</p>
+<p>
+<hr size="1" color="#CCCCCC">
+<h1><a name="features"></a>FEATURES</h1>
+<p>
+<h2><a name="comment management"></a>Comment Management</h2>
+<p>Movable Type 3.0 includes powerful new features for managing comments.</p>
+<p>All comments can be searched and modified from a central ``Comments''
+page. And as in previous versions, the `edit entry' page still
+contains a list of comments associated with the corresponding entry.</p>
+<p>Throughout the comment, entry, and trackback listings, you'll see the
+new magnifying glass icon beside a field, which means you can search
+on the value of that field. For example, this allows you to search for
+``All comments by this author'' or ``All trackbacks connected with this
+entry.''</p>
+<p>
+<h2><a name="comment registration"></a>Comment Registration</h2>
+<p>In addition to comment management, Movable Type 3.0 offers a way to
+accept an identity for each commenter, and to moderate comments based
+on that identity.</p>
+<p>The authentication service in Movable Type 3.0 is provided by the
+TypeKey system. TypeKey is a centralized registration system which
+offers users a single sign-on service across a variety of applications
+including Movable Type 3.0.</p>
+<p>A commenter's identity is stored and managed at the TypeKey site, but
+as a weblog owner, you control the set of commenters who have
+permission to leave comments on your site.</p>
+<p>The comment registration system has a variety of options which can be
+controlled in the ``Weblog Config'' area of Movable Type.</p>
+<p>
+<h3><a name="upgrading templates to enable comment registration"></a>Upgrading Templates to Enable Comment Registration</h3>
+<p>When you install Movable Type 3.0 `out of the box,' it comes packaged
+with new default templates which contain the links to the comment
+registration sign-in process, and wihch greet the user on return to
+your site.</p>
+<p>If you're upgrading from a previous version and you want to enable
+comment registration, you'll need to modify your templates. The
+easiest way to do this is to use the &lt;$MTCommentFields$&gt; tag. This tag
+detects whether you have comment registration enabled and, if so,
+expands to an HTML &lt;form&gt; element that contains all the
+correct fields for your current configuration.</p>
+<p>
+<h2><a name="object callbacks for plugin developers"></a>Object Callbacks for Plugin Developers</h2>
+<p>The most interesting new feature in Movable Type 3.0 is a feature that
+plugin developers will use to make the Movable Type platform even more
+powerful. Developers looking for more information about this feature
+should look at the perldoc documentation in <code>MT::Object</code>,
+<code>MT::Plugin</code> and <code>MT::Callback</code>.</p>
+<p>
+<h2><a name="internationalization"></a>Internationalization</h2>
+<p>By default, a fresh installation of Movable Type 3.0 labels all its
+pages as being in the UTF-8 character encoding (upgraded installations
+won't be reconfigured unless you reconfigure them). You can change the
+encoding that you use by using the PublishCharset configuration
+setting.</p>
+<p>Note that under Apache 2.0, the Apache directive AddDefaultCharset
+will override MT's setting. If you want MT to use a character set
+different from the one that Apache uses, you should turn off the
+AddDefaultCharset option in your Apache configuration file.</p>
+<p>
+<h2><a name="background tasks"></a>Background Tasks</h2>
+<p>Movable Type 3.0 has a smoother interface, in part because of a new
+feature called 'background tasks.' This allows Movable Type to do some
+lengthy operations, such as rebuilding, in the background, rather than
+forcing you to wait for them to complete. This also allows Movable
+Type to play more nicely with other pieces of software, such as
+notification tools that send TrackBack pings.</p>
+<p>However, this feature is not compatible with some systems. If you have
+trouble with rebuilds or if you see erratic database-related errors,
+try turning this feature off. To do so, add this line to your mt.cfg
+configuration file:</p>
+<pre>   BackgroundTasks 0
+</pre><p>
+<hr size="1" color="#CCCCCC">
+<h1><a name="new archive filenames"></a>New Archive Filenames</h1>
+<p>Traditionally, Movable Type archives were a flat directory rather than
+a hierarchical structure, and individual archives were given numerical
+names, such as 0000451.html.</p>
+<p>In Movable Type 3.0, individual archives have a name that is based on
+the (original) title of the entry, such as
+<code>great_expection.html</code>. Furthermore, all archives are stored in a
+date-based hierarchy, so an individual archive will have a path such
+as 2004/05/great_expectation.html. Daily, monthly, and weekly archives
+are also stored within the directory corresponding to the larger time
+unit. For example, May 2004 archives are stored in 2004/05/index.html.</p>
+<p>If you are upgrading from a previous version of Movable Type, you may
+not want your archive URLs to change, for example, if other websites
+are linking to your archive pages. In this case, you will want to set
+the Weblog Config option, ``Use Old-style Archive Links.'' Your archives
+will be built using the exact same names they traditionally have. By
+default an upgraded installation will have this option turned on,
+while a fresh installation will not.</p>
+<p>
+<hr size="1" color="#CCCCCC">
+<h1><a name="upgrading"></a>UPGRADING</h1>
+<p>This section describes the actions you should take if you have already
+installed a previous version of Movable Type and are upgrading that
+installation.</p>
+<p>Movable Type 3.0 has two new files that support a better user
+interface. If you're using a ``static files'' directory, as described in
+<a href="./mtinstall.html#item_configure_path_to_static_files">``Configure path to Static files''</a>,
+you'll need to move <i>mt.js</i> and <i>styles.css</i> to that directory.</p>
+<p>If you're upgrading from version 3.0 or later, just run the script
+<code>mt-upgrade30.cgi</code>. If you're upgrading from an earlier version, you
+need to upgrade to each successive version in turn. This is done by
+running the upgrade scripts in order:</p>
+<p>
+<hr size="1" color="#CCCCCC">
+<h1><a name="developer notes"></a>DEVELOPER NOTES</h1>
+<p>
+<h2><a name="lazy loading of entries"></a>Lazy Loading of Entries</h2>
+<p>In previous Movable Type versions, we placed an element in the stash
+called <code>entries</code> which was a reference to a list of MT::Entry objects.
+The particular set of objects depended on the context; for example,
+inside each iteration of an <code>&lt;MTArchiveList archive_type=&quot;monthly&quot;&gt;</code>
+tag, <code>entries</code> contained the list of entries for the corresponding month.</p>
+<p>In order to improve rebuilding performance, in Movable Type 3.0 we're 
+using lazy evaluation to get the entries only when needed.</p>
+<p>In version 3.0b3 and later, <code>entries</code> will not contain a reference to a 
+list of entries, but rather a ``promise'' for such a reference. To get 
+the entries, you just need to ``force'' the promise. Instead of the 
+following:</p>
+<pre>my $entries = $ctx-&gt;stash('entries');
+foreach my $e (@$entries) {
+    ...
+}
+</pre><p>You should use the following:</p>
+<pre>my $entries = $ctx-&gt;stash('entries')-&gt;force();
+foreach my $e (@$entries) {
+    ...
+}
+</pre><p>Note that <code>entries</code> <i>always</i> contains a promise, regardless of whether 
+the entries have already been loaded. Every place where your code uses 
+<code>entries</code> needs to be updated to reflect this.</p>
+<p>Also note that this convention applies to the <code>entries</code> element but not 
+to the <code>entry</code> element.</p>
+<p>If you want to set the value of <code>entries</code>, you need to create a
+promise. You create a promise using <code>delay()</code>. Where previously you
+would have written this:</p>
+<pre>my @entries = MT::Entry-&gt;load(...);
+local $ctx-&gt;{__stash}-&gt;{entries} = [ @entries ];
+</pre><p>You would now write this:</p>
+<pre>local $ctx-&gt;{__stash}-&gt;{entries} =
+    delay(sub{ my @entries = MT::Entry-&gt;load(...); [ @entries ]; });
+</pre><p>This routine, <code>delay()</code>, always takes a CODE reference which should 
+return a reference to a list of entries. The delay routine needs to be 
+imported from <code>MT::Promise</code>, using:</p>
+<pre>use MT::Promise qw(delay);
+</pre><p>or</p>
+<pre>require MT::Promise;
+import MT::Promise qw(delay);
+</pre>
+<hr size="1" color="#CCCCCC">
+<span class="copyright">Copyright &copy; 2001-2005 Six Apart. All Rights Reserved.</span>
+</body>
+
+</html>

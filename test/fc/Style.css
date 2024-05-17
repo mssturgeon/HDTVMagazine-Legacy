@@ -1,0 +1,56 @@
+.trdark {
+BACKGROUND-COLOR:#B0BF9D;
+}
+.trlight {
+BACKGROUND-COLOR:#F2F2F2;
+}
+.trmid {
+BACKGROUND-COLOR:#EFEFDF;
+}
+.tableWithBorder {
+Border:1px #999999 solid;
+}
+.text
+{
+FONT-SIZE: 9pt; 
+COLOR: black; 
+FONT-FAMILY: MS Sans Serif;
+LETTER-SPACING: -0.2pt; 
+}
+.textbolddark
+{
+FONT-SIZE: 9pt; 
+COLOR: black; 
+FONT-FAMILY: MS Sans Serif;
+LETTER-SPACING: -0.2pt; 
+FONT-WEIGHT:bolder;
+}
+.textboldlight
+{
+FONT-SIZE: 9pt; 
+COLOR: white; 
+FONT-FAMILY: MS Sans Serif;
+LETTER-SPACING: -0.2pt; 
+FONT-WEIGHT:bolder;
+}
+A:hover
+{
+COLOR:#FF0000;
+}
+A
+{
+FONT-SIZE: 9pt; 
+COLOR: black; 
+FONT-FAMILY: MS Sans Serif;
+LETTER-SPACING: -0.2pt; 
+TEXT-DECORATION:none;
+}
+.select 
+{
+FONT-SIZE: 9pt; 
+COLOR: black; 
+FONT-FAMILY: MS Sans Serif;
+LETTER-SPACING: -0.2pt; 
+TEXT-DECORATION:none;
+BACKGROUND-COLOR:#F2F2F2;
+}

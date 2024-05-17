@@ -1,0 +1,100 @@
+<html>
+<head>
+<title>ADVANCED FEATURES</title>
+<link rel="stylesheet" href="doc-styles.css" type="text/css">
+</head>
+
+<body>
+<h3>Movable Type User Manual: ADVANCED FEATURES</h3>
+<p><a href="mtmanual.html">&laquo; Table of Contents</a></p>
+
+
+<a name="__index__"></a>
+
+<ul>
+
+	<li><a href="#advanced features">ADVANCED FEATURES</a></li>
+	<ul>
+
+		<li><a href="#scheduled posting">Scheduled Posting</a></li>
+	</ul>
+
+</ul>
+<hr size="1" color="#CCCCCC">
+<p>
+<h1><a name="advanced features"></a>ADVANCED FEATURES</h1>
+<p>
+<h2><a name="scheduled posting"></a>Scheduled Posting</h2>
+<p>To set up scheduled posting in this version, you need to be able to
+set up a ``cron'' job on the server. There are at least two ways to do
+this: using shell access, or through cPanel. Some hosting providers
+will allow one and not the other.</p>
+<p>Once you've set up post scheduling, when you save an entry with a post
+status of ``Future'', it will be automatically picked up and published by
+the script when it runs.</p>
+<p>Note that you need to use the field labeled ``Authored On'' on the Edit
+Entry screen to specify the time when the entry should go live.</p>
+<p><strong>For Linux or Unix servers. If you have shell access to your server:</strong></p>
+<p>If you have shell access, you can set up scheduled posting as follows:</p>
+<ol>
+<li><strong><a name="item_Log_in_to_the_server"></a>Log in to the server</strong><br>
+
+<li><strong><a name="item_Edit_your_crontab%3A"></a>Edit your crontab:</strong><br>
+
+<pre>% crontab -e
+</pre><li><strong><a name="item_Add_the_following_line%3A"></a>Add the following line:</strong><br>
+
+<pre>0,15,30,45 * * * * cd &lt;path to mt&gt;; ./tools/run-periodic-tasks
+</pre></ol>
+<p>This instructs the cron monkey to run the script at zero, fifteen,
+thirty, and forty-five minutes after the hour, every hour. The
+asterisks are a way of telling cron to do this every hour, every day,
+every day of the week and month. Make sure you have exactly four
+asterisks separated by spaces.</p>
+<p><code>&lt;path to mt&gt;</code> should be the path to your Movable Type
+application directory.</p>
+<p>After that, just save the file, exiting your editor, and cron will
+report that it installed a new crontab.</p>
+<p><strong>If you have cPanel:</strong></p>
+<p>To set up scheduled posting through cPanel, follow the directions below:</p>
+<p><img src="cpanel_cron_std.png"></p><p>In the box labeled ``Command to run,'' enter the path to your Movable Type
+installation, followed by <code>/tools/run-periodic-tasks</code>:</p>
+<pre> cd &lt;path to mt&gt;; ./tools/run-periodic-tasks
+</pre><p>The timing options can be set to a schedule that suits you, however,
+it is not wise to run the script more often than about once every
+fifteen minutes, since it could bog down your server. We recommend
+the settings ``Every fifteen minutes,'' ``Every Hour,'' ``Every Day,'' ``Every
+Month,'' and ``Every Weekday.''</p>
+<p><strong>For Windows servers.</strong></p>
+<p>If Movable Type is running on a Windows server, you can create a
+scheduled task to achieve the same result. Use the following parameters
+for your task:</p>
+<ul>
+<li><strong><a name="item_Name"></a>Name</strong><br>
+
+``Movable Type Tasks''.
+<p></p>
+<li><strong><a name="item_Run"></a>Run</strong><br>
+
+The run command should be the path and filename of your Perl
+interpreter (i.e., <code>C:\Perl\bin\perl.exe</code>), followed by
+<code>tools\run-periodic-tasks</code>.
+<p></p>
+<li><strong><a name="item_Start_In"></a>Start In</strong><br>
+
+Should be the full path to your Movable Type directory.
+Example: <code>C:\Inetpub\wwwroot\mt</code>.
+<p></p>
+<li><strong><a name="item_Schedule"></a>Schedule</strong><br>
+
+The timing options can be set to a schedule that suits you, however, it is
+not wise to run the script more often than about once every fifteen minutes,
+since it could bog down your server. We recommend a frequency between every
+fifteen minutes to once a day.
+<p></p></ul>
+
+<hr size="1" color="#CCCCCC">
+<span class="copyright">Copyright &copy; 2001-2005 Six Apart. All Rights Reserved.</span>
+</body>
+
+</html>

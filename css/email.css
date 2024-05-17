@@ -1,0 +1,117 @@
+/**********
+BASE_IMG_HOST: http://www.hdtvmagazine.us;
+BG_COLOR: EDEDED;
+BORDER_COLOR: AAAAAA;
+LINK_COLOR: 003F87;
+PRIMARY_COLOR: 003F87;
+SECONDARY_COLOR: 995905;
+TERTIARY_COLOR: 73681F;
+TEXT_COLOR: 000000;
+**********/
+a:link {color:#003F87;}
+a:visited {color:#003F87;}
+a:hover {color:#003F87;}
+a:active {color:#995905;}
+a.red {color:#AA0000; font-weight:bold;}
+
+body {background:#fff; color:#000000; margin:0; padding:0;}
+/* redundant rules for bad browsers  */
+body, td, th, h3, textarea {font-family:Arial,sans-serif; font-size:9pt; voice-family:"\"}\""; voice-family:inherit;}
+
+form {margin:0;}
+h2 {color:#995905; font:1.5em Arial, sans serif; font-weight:bold; height:31px; margin:0;}
+h2 a:link {color:#995905;}
+h2 a:visited {color:#995905;}
+h2 a:hover {color:#995905;}
+h2 a:active {color:#995905;}
+img {border:0;padding:0;margin:0}
+span.corners-top, span.corners-bottom, span.corners-top span, span.corners-bottom span {font-size: 1px; line-height: 1px; display: block; height: 5px; background-repeat: no-repeat;}
+span.corners-top {background-image: none; background-position: 0 0; margin: 0 -5px;}
+span.corners-top span {background-image: none;	background-position: 100% 0;}
+span.corners-bottom {background-image: none; background-position: 0 100%; margin: 0 -5px; clear: both;}
+span.corners-bottom span {background-image: none; background-position: 100% 100%;}
+span.corners-top {background-image: url(http://www.hdtvmagazine.com/forum/styles/HDTVMagazine4/theme/images/corners_left.png);}
+span.corners-top span {background-image: url(http://www.hdtvmagazine.com/forum/styles/HDTVMagazine4/theme/images/corners_right.png);}
+span.corners-bottom {background-image: url(http://www.hdtvmagazine.com/forum/styles/HDTVMagazine4/theme/images/corners_left.png);}
+span.corners-bottom span {background-image: url(http://www.hdtvmagazine.com/forum/styles/HDTVMagazine4/theme/images/corners_right.png);}
+
+#email_container {margin:10px; width:740px}
+#email_container ul {margin:0}
+
+#date {font-size:1.5em; font-weight:bold; margin:0;}
+#heading {color:#995905; font-family:verdana; font-size:2em; font-weight:bold;}
+.keyimg {float:left; padding: 0 5px 5px 0;}
+#search {margin-top:20px; text-align:right}
+#viewonline {font-size:.9em; text-align:right}
+
+/* AD - Only used for ad backgrounds, currently displayed in a "light grey" scheme */
+.ad {background-color:#F5F7FA; font-size:1em; margin:10px 0; padding:0 10px;}
+.ad span.corners-top, .ad span.corners-bottom {margin:0 -10px;}
+#ad_leaderboard {margin:5px 0;}
+#ad_leaderboard div {background-color:#F5F7FA; padding:0 10px; width:728px}
+#ad_leaderboard span.corners-top, #ad_leaderboard span.corners-bottom {margin:0 -10px;}
+
+/* IMPORTANT - Something we want to stand out, currently displayed in the "red" scheme */
+.important {background-color:#ECD5D8; margin:10px 0; padding:0 10px;}
+.important a:link {text-decoration:underline}
+.important a:visited {text-decoration:underline}
+.important > .label {color:#800000; float:left; font-weight:bold; padding-right:5px}
+.important > .label a {color:#800000}
+.important span.corners-top, .important span.corners-bottom {margin:0 -10px;}
+
+/* ITEM - Used for displaying other boxed items, currently displayed in the "light blue" scheme */
+.item {background-color:#CEDFEF; margin:10px 0; padding:0 10px;}
+.item h3 {color:#003F87; font:1em Arial, sans serif; font-weight:bold; margin:0;}
+.item h3 > a {text-decoration:none;}
+.item h3 > a:hover {text-decoration:underline;}
+.item h4 {color:#808080; font:.8em Arial, sans serif; margin:0; text-transform:uppercase;}
+.item > .label {color:#003F87; float:left; font-weight:bold; padding-right:5px}
+.item > .label a {color:#003F87}
+.item ul {list-style:disc outside url(http://www.hdtvmagazine.com/images/square-brown_5.gif); margin:0; padding:0}
+.item li {border-bottom:1px solid white; clear:both; margin-left:20px; padding:.25em 0;}
+.item li a{text-decoration:none;}
+.item li a:hover{text-decoration:underline}
+.item span.corners-top, .item span.corners-bottom {margin:0 -10px;}
+
+.entry {margin:0; padding:0 10px;}
+.entry h2 {color:#003F87; display:inline; font:2em Times New Roman, serif; font-weight:bold; margin:0;}
+.entry h2 > a:link {color:#003F87; text-decoration:none;}
+.entry h2 > a:visited {color:#003F87; text-decoration:none;}
+.entry h2 > a:hover {color:#003F87; text-decoration:underline;}
+.entry h2 > a:active {color:#003F87; text-decoration:underline;}
+.entry h3 {color:#003F87; font:1em Arial, sans serif; font-weight:bold; margin:0;}
+.entry h3 > a {text-decoration:none;}
+.entry h3 > a:hover {text-decoration:underline;}
+.entry h4 {color:#AAAAAA; font:.8em Arial, sans serif; margin:0; text-transform:uppercase;}
+.entry div.entry_text {margin-top:10px}
+.entry .footer {margin-top:5px; text-align:right}
+.entry span.corners-top, .entry span.corners-bottom {margin:0 -10px;}
+
+/* ITEM_ODD - Used for displaying other boxed items, currently displayed in the "light light blue" scheme */
+.item_odd {background-color:#ecf3f7; margin:10px 0; padding:0 10px;}
+.item_odd h3 {color:#003F87; font:1em Arial, sans serif; font-weight:bold; margin:0;}
+.item_odd h3 > a {text-decoration:none;}
+.item_odd h3 > a:hover {text-decoration:underline;}
+.item_odd h4 {color:#808080; font:.8em Arial, sans serif; margin:0; text-transform:uppercase;}
+.item_odd ul {list-style:disc outside url(http://www.hdtvmagazine.com/images/square-brown_5.gif); margin:0; padding:0}
+.item_odd li {border-bottom:1px solid white; margin-left:20px; padding:.25em 0;}
+.item_odd li a{text-decoration:none;}
+.item_odd li a:hover{text-decoration:underline}
+.item_odd span.corners-top, .item_odd span.corners-bottom {margin:0 -10px;}
+
+/* MENU classes */
+div.menu {background-color:#003F87; margin-bottom:10px; padding:0 10px;}
+div.menu span.corners-top, div.menu span.corners-bottom {margin:0 -10px;}
+ul.menu {float:left; font-weight:bold; margin:0; padding:0; width:100%;}
+ul.menu li {display: inline;}
+ul.menu li a {border-left:1px solid white; float:left; padding:3px 7px}
+ul.menu li a:link {color:white}
+ul.menu li a:visited {color:white}
+ul.menu li a:hover {color:white}
+ul.menu li a:active {color:white}
+
+/*
+	NEW STUFF
+*/
+/* Make first image align properly in bulletins,  */
+#email_container .content img:first-child{float:left; padding:0 5px 5px 0;}

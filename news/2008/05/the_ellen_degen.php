@@ -1,0 +1,554 @@
+<?
+	### ARCHIVE_IND.PHP.TPL ###
+	require('/var/www/html/global.php');
+	$debug = isset($_GET['debug']);
+
+	function getByPGMasterID($masterid) {
+		global $admindata, $debug;
+
+		# First check to see if it's in the database
+		$sql_pg = "SELECT * FROM pg_main WHERE masterid = '$masterid'";
+		$res_pg = mQuery($sql_pg);
+		if (mysql_num_rows($res_pg) != 0) return mysql_fetch_assoc($res_pg);
+
+		# Not found ... try to get dynamically
+		$pg_request_url = "http://ah.pricegrabber.com/search_xml.php?pid=718&key=7e084a24802&version=2.14&upc=1&spec=2&offers=1&masterid=$masterid";
+		$contents = file_get_contents($pg_request_url);
+		$xml = new SimpleXMLElement( $contents );
+
+		$pg_main = array();
+		$product = $xml->product;
+		$pg_main['url'] = $product->url;
+		$pg_main['masterid'] = $product->masterid;
+		$pg_main['title'] = $product->title;
+		$pg_main['image_small'] = $product->image_small;
+		$pg_main['image_medium'] = $product->image_medium;
+		$pg_main['image_large'] = $product->image_large;
+		$pg_main['image_160'] = $product->image_160;
+#		$pg_main['reative_rank'] = $product->reative_rank;
+		$pg_main['manufacturer'] = $product->manufacturer;
+		$pg_main['partnum'] = $product->partnum;
+		$pg_main['upc'] = $product->upc;
+#		$pg_main['price'] = $product->masterid;
+		$pg_main['price_formatted'] = $product->price;
+		$pg_main['sellers'] = $product->num_sellers[0];
+		$pg_main['rating'] = $product->rating;
+		$pg_main['num_reviews'] = $product->num_reviews;
+
+		# Update pg_main
+		$sql = "REPLACE INTO pg_main (". join(", ", array_keys($pg_main)) .", date_updated) VALUES ('". join("', '", array_values($pg_main)) ."', NOW())";
+		if ($debug) {echo "$sql\n";} else {mQuery($sql);}
+
+		# Now that we KNOW it's in the database ...
+		$res_pg = mQuery($sql_pg);
+		return mysql_fetch_assoc($res_pg);
+	}
+
+	function getByASIN($asin) {
+		global $admindata, $debug;
+
+		# First check to see if it's in the database
+		$sql_amazon = "SELECT * FROM az_main m, az_attributes a WHERE m.ASIN = '$asin' AND m.ASIN = a.ASIN";
+		$res_amazon = mQuery($sql_amazon);
+		if (mysql_num_rows($res_amazon) != 0) return mysql_fetch_assoc($res_amazon);
+
+		# Not found ... try to get dynamically
+		$parameters = "AWSAccessKeyId={$admindata['amazon_access_key']}".
+		"&AssociateTag={$admindata['amazon_associates_id']}".
+		"&ItemId=$asin".
+		"&Operation=ItemLookup".
+		"&ResponseGroup=ItemAttributes,OfferSummary,Images".
+		"&Service=AWSECommerceService".
+		"&Timestamp=". gmdate("Y-m-d\TH:i:s\Z") .
+		"&Version=2009-11-01";
+		$parameters = str_replace(array(':',','), array('%3A','%2C'), $parameters);
+
+		$signature = base64_encode(hash_hmac("sha256", "GET\nwebservices.amazon.com\n/onca/xml\n$parameters", $admindata['amazon_secret_access_key'], true));
+		$signature = str_replace(array('+','='), array('%2B','%3D'), $signature);
+		$signed_request = "http://webservices.amazon.com/onca/xml?{$parameters}&Signature=$signature";
+
+		$contents = file_get_contents($signed_request);
+		$xml = new SimpleXMLElement( $contents );
+
+		# Verify a successful request
+		if (is_object($xml->OperationRequest->Errors->Error)) {
+			foreach($xml->OperationRequest->Errors->Error as $error) {
+				$err = "Error {$error->Code}: (line ". __LINE__ .") $error->Message\n";
+				mail("shane@hdtvmagazine.com", "ERROR: "& $_SERVER['SCRIPT_URL'], $err);
+				return '';
+			}
+		}
+
+		$az_main = array();
+		$az_attributes = array();
+		$item = $xml->Items->Item;
+		$az_main['ASIN'] = $item->ASIN;
+		$az_main['DetailPageURL'] = $item->DetailPageURL;
+
+		if (is_object($item->ItemAttributes)) { # Update az_item_attributes
+			$az_attributes['ASIN'] = $item->ASIN;
+			$az_attributes['Brand'] = $item->ItemAttributes->Brand;
+			$az_attributes['EAN'] = $item->ItemAttributes->EAN;
+			$az_main['Weight'] = $item->ItemAttributes->ItemDimensions->Weight;
+#			$az_main['Label'] = $item->ItemAttributes->Label;
+			$az_main['ListPrice'] = $item->ItemAttributes->ListPrice->Amount;
+			$az_main['ListPriceFormatted'] = $item->ItemAttributes->ListPrice->FormattedPrice;
+			$az_attributes['Manufacturer'] = $item->ItemAttributes->Manufacturer;
+			$az_attributes['Model'] = $item->ItemAttributes->Model;
+			$az_attributes['MPN'] = $item->ItemAttributes->MPN;
+			$az_attributes['ProductGroup'] = $item->ItemAttributes->ProductGroup;
+#			$az_main['ProductTypeName'] = $item->ItemAttributes->ProductTypeName;
+			$az_attributes['Publisher'] = $item->ItemAttributes->Publisher;
+			$az_attributes['Studio'] = $item->ItemAttributes->Studio;
+			$az_attributes['Title'] = $item->ItemAttributes->Title;
+			$az_attributes['UPC'] = $item->ItemAttributes->UPC;
+		}
+
+		if (is_object($item->OfferSummary)) { # Update az_main (might want to put into a separate table)
+			$az_main['TotalNew'] = $item->OfferSummary->TotalNew;
+			if ($az_main['TotalNew'] > 0) {
+				$az_main['LowestNewPrice'] = $item->OfferSummary->LowestNewPrice->Amount;
+				$az_main['LowestNewPriceFormatted'] = $item->OfferSummary->LowestNewPrice->FormattedPrice;
+			}
+			$az_main['TotalUsed'] = $item->OfferSummary->TotalUsed;
+			if ($az_main['TotalUsed'] > 0) {
+				$az_main['LowestUsedPrice'] = $item->OfferSummary->LowestUsedPrice->Amount;
+				$az_main['LowestUsedPriceFormatted'] = $item->OfferSummary->LowestUsedPrice->FormattedPrice;
+			}
+			$az_main['TotalRefurbished'] = $item->OfferSummary->TotalRefurbished;
+			if ($az_main['TotalRefurbished'] > 0) {
+				$az_main['LowestRefurbishedPrice'] = $item->OfferSummary->LowestRefurbishedPrice->Amount;
+				$az_main['LowestRefurbishedPriceFormatted'] = $item->OfferSummary->LowestRefurbishedPrice->FormattedPrice;
+			}
+		}
+
+		if (is_object($item->SmallImage)) { # Update az_main (might want to put images in separate table)
+			$az_main['SmallImageURL'] = $item->SmallImage->URL;
+			$az_main['SmallImageHeight'] = $item->SmallImage->Height;
+			$az_main['SmallImageWidth'] = $item->SmallImage->Width;
+		}
+		if (is_object($item->MediumImage)) { # Update az_main (might want to put images in separate table)
+			$az_main['MediumImageURL'] = $item->MediumImage->URL;
+			$az_main['MediumImageHeight'] = $item->MediumImage->Height;
+			$az_main['MediumImageWidth'] = $item->MediumImage->Width;
+		}
+
+		# Update az_main
+		$sql = "REPLACE INTO az_main (". join(", ", array_keys($az_main)) .", date_updated) VALUES ('". join("', '", array_values($az_main)) ."', NOW())";
+		if ($debug) {echo "$sql\n";} else {mQuery($sql);}
+
+		# Update az_attributes
+		$sql = "REPLACE INTO az_attributes (". join(", ", array_keys($az_attributes)) .") VALUES ('". join("', '", array_values($az_attributes)) ."')";
+		if ($debug) {echo "$sql\n";} else {mQuery($sql);}
+
+		# Now that we KNOW it's in the database ...
+		$res_amazon = mQuery($sql_amazon);
+		return mysql_fetch_assoc($res_amazon);
+	}
+
+	# Get author information
+	$res_author = mQuery("SELECT title, channel, amazon_tracking_id, img, bio_short FROM aux_author au, mt_author a WHERE au.author_id = a.author_id AND a.author_name = 'Shane Sturgeon'");
+	$author = mysql_fetch_assoc($res_author);
+	$author_title = ($author['title'] == '') ? '' : "{$author['title']}<br />";
+	$author_headshot = ($author['img'] == '') ? '' : '<img src="'. BASE_IMG_HOST .'/images/portraits/'. $author['img'] .'" alt="Shane Sturgeon" height="100" width="100"/>';
+	$amazon_tracking_id = ($author['amazon_tracking_id'] != '') ? $author['amazon_tracking_id'] : $admindata['amazon_associates_id'];
+	$google_links_channel = $author['channel'];
+
+	# Get category information
+	$sql = "SELECT placement_category_id FROM mt_placement WHERE placement_entry_id = 1385 AND placement_is_primary = 1";
+	$res_category = mQuery($sql);
+	$row_category = mysql_fetch_assoc($res_category);
+	$category_id = $row_category['placement_category_id'];
+
+	# Get auxiliary information
+	$sql = "SELECT t.topic_id, topic_replies, ASIN, pg_masterid
+	FROM aux_mt_entry a, phpbb_topics t
+	WHERE a.entry_id = 1385
+		AND a.topic_id = t.topic_id";
+	$res_aux = mQuery($sql);
+	$row_aux = mysql_fetch_assoc($res_aux);
+
+	# Get Comments
+	if ($row_aux['topic_replies'] > 0) {
+		$comments = '<li class="li_horizontal"><img src="'. BASE_IMG_URL .'/images/icon_comments.gif" alt="" height="14" width="16" /> '.
+		'<a href="/forum/viewtopic.php?t='. $row_aux['topic_id'] .'">'. $row_aux['topic_replies'] .' Comments</a></li>';
+	} else {
+		$comments = '<li class="li_horizontal"><img src="'. BASE_IMG_URL .'/images/icon_comments.gif" alt="" height="14" width="16" /> '.
+		'<a class="red" href="/forum/viewtopic.php?t='. $row_aux['topic_id'] .'">Post First Comment</a></li>';
+	}
+
+	# Get Pricegrabber info
+	if ($row_aux['pg_masterid'] != '') $row_pg = getByPGMasterID($row_aux['pg_masterid']);
+	if ($row_pg != '') {
+		$pg_mlink = '<script language="javascript" type="text/javascript" 	src="http://ah.pricegrabber.com/cb_table.php?masterid='. $row_pg['masterid'] .'&keyword="The Ellen Degeneres Show" to be Broadcast in High Definition&dw=1&cobrand_id=718&vw=2&sml=1&rst=1&sblpt=1&slp=1&olt=1&w=100&pgb=1&sbt=1&ssbox=1&ss=0&l=20&spic=1&ssbox=1"></script>';
+		$pg_url = $row_pg['url'];
+		$pg_price = $row_pg['price_formatted'];
+	}
+
+	# Get Amazon info
+	if ($row_aux['ASIN'] != '') $row_amazon = getByASIN($row_aux['ASIN']);
+	if ($row_amazon != '') {
+		$az_url = str_replace($admindata['amazon_associates_id'], $amazon_tracking_id, $row_amazon['DetailPageURL']);
+		$az_image = '<img src="'. $row_amazon['MediumImageURL'] .'" alt="'. $row_amazon['Title'] .'" style="keyimg" height="'. $row_amazon['MediumImageHeight'] .'" width="'. $row_amazon['MediumImageWidth'] .'"/>';
+		$review_header = <<<EOT
+<table align="center" class="greygrid"><!--tr>
+	<td style="font-weight:bold; text-align:center;" colspan="4">{$row_amazon['Title']}</td></tr>
+<tr-->
+	<td class="greygrid">&nbsp;</td>
+	<td class="greygrid"><b>List</b></td>
+	<td class="greygrid"><b>Street</b></td>
+	<td class="greygrid"><b>Amazon.com</b></td>
+</tr><tr>
+	<td class="greygrid"><b>Current Pricing</b></td>
+	<td class="greygrid">{$row_amazon['ListPriceFormatted']}</td>
+	<td class="greygrid"><a href="$pg_url" target="_blank">$pg_price</a></td>
+	<td class="greygrid"><a href="$az_url" target="_blank">{$row_amazon['LowestNewPriceFormatted']}</a></td>
+</tr></table>
+EOT;
+	}
+
+	# Set defaults which may be overridden by blog type below
+	$container = 'article_container';
+	$meta_medium_type = 'blog';
+	$link_rel_image_src = $row_amazon['SmallImageURL'];
+	$v_buttons = <<<EOT
+<div id="dd_right"><ul>
+	<li class="li_vertical">
+		<a class="DiggThisButton DiggMedium" rel="external" href="http://digg.com/submit?related=no&amp;url=http://www.hdtvmagazine.com/news/2008/05/the-ellen-degeneres-show-to-be-broadcast-in-high-definition.php&amp;title=&quot;The Ellen Degeneres Show&quot; to be Broadcast in High Definition">
+		<span style="display:none">Emmy&amp;reg;-winning talk show host Ellen DeGeneres will go Hi Def this fall when &quot;The Ellen DeGeneres Show&quot; begins its sixth season on Monday, September 8, and is produced and broadcast in High Definition (HD) after moving its production operations to a newly constructed, state-of-the-art facility on the Warner Bros. Studios lot. The announcement was made today by Hilary Estey McLoughlin, President, Telepictures Productions, and Jon Gilbert, President, Warner Bros. Studio Facilities.
+
+The one-hour series, renewed through the 2010-2011 season, will now...</span></a>
+	</li>
+</ul></div>
+EOT;
+	$h_buttons = <<<EOT
+<div id="dd_right"><ul>
+	<li class="li_horizontal">$comments</li>
+	<li class="li_horizontal" id="tm_li"></li>
+	<li class="li_horizontal"><a name="fb_share" type="button_count" href="http://www.facebook.com/sharer.php"></a></li>
+</ul></div>
+EOT;
+
+	switch (7) {
+		case 1: # Articles
+			$feed_name = 'hdtv-articles';
+			$sub_type = SUB_ARTICLES;
+			$sub_label = 'Receive instant notification of new articles';
+			if ($userdata['session_logged_in']) {
+				$sub_desc = '<a href="/profile-subscriptions.php">Modify your subscription profile</a> to receive notification of new HDTV Magazine Articles via email as soon as they are published.';
+			} else {
+				$sub_desc = '<a href="/profile-create.php">Register Now</a> to receive notification of new HDTV Magazine Articles via email as soon as they are published.';
+			}
+			break;
+		case 4: # Interviews
+			$feed_name = 'hdtv-interviews';
+			break;
+		case 5: # History
+			$feed_link = '<link rel="alternate" type="application/rss+xml" title="HDTV Magazine Bulletins Feed" href="http://feeds.hdtvmagazine.com/hdtv-archive" />';
+			break;
+		case 6: # Test
+			$sub_type = 0;
+			$sub_label = 'Receive instant notification of "Stuff"';
+			if ($userdata['session_logged_in']) {
+				$sub_desc = '<a href="/profile-subscriptions.php">Modify your subscription profile</a> to receive notification of "Stuff" via email as soon as they are published.';
+			} else {
+				$sub_desc = '<a href="/profile-create.php">Register Now</a> to receive notification of "Stuff" via email as soon as they are published.';
+			}
+			break;
+		case 7: # Bulletins
+			$google_links_channel = ''; # Don't count bulletins
+			$feed_name = 'hdtv-news';
+			$container = 'bulletin_container';
+			$author_headshot = '';
+			$sub_type = SUB_BULLETINS;
+			$sub_label = 'Receive instant notification of HDTV Bulletins';
+			if ($userdata['session_logged_in']) {
+				$sub_desc = '<a href="/profile-subscriptions.php">Modify your subscription profile</a> to receive notification of HDTV Bulletins via email as soon as they are published.';
+			} else {
+				$sub_desc = '<a href="/profile-create.php">Register Now</a> to receive notification of HDTV Bulletins via email as soon as they are published.';
+			}
+			$meta_medium_type = 'news';
+			break;
+		case 8: # Reviews
+			$feed_name = 'hdtv-reviews';
+			$sub_type = SUB_REVIEWS;
+			$sub_label = 'Receive instant notification of new reviews';
+			if ($userdata['session_logged_in']) {
+				$sub_desc = '<a href="/profile-subscriptions.php">Modify your subscription profile</a> to receive notification of new HDTV Magazine Reviews via email as soon as they are published.';
+			} else {
+				$sub_desc = '<a href="/profile-create.php">Register Now</a> to receive notification of new HDTV Magazine Reviews via email as soon as they are published.';
+			}
+			break;
+		case 9: # Podcasts
+			# Get enclosure info
+			$sql = "SELECT enclosure_url, enclosure_type FROM aux_mt_entry WHERE entry_id = 1385";
+			$res_enclosure = mQuery($sql);
+			$row_enclosure = mysql_fetch_assoc($res_enclosure);
+			$enclosure_url = $row_enclosure['enclosure_url'];
+
+			$podcast_chicklets = '<span><a href="http://click.linksynergy.com/fs-bin/stat?id=FK62p2waXuc&amp;offerid=78941&amp;type=3&amp;subid=0&amp;tmpid=1826&amp;RD_PARM1=http%253A%252F%252Fphobos.apple.com%252FWebObjects%252FMZStore.woa%252Fwa%252FviewPodcast%253Fid%253D73799860%2526partnerId%253D30" target="_blank"><img src="'. BASE_IMG_HOST .'/images/chicklet-itunes.gif" alt="Subscribe to the HDTV and Home Theater Podcast in iTunes" align="absmiddle" height="15" width="80"></a></span>'.
+				'<span><a href="<?=$enclosure_url?>"><img src="'. BASE_IMG_HOST .'/images/chicklet-mp3-podcast.gif" alt="Download "The Ellen Degeneres Show" to be Broadcast in High Definition" height="15" width="85"/></a></span>';
+			$meta_medium_type = 'audio';
+			$link_rel_image_src = 'http://www.htguys.com/storage/thumbnails/3382196-3373802-thumbnail.jpg';
+			$meta = <<<EOT
+	<meta name="audio_type" content="audio/mpeg" />
+	<meta name="audio_title" content=""The Ellen Degeneres Show" to be Broadcast in High Definition" />
+	<meta name="audio_artist" content="Ara Derderian &amp; Braden Russell" />
+	<meta name="audio_album" content="The HDTV and Home Theater Podcast" />
+	<link rel="audio_src" href="$enclosure_url" />
+EOT;
+
+			$sub_type = SUB_PODCAST;
+			$sub_label = 'Receive instant notification of new episodes';
+			if ($userdata['session_logged_in']) {
+				$sub_desc = '<a href="/profile-subscriptions.php">Modify your subscription profile</a> to receive notification of new episodes of The HDTV Podcast via email as soon as they are published.';
+			} else {
+				$sub_desc = '<a href="/profile-create.php">Register Now</a> to receive notification of new episodes of The HDTV Podcast via email as soon as they are published.';
+			}
+			$itunes_chicklet = BASE_IMG_HOST .'/images/chicklet-itunes.gif';
+			# Need a better check here if we add other podcasts
+			$contents = @file_get_contents('https://feedburner.google.com/api/awareness/1.0/GetFeedData?uri=hdtvpodcast');
+			$xml = new SimpleXMLElement( $contents );
+
+			$h_buttons = <<<EOT
+<div id="dd_right"><ul>
+	<li class="li_horizontal">$comments</li>
+	<li class="li_horizontal" id="tm_li"></li>
+	<li class="li_horizontal"><a name="fb_share" type="button_count" href="http://www.facebook.com/sharer.php"></a></li>
+	<li class="li_horizontal">
+		<span style="line-height:16px;vertical-align:middle;">{$xml->feed->entry['circulation']}
+			<a href="http://click.linksynergy.com/fs-bin/click?id=FK62p2waXuc&subid=&offerid=146261.1&type=10&tmpid=1826&RD_PARM1=http%3A%2F%2Fphobos.apple.com%2FWebObjects%2FMZStore.woa%2Fwa%2FviewPodcast%3Fid%3D73799860" target="_blank"
+				><img src="$itunes_chicklet" alt="Subscribe to the HDTV and Home Theater Podcast in iTunes" align="top" height="15" width="80"></a>
+		</span>
+	</li>
+</ul></div>
+EOT;
+
+			break;
+		case 10: # Columns
+			$feed_name = 'hdtv-columns';
+			$sub_type = SUB_COLUMNS;
+			$sub_label = 'Receive instant notification of new columns';
+			if ($userdata['session_logged_in']) {
+				$sub_desc = '<a href="/profile-subscriptions.php">Modify your subscription profile</a> to receive notification of new HDTV Magazine Columns via email as soon as they are published.';
+			} else {
+				$sub_desc = '<a href="/profile-create.php">Register Now</a> to receive notification of new HDTV Magazine Columns via email as soon as they are published.';
+			}
+			$about = 'HDTV Magazine Columns are written by various personalities within the HDTV industry. They are typically shorter than our standard <a href="/articles">Article</a> and quite often express the opinion of the author(s). And of course, opinions expressed by these authors are not necessarily those of HDTV Magazine.';
+			break;
+		default:
+			break;
+	}
+
+	require(BASE_DIR .'/includes/doctype.php');
+?>
+<html>
+<head>
+	<title>HDTV Magazine - "The Ellen Degeneres Show" to be Broadcast in High Definition</title>
+	<meta name="keywords" content="ellen degeneres, warner bros, degeneres show, talk show, outstanding talk, show, ellen, degeneres, production, new, warner, talk, lot, season, bros, emmy, productions, host, awards, television, outstanding, studio, telepictures, daytime, facility" />
+	<meta name="description" content="Emmy&amp;reg;-winning talk show host Ellen DeGeneres will go Hi Def this fall when &quot;The Ellen DeGeneres Show&quot; begins its sixth season on Monday, September 8, and is produced and broadcast in High Definition (HD) after moving its production operations to a newly constructed, state-of-the-art facility on the Warner Bros. Studios lot. The announcement was made today by Hilary Estey McLoughlin, President, Telepictures Productions, and Jon Gilbert, President, Warner Bros. Studio Facilities.
+
+The one-hour series, renewed through the 2010-2011 season, will now..." />
+	<meta name="title" content="&quot;The Ellen Degeneres Show&quot; to be Broadcast in High Definition" />
+	<meta name="medium_type" content="<?=$meta_medium_type?>" />
+	<link rel="image_src" href="<?=$link_rel_image_src?>" />
+	<?=$meta?>
+
+	<? require(BASE_DIR .'/includes/page_header.php');?>
+
+	<link rel="alternate" type="application/rss+xml" title="HDTV Magazine Bulletins Feed" href="http://feeds.hdtvmagazine.com/<?=$feed_name?>" />
+
+	<script type="text/javascript">
+		// Digg Script
+		(function() {
+			var s = document.createElement('SCRIPT'), s1 = document.getElementsByTagName('SCRIPT')[0];
+			s.type = 'text/javascript';
+			s.src = 'http://widgets.digg.com/buttons.js';
+			s1.parentNode.insertBefore(s, s1);
+		})();
+
+		function init() {
+			document.getElementById("tm_li").innerHTML = getTMButton('http://www.hdtvmagazine.com/news/2008/05/the-ellen-degeneres-show-to-be-broadcast-in-high-definition.php', 'compact', '<?=$admindata['twitter_username']?>', 'bit.ly');
+		}
+
+		function tweetMemeButton() {
+			if (document.getElementById("tm_li")) {
+				var iframeCode = '';
+				iframeCode += '<iframe src="http://api.tweetmeme.com/button.js?url='+ escape(document.URL) +'&amp;style=normal&amp;source=SEOmofo&amp;service=bit.ly" scrolling="no" frameborder="0" width="50" height="61">';
+				document.getElementById("tm_li").innerHTML = iframeCode;
+			}
+		}
+		function getTMButton(url, style, source, service) {
+			if (style == 'compact') {w = 70;h = 20;} else {w = 50;h = 61;}
+			return '<iframe src="http://api.tweetmeme.com/button.js?url='+ escape(url) +'&amp;style='+ style +'&amp;source='+ source +'&amp;service='+ service +'" scrolling="no" frameborder="0" width="'+ w +'" height="'+ h +'">';
+		}
+	</script>
+	<style>
+		#dd_right {float:right;padding:2px;text-align:right;}
+		#dd_right ul {padding:0;margin:0;}
+		#dd_right ul li {list-style-image:none;list-style-position:outside;padding:4px;margin:0;outline:0 none;background-color:transparent;border:0 none;list-style-type:none;background-image:none;}
+		#dd_right .li_horizontal {align:right;display:inline;float:left;font-weight:bold;margin-top:2px;padding:0 10px}
+		#dd_right .li_vertical {display:block;list-style-type:none;}
+/*		#dd_right img {border:none !important;}*/
+		a.stbar.chicklet img {border:0;height:16px;width:16px;margin-right:3px;vertical-align:middle;}
+		a.stbar.chicklet {height:16px;line-height:16px;}
+	</style>
+</head>
+<body onload="init();"><div id="body_container">
+	<? include(BASE_DIR .'/includes/body_header-4.php');?>
+	<table class="bare" cellpadding="0" cellspacing="0"><tr>
+		<td id="left">
+			<? if(access(ACCESS_ADMIN)) {?>
+				<div class="important"><span class="corners-top"><span></span></span>
+					<span class="label">Admin Menu:</span>
+					<a href="javascript:popOpen('/admin/asin-edit.php?entry_id=1385', 340, 125);">Add ASIN</a>
+				<span class="corners-bottom"><span></span></span></div>
+			<? }?>
+
+			<!-- Subscription box -->
+			<? if ($sub_type > 0 && ($userdata['subscriptions'] & $sub_type)) {} else {?>
+				<div class="important"><span class="corners-top"><span></span></span>
+					<img src="<?=BASE_IMG_HOST?>/images/i_inbox.gif" alt="" align="left" height="31" width="38" style="float:left; padding-right:10px" />
+					<span class="label"><?=$sub_label?>:</span>
+					<?=$sub_desc?>
+				<span class="corners-bottom"><span></span></span></div>
+			<? }?>
+
+			<!-- Article Header -->
+			<table class="bare" cellpadding="0" cellspacing="0" style="width:100%">
+				<tr>
+					<td id="article_headshot" rowspan="3"><?=$author_headshot?></td>
+					<td>
+						<table class="bare" cellspacing="0" style="width:100%"><tr>
+							<td id="article_title" colspan="2"><a href="http://www.hdtvmagazine.com/news/2008/05/the-ellen-degeneres-show-to-be-broadcast-in-high-definition.php">"The Ellen Degeneres Show" to be Broadcast in High Definition</a></td>
+						</tr><tr>
+							<td id="article_byline">
+								by <b>Shane Sturgeon</b> on <b>May  7, 2008</b>
+							</td><td id="article_category">
+								Categories: <b><a href="/category.php?id=270&category=Programming">Programming</a></b>
+							</td>
+						</tr><tr colspan="2">
+							<td id="article_buttons" colspan="2"><?=$h_buttons?></td>
+						</tr></table>
+					</td>
+				</tr>
+			</table>
+
+			<!-- Main Article Body -->
+			<div id="<?=$container?>">
+				<?=$v_buttons?>
+				<?=$review_header?>
+				<?=$az_image?>
+				<p class="prtitle">"The Ellen Degeneres Show" to be Broadcast in High Definition After Moving to New State-Of-The-Art Production Complex in Warner Bros. Studios Lot</p>
+
+<center><i>Emmy&reg;-Winning Series from Telepictures Productions and Warner Bros. Domestic Television Distribution Moves to New Home and Will Launch Sixth Season on Monday, September 8.</i></center><br />
+<br />
+
+<p><B>Burbank, CA (Vocus/PRWEB ) May 7, 2008</B> -- Emmy&reg;-winning talk show host Ellen DeGeneres will go Hi Def this fall when "The Ellen DeGeneres Show" begins its sixth season on Monday, September 8, and is produced and broadcast in High Definition (HD) after moving its production operations to a newly constructed, state-of-the-art facility on the Warner Bros. Studios lot. The announcement was made today by Hilary Estey McLoughlin, President, Telepictures Productions, and Jon Gilbert, President, Warner Bros. Studio Facilities.</p>
+
+<p>The one-hour series, renewed through the 2010-2011 season, will now originate from the newly constructed Stage 1 complex on Warner Bros. Studios' 110-acre lot. The new facility - consisting of stages 1, 2 and 3 - has undergone an extensive retrofitting under the supervision of Warner Bros.' Advanced Media Services, Studio Facilities and Real Estate units, working closely with the "Ellen" production staff as well as creative and production operations executives from Telepictures Productions.</p>
+
+<p>In the works for more than 15 months, the resulting complex is a tapeless, High Definition production facility encompassing three stages and 32,000 square feet, and is reflective of the Studio's significant commitment to "The Ellen DeGeneres Show" and the digital future of High Definition production and distribution.</p>
+
+<p><br />
+"We are thrilled to move production of 'The Ellen DeGeneres Show' to the Warner Bros. lot as we begin the sixth season. The lot will provide an exciting, new creative playground allowing Ellen and the producers to innovate fresh comedic elements into the show and letting Ellen's comedic playfulness shine through," said Estey McLoughlin. "The vibrancy and bustling activity of the lot, along with access to the Warner Bros. talent working there, will create new energy, excitement and added spontaneity to the show, while also enhancing our production values."</p>
+
+<p><br />
+"When they asked me if I wanted to move to Warner Bros., I was so excited. And it's not just because they film tons of movies and shows there, or because George Clooney has an office next to ours, or that there's a Starbucks," said DeGeneres. "That's all great, but the main thing is I get my own golf cart! Finally!"</p>
+
+<p><br />
+"We are excited to welcome 'The Ellen DeGeneres Show,' with all of the energy that a daily television program with a live audience generates, to her new high definition home at Warner Bros.," said Gilbert. "The new, tapeless facility will give the show the ability to take advantage of new creative freedoms and benefits the studio by expanding the types of productions that we can house on the lot."</p>
+
+<p><br />
+<B>Elements of the new facility include:</B></p>
+
+<p> * Tapeless environment allowing all production personnel access to program content on their computer desktop, greatly eliminating the need for tapes and viewing stations, resulting in significant cost savings with eventual elimination of 90% of tape machines</p>
+
+<p><br />
+ * Tapeless environment allowing for near-instantaneous editing of material during live production, with technology having major positive impact on workflow, speeding it up considerably</p>
+
+<p><br />
+ * Creation of a comprehensive digital video library containing all episodes of the show, searchable in multiple ways using various types of metadata</p>
+
+<p><br />
+ * A fully self-contained, 19,000-square foot production facility on three floors was constructed within the stage 3 building. The "Ellen" building contains the show's control room, machine room, audio and editorial suites, host and guest dressing facilities, and the green room.</p>
+
+<p><br />
+ * Expansion of "Ellen" audience capacity by +50% to allow seating for 300 attendees on stage 1, thereby increasing ability to accommodate more fan ticket requests for each taping.</p>
+
+<p><br />
+ * Creation of an "Ellen" lounge/audience waiting area on the Studio lot, inside the Stage 1 complex, complete with flat screen televisions playing video from the show, couches for relaxing while fans wait to enter the stage for the live taping, and an "Ellen" store.</p>
+
+<p><br />
+ * Fiber-optic connectivity between the new "Ellen" control room and a number of other stages throughout the Studio will allow for greater production flexibility on the lot. DeGeneres can go mobile and connect back to her control room from a number of places on the lot. Additionally, when "Ellen" is on hiatus, productions can position cameras or camera heads on other stages and, via fiber, can use the "Ellen" tapeless control room for the production, opening up the Studio as a venue for producers of live specials and events, as well as giving existing shows on the lot the creative opportunity for live production.</p>
+
+<p><br />
+An award-winning writer, producer and performer, DeGeneres' distinctive comedic voice has resonated with audiences from her first stand-up comedy appearance through her work today on television, in film and in the literary world. In addition to winning three consecutive Daytime Emmy&reg; Awards for Outstanding Talk Show host and four in a row for Outstanding Talk Show, DeGeneres has also won two People's Choice Awards for Favorite Daytime Talk Show Host and Favorite Funny Female star for three years running. In 2005 and 2006, she won the Producers Guild of America's Johnny Carson Producer of the Year Award for Variety Television. Time magazine has named her one of the 100 most influential people in the world, and she was also voted Favorite TV Host in a Time poll. In January 2008, she was named Television Personality of the year by industry trade paper TelevisionWeek. DeGeneres also garnered the top spot in The Harris Poll's annual favorite television star list in 2007. An in-demand host for major industry events, DeGeneres had the honor of hosting the 79th Annual Academy Awards&reg; in 2007, a telecast which delivered the highest ratings in the Adults 18-34 demographic in five years and which earned DeGeneres a Primetime Emmy&reg; nomination for Outstanding Individual Performance in a Variety or Music Program. She also hosted the Primetime Emmy&reg; Awards in 2005, 2001 and 1994. In November 2007, DeGeneres hosted "Ellen's Really Big Show," an acclaimed one-hour variety special for TBS, and recently signed to host two more specials for TBS, one originating from The Comedy Festival in Las Vegas in 2008 and Chicago's all-new Just For Laughs: A Very Funny Festival in 2009.</p>
+
+<p><br />
+<B>About "The Ellen DeGeneres Show"</B></p>
+
+<p>"The Ellen DeGeneres Show" is the only talk show in the history of the Daytime Emmys&reg; to win four consecutive awards for Outstanding Talk Show in its first four seasons, and it also has won the Daytime Emmy&reg; Award for Outstanding Talk Show Host for the last three years. The show has now earned a total of 21 Daytime Emmy&reg; Awards. "The Ellen DeGeneres Show" is produced by A Very Good Production and WAD Productions, Inc., in association with Telepictures Productions, an industry leading and Emmy&reg; Award-winning producer of syndicated programming, and is distributed by Warner Bros. Domestic Television Distribution. The show is executive produced by DeGeneres, Mary Connelly, Ed Glavin, Andy Lassner and Jim Paratore.</p>
+
+<p><br />
+<B>About Telepictures Productions</B></p>
+
+<p>Telepictures Productions - an industry-leading producer of nationally syndicated programming and winner of 49 Daytime Emmy&reg; Awards - will launch "The Bonnie Hunt Show" in fall 2008, a new talk program hosted by acclaimed comedy producer, director, writer and performer Bonnie Hunt. For the 2007-2008 season, Telepictures is producing six first-run strips. This includes the freshman season of "TMZ," the #1 new syndicated program which brings the TMZ.com brand to television, expanding upon the website's mission as a 24-hour-per day, seven-day-per week entertainment news destination covering Hollywood as it really is and celebrities as they really are; the third season of "The Tyra Banks Show," a one-hour, daily talk show serving as a young woman's guide to life, hosted by Tyra Banks; the fifth season of "The Ellen DeGeneres Show," winner of four consecutive Daytime Emmy&reg; Awards for Outstanding Talk Show and three for Outstanding Talk Show Host; the ninth season of the hour-long court series "Judge Mathis"; the 11th season of "The People's Court"; and the 14th season of the pop culture newsmagazine strip "Extra."</p>
+				<?=$pg_mlink?>
+				<p class="posted">
+					Posted by <b>Shane Sturgeon</b>, <b>May  7, 2008  3:17 PM</b>
+					<span style="float:right">
+						<a id="ck_email" class="stbar chicklet" href="javascript:void(0);"><img src="http://w.sharethis.com/chicklets/email.gif" /></a>
+						<a id="ck_facebook" class="stbar chicklet" href="javascript:void(0);"><img src="http://w.sharethis.com/chicklets/facebook.gif" /></a>
+						<a id="ck_twitter" class="stbar chicklet" href="javascript:void(0);"><img src="http://w.sharethis.com/chicklets/twitter.gif" /></a>
+						<a id="ck_sharethis" class="stbar chicklet" href="javascript:void(0);"><img src="http://w.sharethis.com/chicklets/sharethis.gif" /></a>
+					</span>
+				</p>
+			</div>
+
+			<!-- Comments -->
+			<?=getComments(1385)?>
+			<div class="dottedline"></div>
+
+			<? if (7 != 7) echo getBoxMoreFromAuthor('Shane Sturgeon', 1385)?>
+
+			<?=getBoxMoreFromCategory($category_id)?>
+
+			<? if ($author['bio_short'] != '') {?>
+				<div class="item"><span class="corners-top"><span></span></span>
+					<h2>About Shane Sturgeon</h2>
+					<?=stripslashes($author['bio_short'])?>
+				<span class="corners-bottom"><span></span></span></div>
+			<? }?>
+		</td><td id="right">
+			<div align="center" style="margin:5px 0;">
+				<? include(BASE_DIR .'/ads/mrectangle.php');?>
+			</div>
+			<br />
+
+			<div align="right">
+				<? include(BASE_DIR .'/ads/skyscraper.php');?>
+			</div>
+
+			<?=getBoxAuthors()?>
+
+			<?=getBoxCategories()?>
+
+			<?=getBoxDiscussions()?>
+		</td>
+	</tr></table><br />
+
+	<? include(BASE_DIR .'/includes/body_footer.php');?>
+	<script src="http://feeds.feedburner.com/~s/<?=$feed_name?>?i=http://www.hdtvmagazine.com/news/2008/05/the-ellen-degeneres-show-to-be-broadcast-in-high-definition.php" type="text/javascript" charset="utf-8"></script>
+	<script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script>
+	<script type="text/javascript" src="http://w.sharethis.com/button/sharethis.js#publisher=3da06545-0753-46cb-8739-3ffcef208c1f&amp;type=website&amp;post_services=email%2Ctwitter%2Cdigg%2Cfacebook%2Cmyspace%2Csms%2Cdelicious%2Cstumbleupon%2Cgoogle_bmarks%2Clinkedin%2Cwindows_live%2Creddit%2Cbebo%2Cybuzz%2Cblogger%2Cyahoo_bmarks%2Cmixx%2Ctechnorati%2Cfriendfeed%2Cpropeller%2Cwordpress%2Cnewsvine%2Cxanga&amp;linkfg=%23003F87&amp;button=false"></script>
+	<script type="text/javascript">
+		var shared_object = SHARETHIS.addEntry({title: document.title,url: document.location.href});
+
+		shared_object.attachButton(document.getElementById("ck_sharethis"));
+		shared_object.attachChicklet("email", document.getElementById("ck_email"));
+		shared_object.attachChicklet("facebook", document.getElementById("ck_facebook"));
+		shared_object.attachChicklet("twitter", document.getElementById("ck_twitter"));
+	</script>
+</div></body>
+</html>

@@ -1,0 +1,141 @@
+<html>
+<head>
+<title>3.16 - Known Issues</title>
+<link rel="stylesheet" href="doc-styles.css" type="text/css">
+</head>
+
+<body>
+<h3>Known Issues</h3>
+
+
+<a name="__index__"></a>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#movable type 3.16  known issues">MOVABLE TYPE 3.16 - KNOWN ISSUES</a></li>
+</ul>
+<hr size="1" color="#CCCCCC">
+<p>
+<h1><a name="name"></a>NAME</h1>
+<p>Movable Type 3.16 - Known Issues</p>
+<p>
+<hr size="1" color="#CCCCCC">
+<h1><a name="synopsis"></a>SYNOPSIS</h1>
+<p>This document details the known issues in Movable Type 3.16.  These
+issues will be addressed in a future release.</p>
+<p>
+<hr size="1" color="#CCCCCC">
+<h1><a name="movable type 3.16  known issues"></a>MOVABLE TYPE 3.16 - KNOWN ISSUES</h1>
+<ul>
+<li>
+Movable Type 3.16 can't be used with DBD::Pg 1.4 because of a bug
+in that version of the database driver.
+<p></p>
+<li>
+Plugins that need to save configuration data cannot be used with the
+DBI::postgres driver (mt_plugindata.data column has incorrect type).
+<p></p>
+<li>
+When using MySQL 4.1, ``modified'' date strings will be mangled--for
+example, the output of the <code>&lt;MTEntryModifiedDate&gt;</code> tag is
+incorrect.
+<p></p>
+<li>
+When a template is linked to a file, changes to the file are not
+written to the database until the user views the template and hits the
+``Save'' button. As a result, when using dynamic pages, changes to the
+file are not reflected on the dynamic pages until the user saves the
+template.
+<p></p>
+<li>
+Categories are shown without hierarchy in the ``Assign Multiple
+Categories...'' popup.
+<p></p>
+<li>
+It is impossible to create two categories with the same name, even if
+they have different parents (on MySQL, PostgreSQL, or SQLite).
+<p></p>
+<li>
+The recently_commented_on attribute to MTEntries may function corrently 
+when the MTEntries block is nested in a constraining block such as 
+MTSubCategories.
+<p></p>
+<li>
+It is impossible to produce files with no file extension by using
+the ``File extension for archive files'' box.
+<p></p>
+<li>
+When a thumbnail is generated for a GIF image with animation, the
+thumbnail appears broken.
+<p></p>
+<li>
+Under Windows XP (with IIS), the TrackBack URL that is displayed by
+<code>&lt;MTEntryTrackBackLink&gt;</code> does not work without further server
+configuration. For instructions, see ``Configuring TrackBack on IIS
+Servers'' in the <a href="./mtmanual_trackback.html">TRACKBACK</a> section of the Movable 
+Type manual.
+<p></p>
+<li>
+Better error checking disallows blank names in new categories, but they
+are still allowed when you edit and save an previously existing category.
+<p></p>
+<li>
+If a post contains the URL of a large binary file (such as an image or
+a music file) and TrackBack auto-discovery is on, saving the post may
+fail.
+<p></p>
+<li>
+If an error occurs while <code>run-periodic-tasks</code> is running, an entry
+may be put into ``Published'' status but not rebuilt.
+<p></p>
+<li>
+On some versions of IE, after ``maximizing'' the QuickPost window, the 
+entry text are may appear wider than the window itself, obscuring the
+scrollbar.
+<p></p>
+<li>
+When importing or exporting a weblog, unique IDs in Atom feeds may
+change.
+<p></p>
+<li>
+<code>&lt;MTComments&gt;</code> with <code>lastn</code> attribute produces an error
+message on dynamic pages.
+<p></p>
+<li>
+When a reader submits the ``Mail This Entry'' form, no confirmation is
+displayed.
+<p></p>
+<li>
+Clicking ``Go Back'' in a pop-up rebuilding window only re-tries the
+last chunk of pages, rather than taking the user back to a previous
+choice. On full-page error messages, ``Go Back'' does return the user to
+the screen where the action was taken.
+<p></p>
+<li>
+After the first weblog, additional weblogs have category archives off
+by default, even though the default templates have category archives
+listed on the main index.
+<p></p>
+<li>
+TrackBack pings received from a site using a different character
+encoding are displayed incorrectly.
+<p></p>
+<li>
+<code>&lt;MTEntryBasename&gt;</code> isn't yet supported in dynamic templates.
+<p></p>
+<li>
+<code>&lt;MTCalendarCellNumber&gt;</code> isn't yet supported in dynamic templates.
+<p></p>
+<li>
+The new ``locale'' attribute for <code>&lt;MTBlogLanguage&gt;</code> returns a value
+in dynamic templates that is inconsistent with its return value on static
+templates.
+<p></p></ul>
+
+<hr size="1" color="#CCCCCC">
+<span class="copyright">Copyright &copy; 2001-2005 Six Apart. All Rights Reserved.</span>
+</body>
+
+</html>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+	<!-- feed.xml template -->
+	<channel>
+		<title>HDTV Magazine Testing Grounds</title>
+		<link>http://www.hdtvmagazine.com/test/</link>
+		<description></description>
+		<language>en</language>
+		<copyright>Copyright 2014</copyright>
+		<lastBuildDate>Sat, 01 Feb 2014 20:38:20 -0800</lastBuildDate>
+		<generator>http://www.movabletype.org/?v=3.38</generator>
+		<docs>http://blogs.law.harvard.edu/tech/rss</docs>
+
+					<item>
+				<title><![CDATA[Living with 4K &ndash; Bought an UHDTV? wait, is it Upgradeable?]]></title>
+				<description>
+					<![CDATA[<p>Your next question then would be “an upgrade to what and why?”</p>
+
+<p>Unfortunately in most cases the upgrade may actually be a replacement of a short lived TV, depending who manufactured the UHDTV.</p>
+
+<p>Over the past couple of years 4K displays and projectors were made available to consumers and, although market introduction is better than expected and prices are rapidly coming down, many journalists continuously discourage consumers with negativism, such as...</p>]]>
+				</description>
+				<link>http://www.hdtvmagazine.com/test/2014/02/living-with-4k-bought-an-uhdtv-wait-is-it-upgradeable.php</link>
+				<guid>http://www.hdtvmagazine.com/test/2014/02/living-with-4k-bought-an-uhdtv-wait-is-it-upgradeable.php</guid>
+				<category>Technology</category>
+				<pubDate>Sat, 01 Feb 2014 20:38:20 -0800</pubDate>
+				<!--author>Rodolfo La Maestra</author-->
+				<source url="http://www.hdtvmagazine.com/test/">Testing Grounds</source>
+			</item>
+					<item>
+				<title>Living with 4K - Nuvola 4K Player NP-1</title>
+				<description>
+					<![CDATA[<p>This article follows the series of articles of the “Living with 4K” topic, and 4K related products and subjects, including 4K content and 4K Blu-ray. Today is about a new 4K player that is just coming to the market, the Nuvola NP-1.</p>
+
+<p><br />
+NanoTech Entertainment has just announced the introduction of their Nuvola NP-1 4K player that claims to be compatible with all UHDTVs regardless of brand, as opposed to the proprietary player/TV pairing setup Sony has done with their current 4K media player (FMP-X1) and their UHDTVs/4K Projectors, which limits their 4K media player connectivity to only Sony UHDTVs/4K Projectors.</p>
+
+<p>The other 4K player competitor, the $1750 Red Ray 4K player, has been unavailable for over a year after their “reserve your unit” announcement in late 2012 with an original price of $1400+. According to an email I received from the manufacturer last week...</p>]]>
+				</description>
+				<link>http://www.hdtvmagazine.com/test/2014/01/living-with-4k-nuvola-4k-player-np1.php</link>
+				<guid>http://www.hdtvmagazine.com/test/2014/01/living-with-4k-nuvola-4k-player-np1.php</guid>
+				<category></category>
+				<pubDate>Tue, 21 Jan 2014 18:33:15 -0800</pubDate>
+				<!--author>Shane Sturgeon</author-->
+				<source url="http://www.hdtvmagazine.com/test/">Testing Grounds</source>
+			</item>
+					<item>
+				<title>VUDU: The Future of High Definition Movie Downloads</title>
+				<description>
+					 I am writing a series of small reviews for the 2007 Holiday Gadget Guide, hosted by our advertising agency, Federated Media. One of the &quot;gadgets&quot; I reviewed recently looked quite interesting and so I thought it should have a...
+				</description>
+				<link>http://www.hdtvmagazine.com/test/2007/12/vudu-the-future-of-high-definition-movie-downloads.php</link>
+				<guid>http://www.hdtvmagazine.com/test/2007/12/vudu-the-future-of-high-definition-movie-downloads.php</guid>
+				<category></category>
+				<pubDate>Tue, 18 Dec 2007 22:55:56 -0800</pubDate>
+				<!--author>Shane Sturgeon</author-->
+				<source url="http://www.hdtvmagazine.com/test/">Testing Grounds</source>
+			</item>
+					<item>
+				<title>Cinemascope - Zoom and Anamorphic Methods</title>
+				<description>
+					<![CDATA[<p>This is an exciting time for home theater and one I have been waiting for; the ability to properly display CinemaScope content in its native aspect ratio, duplicating the experience of your local film theater where CinemaScope content is larger, growing left to right as the side curtains are pulled back to reveal more screen for a larger image. </p>
+
+<p>Check the A/V and videophile magazines for this year. Odds are quite high that they had...</p>]]>
+				</description>
+				<link>http://www.hdtvmagazine.com/test/2007/01/cinemascope-zoom-and-anamorphic-methods.php</link>
+				<guid>http://www.hdtvmagazine.com/test/2007/01/cinemascope-zoom-and-anamorphic-methods.php</guid>
+				<category></category>
+				<pubDate>Sun, 28 Jan 2007 14:46:11 -0800</pubDate>
+				<!--author>Richard Fisher</author-->
+				<source url="http://www.hdtvmagazine.com/test/">Testing Grounds</source>
+			</item>
+					<item>
+				<title>Blu-ray Primer</title>
+				<description>
+					 For those of you that read the HD DVD Primer article published a few weeks back, you will find this article is of similar style and content. Now we turn to the competing HD disc format: Blu-ray Disc (BD)....
+				</description>
+				<link>http://www.hdtvmagazine.com/test/2006/03/bluray-primer.php</link>
+				<guid>http://www.hdtvmagazine.com/test/2006/03/bluray-primer.php</guid>
+				<category></category>
+				<pubDate>Wed, 08 Mar 2006 15:47:29 -0800</pubDate>
+				<!--author>Shane Sturgeon</author-->
+				<source url="http://www.hdtvmagazine.com/test/">Testing Grounds</source>
+			</item>
+		
+
+	</channel>
+</rss>

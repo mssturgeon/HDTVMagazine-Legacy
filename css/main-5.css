@@ -1,0 +1,639 @@
+/**********
+BASE_IMG_HOST: http://www.hdtvmagazine.us;
+BG_COLOR: EDEDED;
+BORDER_COLOR: AAAAAA;
+LINK_COLOR: 003F87;
+PRIMARY_COLOR: 003F87;
+SECONDARY_COLOR: 995905;
+TERTIARY_COLOR: 73681F;
+TEXT_COLOR: 000000;
+**********/
+
+body {
+	margin:0;
+	padding:0;
+	border:0;			/* This removes the border around the viewport in old versions of IE */
+	width:100%;
+	background:#fff;
+	min-width:980px;		/* Minimum width of layout - remove line if not required */
+					/* The min-width property does not work in old versions of Internet Explorer */
+	max-width:1200px;
+	font-size:90%;
+}
+a:link {color:#003F87;}
+a:visited {color:#003F87;}
+a:hover {color:#003F87;}
+a:active {color:#995905;}
+h1, h2, h3 {
+	margin:.8em 0 .2em 0;
+	padding:0;
+	clear:both;
+}
+p {
+	margin:.4em 0 .8em 0;
+	padding:0;
+}
+img {
+	margin:10px 0 5px;
+}
+
+/* Header styles */
+#header {
+	clear:both;
+	float:left;
+	width:100%;
+}
+#header {
+/*	border-bottom:1px solid #000;*/
+}
+#header p,
+#header h1,
+#header h2 {
+	padding:.4em 15px 0 15px;
+	margin:0;
+}
+#header ul {
+	clear:left;
+	float:left;
+	width:100%;
+	list-style:none;
+	margin:10px 0 0 0;
+	padding:0;
+}
+#header ul li {
+	display:inline;
+	list-style:none;
+	margin:0;
+	padding:0;
+}
+#header ul li a {
+	display:block;
+	float:left;
+	margin:0 0 0 1px;
+	padding:3px 10px;
+	text-align:center;
+	background:#eee;
+	color:#000;
+	text-decoration:none;
+	position:relative;
+	left:15px;
+	line-height:1.3em;
+}
+#header ul li a:hover {
+	background:#369;
+	color:#fff;
+}
+#header ul li a.active,
+#header ul li a.active:hover {
+	color:#fff;
+	background:#000;
+	font-weight:bold;
+}
+#header ul li a span {
+	display:block;
+}
+
+/* column container */
+.colmask {
+	position:relative;	/* This fixes the IE7 overflow hidden bug */
+	clear:both;
+	float:left;
+	width:100%;			/* width of whole page */
+	overflow:hidden;		/* This chops off any overhanging divs */
+}
+
+/* 2 column right menu settings */
+.rightmenu {
+	background:#EEE;
+}
+.rightmenu .colleft {
+	float:left;
+	width:200%;
+	margin-left:-300px;
+	position:relative;
+	right:100%;
+	background:#fff;
+}
+.rightmenu .col1wrap {
+	float:left;
+	width:50%;
+	position:relative;
+	left:50%;
+	padding-bottom:1em;
+}
+.rightmenu .col1 {
+	margin:0 5px 0 305px;
+	overflow:hidden;
+}
+.rightmenu .col2 {
+	float:right;
+	width:290px;
+	position:relative;
+	left:295px;
+}
+
+/* Footer styles */
+#footer {
+	clear:both;
+	float:left;
+	width:100%;
+}
+#footer p {
+	padding:10px;
+	margin:0;
+}
+
+/*--- OLD "4" DESIGN ---*/
+html .email_share_link {padding:2px 0 0 25px; height:16px; background:url(http://www.hdtvmagazine.us/images/email.gif) no-repeat top left;}
+html .fb_share_link {padding:2px 0 0 20px; height:16px; background:url(http://b.static.ak.fbcdn.net/images/share/facebook_share_icon.gif?8:26981) no-repeat top left;}
+html .rss_share_link {padding:2px 0 0 20px; height:16px; background:url(http://www.hdtvmagazine.us/images/livemark.png) no-repeat top left;}
+html .twitter_share_link {padding:2px 0 0 20px; height:16px; background:url(http://www.hdtvmagazine.us/images/twitter.png) no-repeat top left;}
+
+table.gg {}
+table.gg td {}
+
+/*** NEW STUFF ***/
+h2 {clear:both; color:#995905; font:1.5em Arial, sans serif; font-weight:bold; margin:0; padding:0}
+h2 a:link {color:#995905;}
+h2 a:visited {color:#995905;}
+h2 a:hover {color:#995905;}
+h2 a:active {color:#995905;}
+
+/* no relative positioning due to IE6 */
+#container {margin:0 auto; padding:0 10px; min-width:980px; max-width:1200px;}
+
+#body_container h1 {background:url(http://www.hdtvmagazine.us/images/bg_h1.gif) repeat; border-top:3px solid #003F87; border-bottom:1px solid #003F87; font-size:2em; font-weight:bold; padding:3px;}
+
+.anchors {font-size:1.2em; font-weight:bold; margin-bottom:10px;}
+.anchors a:link {color:#995905}
+.anchors a:visited {color:#995905}
+.anchors a:hover {color:#995905}
+.anchors a:active {color:#995905}
+
+#article_container {font:1.1em/1.2em verdana, sans-serif; margin:5px 0}
+#article_container h1 {background:url(http://www.hdtvmagazine.us/images/bg_h1.gif) repeat; border-top:3px solid #003F87; border-bottom:1px solid #003F87; font-size:2em; font-weight:bold; padding:3px;}
+#article_container h2 {margin-top:1.5em;}
+#article_container ul li {list-style-image:url(http://www.hdtvmagazine.us/images/square-brown_5.png); margin-left:-20px; padding:.25em 0}
+#article_container blockquote {border:1px dotted #ccc; border-width:1px 0; color:#666; margin:.75em 0; padding:5px 15px;}
+#article_container img {float:left; padding: 0 5px 5px 0}
+/*
+#article_container blockquote {background-color:#eee; border-left:1px solid #666; color:#666; display:block; padding:0 60px; width:400px}
+#article_container blockquote:before, #article_container blockquote:after {color:#003F87; display:block; font-family:"Times New Roman", Times, serif; font-size:700%; width:50px;}
+#article_container blockquote:before {content:open-quote; height:0; padding-top:30px; margin-left:-0.55em;}
+#article_container blockquote:after {content:close-quote; height:20px; margin-top:-15px; margin-left:410px;}
+#article_container blockquote > p {margin:-20px 20px 0 0;}
+*/
+
+/* Used in: profile-stations */
+.autocomplete {background-color:white; border:1px solid #AAAAAA; margin:10px; overflow:auto; padding:0; position:absolute; width:25em; height:200px; z-index:1;}
+.autocomplete ul {list-style-type:none; margin:0; padding:0;}
+.autocomplete ul li {list-style-type:none; display:block; margin:0; padding:2px; cursor:pointer;}
+.autocomplete ul li.selected {border-width:0; background-color:#CEDFEF; margin:0; padding:2px}
+
+#bulletin_container {font:1.1em/1.2em verdana, sans-serif; margin:5px 0}
+#bulletin_container li {list-style-image:url(http://www.hdtvmagazine.us/images/square-brown_5.png); margin-left:-20px; padding:.25em 0}
+
+.button_green {background-color:#339900; color:white; font-size:.9em; margin-left:5px; padding:0}
+.button_red {background-color:#cc0000; color:white; font-size:.9em; margin-left:5px; padding:0}
+.button_blue {background-color:#336699; color:white; font-size:.9em; margin-left:5px; padding:0}
+
+.btn {float:left;clear:both; background:url(http://www.hdtvmagazine.us/images/btn_left_20.png) no-repeat; padding:0 0 0 5px; margin:5px 0;}
+.btn a {float:left;height:20px; background:url(http://www.hdtvmagazine.us/images/btn_stretch_20.png) repeat-x left top; line-height:20px; padding:0 5px; font-size:1em; text-decoration:none;}
+.btn span {background:url(http://www.hdtvmagazine.us/images/btn_right_20.png) no-repeat; float:left; width:5px; height:20px;}
+.btn_green {background-color:#339900;}
+.btn_green a {color:#fff !important}
+
+/* FEATURE - Something we want to feature, current displayed in the "brown" scheme */
+.feature {background-color:#CEDFEF; padding:0 10px; width:280px;}
+.feature span.corners-top, .feature span.corners-bottom {margin:0 -10px;}
+
+/* AD - Only used for ad backgrounds, currently displayed in a "light grey" scheme */
+.ad {background-color:#F5F7FA; font-size:1em; margin:5px 0; padding:0 10px;}
+.ad span.corners-top, .ad span.corners-bottom {margin:0 -10px;}
+
+/* ITEM - Used for displaying other boxed items, currently displayed in the "light blue" scheme */
+.item {background-color:#CEDFEF; margin-bottom:10px; padding:0 10px;}
+.item > .label {color:#003F87; float:left; font-weight:bold; padding-right:5px}
+.item > .label a {color:#003F87}
+/*.item li {border-bottom:1px solid white; list-style-image:url(http://www.hdtvmagazine.us/images/square-brown_5.png); margin-left:-20px; padding:.25em 0}
+.item li a{text-decoration:none;}
+.item li a:hover{text-decoration:underline}*/
+.item span.corners-top, .item span.corners-bottom {margin:0 -10px;}
+
+/* ITEM_ODD - Used for displaying other boxed items, currently displayed in the "light light blue" scheme */
+.item_odd {background-color:#ecf3f7; margin-bottom:10px; padding:0 10px;}
+.item_odd li {border-bottom:1px solid white;}
+.item_odd li a{text-decoration:none;}
+.item_odd li a:hover{text-decoration:underline}
+.item_odd span.corners-top, .item_odd span.corners-bottom {margin:0 -10px;}
+
+/* ITEM_REVIEW - Used for displaying the item information at the beginning of a review */
+.item_review {background-color:#CEDFEF; clear:both; margin-bottom:10px; padding:0 10px;}
+.item_review h2 {margin:0 !important; padding-bottom:5px}
+.item_review > .image {background-color:white; border:1px solid #CCCCCC; border-radius:7px; float:left; -moz-border-radius:7px; -webkit-border-topleft-radius:7px; padding:3px;}
+.item_review > .text {float:left; font-size:.9em; line-height:170%; padding-left:10px; vertical-align:top;}
+.item_review span.corners-top, .item_review span.corners-bottom {margin:0 -10px;}
+
+/* IMPORTANT - Something we want to stand out, currently displayed in the "red" scheme */
+.important {background-color:#ECD5D8; margin:5px 0; padding:0 10px;}
+.important a:link {text-decoration:underline}
+.important a:visited {text-decoration:underline}
+.important .label {color:#800000; float:left; font-weight:bold; padding-right:5px}
+.important .label a {color:#800000}
+.important span.corners-top, .important span.corners-bottom {margin:0 -10px;}
+
+div.local_info {height:140px; overflow-y:auto;}
+div.local_info li {float:left; width:10.2em; border-bottom:1px solid white; list-style-image:url(http://www.hdtvmagazine.us/images/square-brown_5.png); margin-left:-20px; padding:.25em 0}
+div.local_info li a{text-decoration:none;}
+div.local_info li a:hover{text-decoration:underline}
+/*div.local_info li {float:left; width:10.2em;}*/
+
+/*
+#mainmenu {background-color:#003f87; font-weight:bold; margin-bottom:10px; padding:0 10px;}
+#mainmenu ul {height:20px; list-style-type:none; margin:0; padding:0;}
+#mainmenu ul li {border-left:1px solid white; float:left; margin:0; padding:0}
+#mainmenu ul li:first-child {border-left-width:0}
+#mainmenu ul li a {color:white; display:block; padding:3px 7px 3px 0.5em; text-decoration:none;}
+#mainmenu span.corners-top, #mainmenu span.corners-bottom {margin:0 -10px;}
+*/
+#header_table {border:0; margin:0; padding:0; width:100%}
+#header_table td {vertical-align:center;}
+#mainmenu {background-color:#003f87; border:0; font-weight:bold; margin:5px 0; padding:0 10px;}
+#mainmenu table {border:0; margin:0; padding:0; width:100%}
+#mainmenu table td {border-left:1px solid white; margin:0; padding:0; text-align:center;}
+#mainmenu table td:first-child {border-left-width:0}
+#mainmenu table td a {color:white; padding:3px 7px 3px 0.5em; text-decoration:none;}
+#mainmenu span.corners-top, #mainmenu span.corners-bottom {margin:0 -10px;}
+#menuicons {padding:7px 0; text-align:right;}
+
+#accountbar {float:right;}
+
+#searchbar {background-color:#DDD; clear:right; float:right; margin-top:10px; padding:3px; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;}
+#searchbar .input {border:1px solid #003f87; font-size:1.1em; margin:0; padding:2px}
+#searchbar .button {background-color:#003f87; border:0; color:#FFF; cursor:pointer; font-size:1.1em; margin:0; padding:3px 7px; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;}
+
+#subscribe_box {font-size:1.1em;}
+#subscribe_box .input {border:1px solid #800000; color:#777777; font-size:1.1em; margin:0; padding:2px; width:13em;}
+#subscribe_box .button {background-color:#800000; border:0; color:#FFF; cursor:pointer; font-size:1.1em; margin:0; padding:3px 7px; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;}
+#subscribe_box .label {padding-bottom:4px;}
+
+#admin_information {margin-top:20px;}
+#admin-information label {display:block; float:left; margin-right:2px; text-align:right; width:15em}
+#admin-information br {clear:left}
+#network-information label {display:block; float:left; margin-right:2px; text-align:right; width:10em}
+#network-information br {clear:left}
+#program-information label {display:block; float:left; margin-right:2px; text-align:right; width:10em}
+#program-information br {clear:left}
+
+.story {border-bottom:1px dashed #AAAAAA; margin:.5em 0; padding:.5em 0;}
+.story h2 {color:#003F87; font:2em Times New Roman, serif; font-weight:bold; margin:0;}
+.story h2 > a {text-decoration:none;}
+.story h2 > a:hover {text-decoration:underline;}
+.story h3 {color:#003F87; font:1em Times New Roman, serif; font-weight:bold; margin:0;}
+.story h3 > a {text-decoration:none;}
+.story h3 > a:hover {text-decoration:underline;}
+.story h4 {color:#AAAAAA; font:.8em Arial, sans serif; margin:0; text-transform:uppercase;}
+.story .footer {margin-top:5px; text-align:right}
+
+.entry {margin:0; padding:0 10px;}
+.entry:hover {background-color:#ecf3f7;}
+.entry h2 {color:#003F87; font:2em Times New Roman, serif; font-weight:bold; margin:0;}
+.entry h2 > a:link {color:#003F87; text-decoration:none;}
+.entry h2 > a:visited {color:#003F87; text-decoration:none;}
+.entry h2 > a:hover {color:#003F87; text-decoration:underline;}
+.entry h2 > a:active {color:#003F87; text-decoration:underline;}
+.entry h3 {color:#003F87; font:1em Arial, sans serif; font-weight:bold; margin:0;}
+.entry h3 > a {text-decoration:none;}
+.entry h3 > a:hover {text-decoration:underline;}
+.entry h4 {color:#AAAAAA; font:.8em Arial, sans serif; margin:0; text-transform:uppercase;}
+.entry img.thumb {float:left; padding:0 5px 5px 0;}
+.entry .footer {margin-top:5px; text-align:right}
+.entry div.entry_text {margin-top:10px}
+.entry div.entry_text img {float:left; padding: 0 5px 5px 0;}
+.entry span.corners-top, .entry span.corners-bottom {margin:0 -10px;}
+
+.dottedline {border-bottom:1px dashed #AAAAAA; margin:5px 0;}
+
+.product {margin:0; padding:0 10px;}
+.product h2 {color:#003F87; font:1.5em Times New Roman, serif; margin:0;}
+.product h2 > a:link {color:#003F87;}
+.product h2 > a:visited {color:#003F87;}
+.product h2 > a:hover {color:#003F87;}
+.product h2 > a:active {color:#003F87;}
+.product h4 {color:#606060; font-weight:normal; margin:0; padding-bottom:5px}
+.product .image {width:100px;}
+.product .price {font-size:1.1em; font-weight:bold; text-align:right; vertical-align:top; width:100px}
+.product .features {}
+.product .rating {color:#606060; margin-top:5px}
+.product span.corners-top, .product span.corners-bottom {margin:0 -10px;}
+
+.newsticker {color:black; font-weight:normal; filter:progid:DXImageTransform.Microsoft.alpha(opacity=90); -moz-opacity: 0.99; overflow:hidden; white-space:nowrap}
+
+#sortable_container {position:relative}
+#sortable_updating {background:rgba(255,255,255,0.5); position:absolute; top:0; left:0; width:100%; height:100%; z-index:1}
+#sortable_updating > div {font-size:14pt; font-weight:bold; margin-top:45%}
+#sortable_loading {background:rgba(255,255,255,0.5); position:absolute; top:0; left:0; width:100%; height:100%; z-index:1}
+#sortable_loading > div {font-size:14pt; font-weight:bold; margin-top:45%}
+.updating {background:rgba(255,255,255,0.5); position:absolute; top:0; left:0; width:100%; height:100%; z-index:1}
+.updating > div {font-size:14pt; font-weight:bold; margin-top:45%}
+
+.story_container {border-bottom:1px dashed #AAAAAA; margin:.5em 0; padding-bottom:1em;}
+.story_container > h1 {font:2em Times New Roman, serif; font-weight:bold; margin:0;}
+.story_container > h1 > a {color:#003F87; text-decoration:none;}
+.story_container > h1 > a:hover {text-decoration:underline;}
+.story_container > h3 {color:#AAAAAA; font:.8em Arial, sans serif; margin:0; text-transform:uppercase;}
+.story_container > h3 a {text-decoration:underline}
+
+#search_box {background:#FFF url(http://www.hdtvmagazine.us/images/i_search.gif) no-repeat right; border:0; color:#777777; width:8em;}
+
+#tab-container {display:table; width:600px;}
+#tabs {float:left; width:100%; font-size:93%; line-height:normal;}
+#tabs ul {margin:0; padding:10px 10px 0 0px; list-style:none;}
+#tabs li {display:inline; margin:0; padding:0;}
+#tabs a {float:left; background:url(http://www.hdtvmagazine.us/images/tableft.gif) no-repeat left top; margin:0; padding:0 0 0 5px; text-decoration:none;}
+#tabs a span {float:left; display:block; background:url(http://www.hdtvmagazine.us/images/tabright.gif) no-repeat right top; padding:5px 15px 4px 6px; color:#24618E;}
+/* Commented Backslash Hack hides rule from IE5-Mac \*/
+#tabs a span {float:none;}
+/* End IE5-Mac hack */
+#tabs a:hover {background-position:0% -42px;}
+#tabs a:hover span {background-position:100% -42px; color:#FFF;}
+#tabs .tab-selected {background-position:0% -42px;}
+#tabs .tab-selected span {background-position:100% -42px; color:#FFF; font-weight:bold}
+.tab-content {border:1px solid #24618E; clear:both; display:table; padding:5px; width:100%}
+
+#eq_br {clear:both; display:table; padding-top:10px; width:100%}
+#eq-image {background-color:#FFF; float:left; height:200px; padding-right:10px; vertical-align:middle}
+#eq-layout {padding-right:10px; vertical-align:top; width:100%}
+#eq-mrec {background-color:#FFF; float:right; padding-left:10px;}
+#eq-sky {float:right; padding:10px 0 0 10px}
+#eq-title {font-size:1.5em}
+#eq-pricing {color:#808080; font-size:.9em}
+#eq-pricing b {color:#800000}
+
+/*** ELEMENT SELECTORS ***/
+a:link {color:#003F87;}
+a:visited {color:#003F87;}
+a:hover {color:#003F87;}
+a:active {color:#995905;}
+
+abbr, acronym, .help {border-bottom:1px dotted #333; cursor:help;}
+
+body {background:#fff; color:#000000; margin:10px 0; padding:0;}
+
+/* redundant rules for bad browsers  */
+body, td, th, h3, textarea {font-family:Arial,sans-serif; font-size:9pt; voice-family:"\"}\""; voice-family:inherit;}
+
+/*fieldset {border:1px solid #AAAAAA; margin:5px 5px 15px 5px; padding:5px; text-align:left;}*/
+/*fieldset > br {line-height:75%}*/
+form {margin:0;}
+/*
+h1 {background:url(http://www.hdtvmagazine.us/images/bg_h1.gif) repeat; border-top:3px solid #003F87; border-bottom:1px solid #003F87; font-size:14pt; font-weight:bold; padding:3px;}
+h2 {color:#73681F; margin:0; padding:0}
+*/
+h1 {font:2em Times New Roman, serif; font-weight:bold; margin-bottom:5px;}
+h3 > a {text-decoration:none}
+h3 > a:hover {text-decoration:underline}
+h3 > img {padding-right:.3em;}
+
+img {border:0;padding:0;margin:0}
+input[type="text"] {border:1px solid #AAAAAA; margin:1px 0 1px 3px; padding-left:2px}
+input[type="password"] {border:1px solid #AAAAAA; margin:1px 0 1px 3px; padding-left:2px}
+ul.brownsquare > li {list-style-image:url(http://www.hdtvmagazine.us/images/square-brown_5.png); margin-left:-20px; padding:.25em 0}
+ul.nosquare > li {list-style-type:none; margin:0 0 4px -20px; padding:0}
+select {margin-left:3px}
+textarea {border:1px solid #AAAAAA; padding-left:3px; width:100%;}
+
+
+/*** CLASS & ID SELECTORS ***/
+/*
+#body_container {}
+#body_container > h1 {background:url(http://www.hdtvmagazine.us/images/bg_h1.gif) repeat; border-top:3px solid #003F87; border-bottom:1px solid #003F87; font-size:14pt; font-weight:bold; padding:3px;}
+#body_container h2 {color:#995905; font:1.5em Arial, sans serif; font-weight:bold;}
+#body_container h2 a {color:#995905;}
+#body_container h3 {border:none; font-size:1.25em; line-height:125%; margin:1em 0 0 0; padding:2px 0 0 0; text-transform:none;}
+#body_container h4 {font-size:1em}
+*/
+
+#ad_leaderboard {margin:5px 0;}
+#ad_leaderboard div {background-color:#F5F7FA; padding:0 10px; width:728px}
+#ad_leaderboard span.corners-top, #ad_leaderboard span.corners-bottom {margin:0 -10px;}
+
+#ad_links {margin:.5em;}
+
+.ad_mrectangle {color:#AAAAAA; font-size:.8em; letter-spacing:.3em; margin:0; padding:0; text-align:center; width:300px;}
+
+#ad_skyscraper {margin-bottom:10px;}
+#ad_skyscraper div {background-color:#F5F7FA; padding:0 10px; text-align:center;}
+#ad_skyscraper span.corners-top, #ad_skyscraper span.corners-bottom {margin:0 -10px;}
+
+.alertbox {background-color:#F6EBAD; border:1px solid #D5CA8B; color:#73681F; margin:10px; padding:5px; text-align:center; width:500px;}
+.alertbox a:link {color:#73681F;}
+.alertbox a:visited {color:#73681F;}
+.alertbox a:hover {color:#73681F;}
+.alertbox a:active {color:#73681F;}
+.alertbox b {color:#73681F}
+/*.alert_green div {color:#008000; border:1px solid #408040; background-color:#EEFFEE; font-weight:bold; margin:5px 0; padding:7px; width:6.5in;}*/
+.alert_green {border:1px solid #408040; background-color:#EEFFEE}
+.alert_green td {color:#008000; font-weight:bold; margin:5px 0; padding:7px;}
+.alert_red div {color:#800000; border:1px solid #804040; background-color:#FFEEEE; font-weight:bold; margin:5px 0; padding:7px; width:6.5in;}
+
+table.bare {border:0; margin:0; padding:0;}
+
+p.big-first:first-letter {font-size: 200%; float: left;}
+
+.block_small {background-color:#EDEDED; border:1px solid #AAAAAA; float:left; height:80px; margin:3px; padding:2px; width:30%;}
+.block_small img {padding-right:2px}
+
+.booksnavbar {background-color:#EDEDED; border:1px solid #AAAAAA; padding:3px; text-align:center;}
+
+.brown {color:#995905}
+
+table.btn {float:left; padding-right:3px;}
+td.btn-left {background:url(http://www.hdtvmagazine.us/images/btn-left.gif) 0 0 no-repeat; padding:0}
+td.btn-back {background:url(http://www.hdtvmagazine.us/images/btn-back.gif) repeat-x; color:white; font-weight:bold; padding:5px; height:36px;}
+td.btn-back a:link {color:white;}
+td.btn-back a:visited {color:white;}
+td.btn-back a:hover {color:white;}
+td.btn-back a:active {color:white;}
+td.btn-right {background:url(http://www.hdtvmagazine.us/images/btn-right.gif) no-repeat;}
+
+.buttonBar {border:1px dashed #AAAAAA; padding:5px 0; text-align:center;}
+
+table.calendar {border:1px solid #AAAAAA; border-collapse:collapse;}
+td.calendar {border:1px solid #AAAAAA; background-color:#EDEDED; width:50px; text-align:center;}
+td.calendar_header {border:1px solid #AAAAAA; text-align:center;}
+
+.categories {background-color:#CEDFEF; font-weight:bold; padding:2px; width:600px;}
+.categories a {font-weight:normal;}
+
+/*
+span.caption {float:left; margin-bottom:5px; text-align:center;}
+span.caption img {}
+*/
+/*
+.caption {border:thin silver solid; margin: 0.5em; padding: 0.5em;}
+.caption p {text-align:center; font-style:italic; font-size:smaller; text-indent:0;}
+*/
+.caption {background-color:#F9F9F9; border:1px solid #CCCCCC; padding:3px; font: 11px/1.4em Arial, sans-serif; text-align:center; white-space:normal;}
+.caption img {border:1px solid #CCCCCC; vertical-align:middle; margin-bottom:3px; padding:0 !important}
+.caption br {clear:both}
+.right {margin:0.5em 0pt 0.5em 0.8em; float:right;}
+.left {margin:0.5em 0.8em 0.5em 0; float:left;}
+
+#container-footer {margin:5px 0; clear:both}
+#container-footer div {background-color:#F5F7FA; padding:0 10px;}
+#container-footer span.corners-top, #container-footer span.corners-bottom {margin:0 -10px;}
+
+.content .caption {text-align:center;}
+.content img {padding:7px;}
+.content li {line-height:150%;}
+.content pre {font-size:larger;}
+
+span.corners-top, span.corners-bottom, span.corners-top span, span.corners-bottom span {font-size: 1px; line-height: 1px; display: block; height: 5px; background-repeat: no-repeat;}
+span.corners-top {background-image: none; background-position: 0 0; margin: 0 -5px;}
+span.corners-top span {background-image: none;	background-position: 100% 0;}
+span.corners-bottom {background-image: none; background-position: 0 100%; margin: 0 -5px; clear: both;}
+span.corners-bottom span {background-image: none; background-position: 100% 100%;}
+span.corners-top {background-image: url(http://www.hdtvmagazine.us/forum/styles/HDTVMagazine4/theme/images/corners_left.png);}
+span.corners-top span {background-image: url(http://www.hdtvmagazine.us/forum/styles/HDTVMagazine4/theme/images/corners_right.png);}
+span.corners-bottom {background-image: url(http://www.hdtvmagazine.us/forum/styles/HDTVMagazine4/theme/images/corners_left.png);}
+span.corners-bottom span {background-image: url(http://www.hdtvmagazine.us/forum/styles/HDTVMagazine4/theme/images/corners_right.png);}
+
+.date {clear:left; padding:3px; text-align:right; width:100px;}
+td.dayamount_normal {padding:8px 1px; text-align:center;}
+td.dayamount_today {background-color:#AAAAAA; padding:8px 1px; text-align:center;}
+td.daytitle {font-size:6pt; color:white; background-color:black; padding:1px; text-align:right;}
+
+.diggbox {padding:0 5px 5px 0;}
+
+/*
+.entry {padding:3px;}
+*/
+.editorial {background-color:#EDEDED; border:1px dotted black; border-left:3px solid #003F87; clear:left; font-size:12px; padding:5px; display:table}
+.entry_date {float:left; padding:3px; text-align:right; width:100px;}
+.featured {background-color:#F6EBAD; color:#73681F; padding:3px;}
+.featured a {margin-left:10px}
+.grey {color:#808080}
+.grey_italic {color:#808080; font-style:italic}
+table.greygrid {border-collapse:collapse;}
+td.greygrid {background-color:#EDEDED; border:2px solid white; padding:3px; text-align:center}
+td.grid {border:1px solid #AAAAAA; padding:2px 4px;}
+td.grid_bold_shade {background-color:#EDEDED; border:1px solid #AAAAAA; font-weight:bold; padding:2px 4px;}
+
+p.header {color:#003F87; font:bold 12pt Arial,sans-serif;}
+
+.infobox {background-color:#F6EBAD; border:1px solid #D5CA8B; float:right; padding:2px; width:300px}
+.inputButton {background:url(http://www.hdtvmagazine.us/images/bg-button.gif) repeat-x; border:1px solid #AAAAAA; cursor:pointer; font:8pt Arial,sans-serif; height:21px;}
+.inputLabel {font-weight:bold; padding:3px; text-align:right;}
+.inputTextDisabled {background-color:#EDEDED; border:1px solid #AAAAAA; font-weight:normal; height:18px; padding-left:3px;}
+
+.livefeed {font-weight:bold; margin:3px; text-align:right; vertical-align:middle; width:100%}
+
+/* .newsblock {background-color:#EDEDED; border:1px solid #AAAAAA; float:left; height:200px; margin:3px; overflow:auto; padding:5px; width:235px;}*/
+.newsitem {color:#333333; line-height:1.48em; margin:1em 0 0 0; padding:0;}
+.newsitem > h4 {color:#606060; font-weight:bold; margin:0}
+/*.newsnet {background-color:#EFF3F7; padding:0 10px; width:280px;}*/
+
+.posted {background-color:#EDEDED; border-top:1px solid #AAAAAA; clear:both; font-size:8pt; margin-bottom:10px; padding:3px;}
+.primary_bold {font-weight:bold; color:#003F87}
+.primary_bold_10 {font-size:10pt; font-weight:bold; color:#003F87}
+.primary_bold_12 {font-size:12pt; font-weight:bold; color:#003F87}
+.primary_bold_14 {font-size:14pt; font-weight:bold; color:#003F87}
+.premium_only {color:#CAC8BB;}
+.prtitle {text-align:center; font-weight:bold; font-size:12pt}
+.keyimg {float:left; padding: 0 5px 5px 0;}
+
+.red {color:#AA0000; font-weight:bold;}
+a.red {color:#AA0000; font-weight:bold;}
+
+.evenRow {background-color:#EDEDED; padding:3px;}
+.oddRow {padding:3px;}
+
+.scroll {overflow:auto; padding:2px; border:1px solid #AAAAAA}
+.section_heading {font:14pt bold verdana,arial,sans-serif; color:#003F87;}
+.selected {background-color:#EDEDED; border:1px solid #AAAAAA; padding:2px 5px 2px 2px;}
+
+.shadebox {background-color:#EDEDED; border:1px solid #AAAAAA; margin-bottom:7px; padding:3px; vertical-align:middle;}
+.shade_border {background-color:#EDEDED; border:1px solid #AAAAAA; padding:3px; margin:3px;}
+.shade_border_bold {background-color:#EDEDED; border:1px solid #AAAAAA; color:#003F87; font-weight:bold; padding:3px; margin:3px;}
+
+.sidebar {background-color:#F6EBAD; border:1px solid #D5CA8B; padding:3px;}
+.sidebar li {color:#000000; margin-top:5px; line-height:150%; list-style-type:none; text-align:left;}
+/*.sidebar ul {margin:0; margin-bottom:15px; padding-left:0;}*/
+.sidebar ul ul {margin-bottom: 0px;}
+/*.sidebar #categories ul {padding-left:15px;}*/
+.sidebar #categories li {list-style-type:disc;}
+.sidebar h2 {background-color:transparent; border:0; border-bottom:1px dotted #AAAAAA; color:#003F87; font:bold 8pt Arial,sans-serif; letter-spacing:.2em; margin:0; padding-bottom:3px; text-transform:uppercase;}
+
+td.space_header {background-color:#AAAAAA; color:white; font-weight:bold; padding:2px; text-align:center}
+
+/*** Tabbed table styles  ***/
+table.tabTable {border:0; width:6.5in;}
+table.tabHeader {border-collapse:collapse; width:100%;}
+table.tabContent {border:1px solid #AAAAAA; border-collapse:collapse; border-top:0; width:100%;}
+td.tabContent {border:1px solid #AAAAAA; border-top:0; padding:15px 5px 5px 5px;}
+td.activeTab {background:url(http://www.hdtvmagazine.us/images/bg-activetab.jpg) repeat-x; border:1px solid #AAAAAA; border-bottom:0px; font-weight:bold; padding: 5px 10px; text-align:center;}
+td.inactiveTab {background:url(http://www.hdtvmagazine.us/images/bg-inactivetab.gif); border:1px solid #AAAAAA; padding:5px 10px; text-align:center;}
+td.tabActive {background:url(http://www.hdtvmagazine.us/images/bg-activetab.jpg) repeat-x; border:1px solid #AAAAAA; border-bottom:0px; font-weight:bold; padding: 5px 10px; text-align:center;}
+td.tabInactive {background:url(http://www.hdtvmagazine.us/images/bg-inactivetab.gif); border:1px solid #AAAAAA; padding:5px 10px; text-align:center;}
+.tabContent > fieldset {border:1px solid #AAAAAA; margin:5px 5px 15px 5px; padding:5px; text-align:left;}
+.tabContent > fieldset > br {line-height:75%}
+.tabContent > label {display:block; font-weight:bold; margin-left:3px}
+.tabContent > label > input[disabled="disabled"] {color:#CAC8BB;}
+.tabContent > legend {color:#003F87; font-weight:bold;}
+
+table.type1b {border:1px solid #AAAAAA; border-collapse:collapse;}
+.type1b_header {background-color:#EDEDED; border:1px solid #AAAAAA; color:#003F87; font-weight:bold; padding:2px 3px; vertical-align:top;}
+td.type1b {border-bottom:1px solid #AAAAAA; padding:2px 4px;}
+
+/* Used in: hdtvs-by-manufacturer, manufacturer */
+table.simple {border:1px solid #AAAAAA; border-collapse:collapse;}
+table.simple td {border:1px solid #AAAAAA; padding:2px; vertical-align:middle}
+table.simple .header td {background-color:#EDEDED; color:#003F87; font-weight:bold; padding:2px 3px; vertical-align:top;}
+
+/* NEW 'standard' table class */
+table.standard {border:1px solid #CCCCCC; border-collapse:collapse;}
+table.standard td {border:1px solid #CCCCCC !important; font-size:8pt; padding:2px; vertical-align:middle}
+table.standard th {background-color:#EEEEEE; font-size:8pt; font-weight:bold; padding:2px 5px; text-align:left}
+
+.type2 {background-color:#EDEDED; border-bottom:1px solid #AAAAAA; margin-bottom:1em; width:100%;}
+
+/*** ID SELECTORS ***/
+#ad-right {padding-left:10px; text-align:right; vertical-align:top; width:180px;}
+#ad-left {padding-right:10px; text-align:left; vertical-align:top; width:180px;}
+#article_headshot {padding-right:5px; vertical-align:top}
+/*.article_title {background:url(http://www.hdtvmagazine.us/images/bg_h1.gif) repeat; border:1px solid #AAAAAA; color:#003F87; font:bold 14pt arial,sans-serif; padding:7px; vertical-align:top; width:100%;}*/
+#article_title {background:url(http://www.hdtvmagazine.us/images/bg_h1.gif) repeat; border:1px solid #AAAAAA; color:#003F87; font:bold 14pt arial,sans-serif; padding:7px; vertical-align:top;}
+/*
+#article_title {font:bold 16pt arial,sans-serif; padding-bottom:5px; vertical-align:top;}
+*/
+#article_title a {border-width-bottom:3px;text-decoration:none;}
+#article_title a:hover {text-decoration:underline;}
+#article_buttons {}
+#article_byline {color:#666666; padding:3px;}
+#article_category {color:#666666; padding:3px; text-align:right}
+#article_links {text-align:right; width:100%;}
+#article_links img {padding:0 2px 0 5px;}
+
+#card {border:1px solid black;}
+
+#center {overflow:hidden;}
+#left {padding-right:10px; vertical-align:top}
+#right {border-left:1px solid #AAAAAA; float:right; padding-left:10px; vertical-align:top; width:310px;}
+
+#content {min-height:400px; width:100%;}
+#email_preference {border-top:1px solid #AAAAAA;vertical-align:middle;padding:4px}
+
+#listing {border:1px solid #AAAAAA; margin-bottom:5px; width:100%;}
+#map {height:550px;border:1px solid #AAAAAA}
+
+#menu {background:#003F87 url(http://www.hdtvmagazine.us/images/menu-back.png) no-repeat 0 0; border:0; clear:both; height:40px; margin:0.1em 0; padding-left:10px;}
+#menu div {background:url(http://www.hdtvmagazine.us/images/menu-back.png) no-repeat 100% 0; height:36px; overflow:hidden; padding-top:4px;}
+table.menuItem {border:0; border-collapse:collapse; padding:0; margin:0; width:100%;}
+.menuItem {border-right:1px solid #AAAAAA; font:bold 9pt Arial,sans-serif; height:32px; text-align:center; vertical-align:middle;}
+.menuItem a:link {color:#FFF; text-decoration:underline;}
+.menuItem a:visited {color:#FFF; text-decoration:underline;}
+.menuItem a:hover {color:#FFF; text-decoration:underline;}
+.menuItem a:active {color:#FFF; text-decoration:underline;}
+
+.networkLogo {border:1px solid #AAAAAA; padding:2px; margin:0 3px 3px 0; float:left}

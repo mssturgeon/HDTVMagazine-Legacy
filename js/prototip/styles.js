@@ -1,0 +1,1 @@
+Prototip.Styles={'hdtvmagazine':{className:'hdtvmagazine',border:4,borderColor:'#cedfef',delay:0.1,hideOn:'mouseout',hideOthers:true,hook:{tip:'bottomLeft',mouse:true},radius:4,stem:{position:'bottomLeft',height:12,width:15},width:300}};

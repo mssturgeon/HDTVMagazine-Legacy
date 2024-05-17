@@ -1,0 +1,12 @@
+<?xml version="1.0"?> 
+<rsd version="1.0" xmlns="http://archipelago.phrasewise.com/rsd">
+<service>
+<engineName>Movable Type 3.16</engineName> 
+<engineLink>http://www.movabletype.org/</engineLink>
+<homePageLink>http://www.hdtvmagazine.com/reviews/</homePageLink>
+<apis>
+<api name="MetaWeblog" preferred="true" apiLink="/cgi-bin/movabletype/mt-xmlrpc.cgi" blogID="8" />
+<api name="Blogger" preferred="false" apiLink="/cgi-bin/movabletype/mt-xmlrpc.cgi" blogID="8" />
+</apis>
+</service>
+</rsd>

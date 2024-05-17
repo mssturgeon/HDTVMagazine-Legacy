@@ -1,0 +1,130 @@
+<html>
+<head>
+<title>IMPORTING YOUR ENTRIES</title>
+<link rel="stylesheet" href="doc-styles.css" type="text/css">
+</head>
+
+<body>
+<h3>Movable Type User Manual: IMPORTING YOUR ENTRIES</h3>
+<p><a href="mtmanual.html">&laquo; Table of Contents</a></p>
+
+
+<a name="__index__"></a>
+
+<ul>
+
+	<li><a href="#importing your entries">IMPORTING YOUR ENTRIES</a></li>
+	<ul>
+
+		<li><a href="#importing entries">Importing Entries</a></li>
+	</ul>
+
+</ul>
+<hr size="1" color="#CCCCCC">
+<p>
+<h1><a name="importing your entries"></a>IMPORTING YOUR ENTRIES</h1>
+<p>Movable Type allows you to import entries into the system via the
+Import/Export button on the sidebar.   The import functionality 
+requires that the data to be imported is contained in a file and follows 
+the  <a href="./mtimport.html">Movable Type Import Format</a>.</p>
+<p>If you are converting from another publishing system, you will first have to 
+export your data from that system using its standard templating system.  The 
+output should be in the form of the import format described above.   See our 
+help section on Migrating to Movable Type at <a href="http://www.sixapart.com/movabletype/docs/migrating_to_mt.html">http://www.sixapart.com/movabletype/docs/migrating_to_mt.html</a> 
+for particulars on how to export from many other publishing systems.</p>
+<p>
+<h2><a name="importing entries"></a>Importing Entries</h2>
+<p>Once you have exported all of your entries from your other content
+management system, you are ready to import the entries into Movable Type.</p>
+<ol>
+<li>
+Connect to your FTP server; then open the directory where you installed
+Movable Type.
+<p></p>
+<li>
+Create a new directory called <i>import</i>, then open that directory.
+<p></p>
+<li>
+Upload the file containing all of your entries into the <i>import</i> directory.
+<p></p>
+<li>
+Log into Movable Type, then select the weblog into which you wish to import the
+entries from the <code>Your existing weblogs</code> list.
+<p></p>
+<li>
+Click <code>Import Entries</code>.
+<p></p>
+<li>
+<a name="import_as_self"></a><p>You have the option of either importing the entries as yourself--the author
+that you are currently logged in as--or creating new authors for each
+author name found in the original set of entries. For example, if your weblog
+is/was a team weblog, you would probably want to recreate the original set of
+authors, rather than import all of the entries as yourself. Otherwise you
+probably wish to simply import the entries as yourself.</p>
+<p>If importing the entries as you, check the <code>Import as me</code> box.</p>
+<p>If creating new authors, you will need to set a password which will be
+used when creating each of the new authors in the system. You should also
+leave the <code>Import as me</code> box unchecked.</p>
+<p><strong>NOTE:</strong> if the name of an author listed for one of the entries you are
+importing is already being used by an author in the Movable Type system, the
+entry will be assigned to the existing author, and a new author will not be
+created.</p>
+<li>
+<a name="import_category"></a><p>If you would like to choose a default category for all of the entries that
+you import, you can do so here. This might be useful if you already have a
+batch of entries in your Movable Type weblog, for example, and you wish to mark
+the newly-imported entries as uncategorized.</p>
+<p>If you do not choose a default category, the entries will not be assigned to a
+particular category (unless the entries you are importing use the <code>CATEGORY</code>
+key to specify their category).</p>
+<p>If you choose a default category, and one or more entries use the <code>CATEGORY</code>
+key in the list of exported entries, the <code>CATEGORY</code> key will override the
+default category, for those entries using the <code>CATEGORY</code> key; all other
+entries will be assigned to the default category.</p>
+<li>
+<a name="import_status"></a><p>By default, your imported entries will be assigned the post status that you
+have selected as the <code>Status default</code> in your weblog configuration. If you
+would like to override this, you can select the desired post status
+(<code>Draft</code> or <code>Publish</code>) from the <code>Default post status for entries</code> menu.</p>
+<li>
+<a name="import_title_html"></a><p>The <code>Title Start HTML</code> and <code>Title End HTML</code> values are used to identify
+a post title within the body of an entry. This is useful when importing
+entries from Blogger, for example, because Blogger posts do not have the
+concept of a separate title field. If you have named your posts consistently
+through the use of HTML tags, however, Movable Type can parse your weblog
+entries to find those titles. For example, if all of your entry titles look
+like this:</p>
+<pre>&lt;font class=&quot;title&quot;&gt;I am a title&lt;/font&gt;
+</pre><p>Then you could use a value for <code>Title Start HTML</code> of</p>
+<pre>&lt;font class=&quot;title&quot;&gt;
+</pre><p>and a value for <code>Title End HTML</code> of</p>
+<pre>&lt;/font&gt;
+</pre><p>to automatically set the titles of your entries when importing. If found,
+the title, along with the surrounding HTML, will be removed from the body
+of your entry.</p>
+<p>If you do not fill in these values, or if the relevant HTML cannot be found
+for a particular entry, the first five (5) words of the entry are used as
+the title, instead.</p>
+<li>
+After filling in the necessary values in the form, press <code>IMPORT</code> to import
+your entries.
+<p></p>
+<li>
+That's it!
+<p><i>NOTE</i>: You should now remove all of the files that you imported from the
+<i>import</i> directory, so that if or when you run the import process again at
+some later date, the entries you just imported will not be re-imported.</p>
+<p>You will need to rebuild all of your files in order to generate your archives
+for the new imported entries.</p>
+<p></p></ol>
+<p><strong>TIP:</strong> after importing your entries, if you imported them from a system
+without categories, you may wish to assign categories to each of your entries;
+a fast way to do this is to use Movable Type's
+<a href="./mtmanual_entries.html#powerediting mode">Power-Editing Mode</a>, which allows you
+to edit multiple entries at once.</p>
+
+<hr size="1" color="#CCCCCC">
+<span class="copyright">Copyright &copy; 2001-2005 Six Apart. All Rights Reserved.</span>
+</body>
+
+</html>

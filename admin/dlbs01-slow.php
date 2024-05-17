@@ -1,0 +1,9 @@
+<?
+	require('../global.php');
+	if (!access(ACCESS_ADMIN_ANY)) access_denied();
+
+	header('Content-Type: text/plain');
+	header('Content-Disposition: filename="dlbs01-slow.txt"');
+	
+	include('/var/lib/mysql/dlbs01-slow.log');
+?>

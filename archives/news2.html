@@ -1,0 +1,1512 @@
+<html>
+
+<head>
+<title>HDTV Magazine</title>
+<meta NAME="Keywords"
+CONTENT="HDTV, High Definition, TV, HD, HDTV Info, HDTV Programming, Digital Television, Digital, DTV, Television, Magazine, Newsletter, I love HDTV, HDTV Information, Program listings,">
+<meta NAME="Description"
+CONTENT="The HDTV Magazine a consumer news service providing information, product reviews, product ratings, interactive services, programming listings, and other vital, critical and timely content to consumers and potential consumers of HDTV.">
+<style>
+<!--
+
+A.normal:link    {color:#ffffff; text-decoration:none;}
+A.normal:visited {color:#ffffff; text-decoration:none;}
+A.normal:active  {color:#ffffff; text-decoration:none;}
+A.normal:hover   {color:#c0c0c0; text-decoration:underline;}
+
+A.menu:link    {color:#FFFFFF; text-decoration:none;}
+A.menu:visited {color:#FFFFFF; text-decoration:none;}
+A.menu:active  {color:#FFFFFF; text-decoration:none;}
+A.menu:hover   {color:#C0C0C0; text-decoration:none;}
+
+//-->
+</style>
+<script LANGUAGE="JavaScript" FPTYPE="dynamicanimation">
+<!--
+  // If you want to change this script, you must also make the following
+  // changes so that FrontPage will not overwrite your new script.
+  // In the script tag, change type="dynamicanimation" to type="mydynamicanimation"
+  // In the first script statement, change "dynamicanimation" to "mydynamicanimation"
+  // Throughout the HTML content, change dynamicanimation= to mydynamicanimation=
+  // Change function dynAnimation to function mydynAnimation
+  // In the body tag, change onload="dynAnimation()" to onload="mydynAnimation()"
+  dynamicanimAttr = "dynamicanimation"
+  animateElements = new Array()
+  currentElement = 0
+  speed = 0
+  stepsZoom = 8
+  stepsWord = 8
+  stepsFly = 12
+  stepsSpiral = 16
+  steps = stepsZoom
+  step = 0
+  outString = ""
+  function dynAnimation()
+  {
+    var ms = navigator.appVersion.indexOf("MSIE")
+    ie4 = (ms>0) && (parseInt(navigator.appVersion.substring(ms+5, ms+6)) >= 4)
+    if(!ie4)
+    {
+      if((navigator.appName == "Netscape") &&
+         (parseInt(navigator.appVersion.substring(0, 1)) >= 4))
+      {
+        for (index=document.layers.length-1; index >= 0; index--)
+        {
+            layer=document.layers[index]
+            if (layer.left==10000)
+                layer.left=0
+        }
+      }
+      return
+    }
+    for (index=document.all.length-1; index >= document.body.sourceIndex; index--)
+    {
+      el = document.all[index]
+      animation = el.getAttribute(dynamicanimAttr, false)
+      if(null != animation)
+      {
+        if(animation == "dropWord" || animation == "flyTopRightWord" || animation == "flyBottomRightWord")
+        {
+          ih = el.innerHTML
+          outString = ""
+          i1 = 0
+          iend = ih.length
+          while(true)
+          {
+            i2 = startWord(ih, i1)
+            if(i2 == -1)
+              i2 = iend
+            outWord(ih, i1, i2, false, "")
+            if(i2 == iend)
+              break
+            i1 = i2
+            i2 = endWord(ih, i1)
+            if(i2 == -1)
+              i2 = iend
+            outWord(ih, i1, i2, true, animation)
+            if(i2 == iend)
+              break
+            i1 = i2
+          }
+          document.all[index].innerHTML = outString
+          document.all[index].style.posLeft = 0
+          document.all[index].setAttribute(dynamicanimAttr, null)
+        }
+        if(animation == "zoomIn" || animation == "zoomOut")
+        {
+          ih = el.innerHTML
+          outString = "<SPAN " + dynamicanimAttr + "=\"" + animation + "\" style=\"position: relative; left: 10000;\">"
+          outString += ih
+          outString += "</SPAN>"
+          document.all[index].innerHTML = outString
+          document.all[index].style.posLeft = 0
+          document.all[index].setAttribute(dynamicanimAttr, null)
+        }
+      }
+    }
+    i = 0
+    for (index=document.body.sourceIndex; index < document.all.length; index++)
+    {
+      el = document.all[index]
+      animation = el.getAttribute(dynamicanimAttr, false)
+      if (null != animation)
+      {
+        if(animation == "flyLeft")
+        {
+          el.style.posLeft = 10000-offsetLeft(el)-el.offsetWidth
+          el.style.posTop = 0
+        }
+        else if(animation == "flyRight")
+        {
+          el.style.posLeft = 10000-offsetLeft(el)+document.body.offsetWidth
+          el.style.posTop = 0
+        }
+        else if(animation == "flyTop" || animation == "dropWord")
+        {
+          el.style.posLeft = 0
+          el.style.posTop = document.body.scrollTop-offsetTop(el)-el.offsetHeight
+        }
+        else if(animation == "flyBottom")
+        {
+          el.style.posLeft = 0
+          el.style.posTop = document.body.scrollTop-offsetTop(el)+document.body.offsetHeight
+        }
+        else if(animation == "flyTopLeft")
+        {
+          el.style.posLeft = 10000-offsetLeft(el)-el.offsetWidth
+          el.style.posTop = document.body.scrollTop-offsetTop(el)-el.offsetHeight
+        }
+        else if(animation == "flyTopRight" || animation == "flyTopRightWord")
+        {
+          el.style.posLeft = 10000-offsetLeft(el)+document.body.offsetWidth
+          el.style.posTop = document.body.scrollTop-offsetTop(el)-el.offsetHeight
+        }
+        else if(animation == "flyBottomLeft")
+        {
+          el.style.posLeft = 10000-offsetLeft(el)-el.offsetWidth
+          el.style.posTop = document.body.scrollTop-offsetTop(el)+document.body.offsetHeight
+        }
+        else if(animation == "flyBottomRight" || animation == "flyBottomRightWord")
+        {
+          el.style.posLeft = 10000-offsetLeft(el)+document.body.offsetWidth
+          el.style.posTop = document.body.scrollTop-offsetTop(el)+document.body.offsetHeight
+        }
+        else if(animation == "spiral")
+        {
+          el.style.posLeft = 10000-offsetLeft(el)-el.offsetWidth
+          el.style.posTop = document.body.scrollTop-offsetTop(el)-el.offsetHeight
+        }
+        else if(animation == "zoomIn")
+        {
+          el.style.posLeft = 10000
+          el.style.posTop = 0
+        }
+        else if(animation == "zoomOut")
+        {
+          el.style.posLeft = 10000
+          el.style.posTop = 0
+        }
+        else
+        {
+          el.style.posLeft = 10000-offsetLeft(el)-el.offsetWidth
+          el.style.posTop = 0
+        }
+        el.initLeft = el.style.posLeft
+        el.initTop = el.style.posTop
+        animateElements[i++] = el
+      }
+    }
+    window.setTimeout("animate();", speed)
+  }
+  function offsetLeft(el)
+  {
+    x = el.offsetLeft
+    for (e = el.offsetParent; e; e = e.offsetParent)
+      x += e.offsetLeft;
+    return x
+  } 
+  function offsetTop(el)
+  {
+    y = el.offsetTop
+    for (e = el.offsetParent; e; e = e.offsetParent)
+      y += e.offsetTop;
+    return y
+  } 
+  function startWord(ih, i)
+  {
+    for(tag = false; i < ih.length; i++)
+    {
+      c = ih.charAt(i)
+      if(c == '<')
+        tag = true
+      if(!tag)
+        return i
+      if(c == '>')
+        tag = false
+    }
+    return -1
+  }
+  function endWord(ih, i)
+  {
+    nonSpace = false
+    space = false
+    while(i < ih.length)
+    {
+      c = ih.charAt(i)
+      if(c != ' ')
+        nonSpace = true
+      if(nonSpace && c == ' ')
+        space = true
+      if(c == '<')
+        return i
+      if(space && c != ' ')
+        return i
+      i++
+    }
+    return -1
+  }
+  function outWord(ih, i1, i2, dyn, anim)
+  {
+    if(dyn)
+      outString += "<SPAN " + dynamicanimAttr + "=\"" + anim + "\" style=\"position: relative; left: 10000;\">"
+    outString += ih.substring(i1, i2)
+    if(dyn)
+      outString += "</SPAN>"
+  }
+  function animate()
+  {
+    el = animateElements[currentElement]
+    animation = el.getAttribute(dynamicanimAttr, false)
+    step++
+    if(animation == "spiral")
+    {
+      steps = stepsSpiral
+      v = step/steps
+      rf = 1.0 - v
+      t = v * 2.0*Math.PI
+      rx = Math.max(Math.abs(el.initLeft), 200)
+      ry = Math.max(Math.abs(el.initTop),  200)
+      el.style.posLeft = Math.ceil(-rf*Math.cos(t)*rx)
+      el.style.posTop  = Math.ceil(-rf*Math.sin(t)*ry)
+    }
+    else if(animation == "zoomIn")
+    {
+      steps = stepsZoom
+      el.style.fontSize = Math.ceil(50+50*step/steps) + "%"
+      el.style.posLeft = 0
+    }
+    else if(animation == "zoomOut")
+    {
+      steps = stepsZoom
+      el.style.fontSize = Math.ceil(100+200*(steps-step)/steps) + "%"
+      el.style.posLeft = 0
+    }
+    else
+    {
+      steps = stepsFly
+      if(animation == "dropWord" || animation == "flyTopRightWord" || animation == "flyBottomRightWord")
+        steps = stepsWord
+      dl = el.initLeft / steps
+      dt = el.initTop  / steps
+      el.style.posLeft = el.style.posLeft - dl
+      el.style.posTop = el.style.posTop - dt
+    }
+    if (step >= steps) 
+    {
+      el.style.posLeft = 0
+      el.style.posTop = 0
+      currentElement++
+      step = 0
+    }
+    if(currentElement < animateElements.length)
+      window.setTimeout("animate();", speed)
+  }
+//-->
+</script></head>
+
+<body bgcolor="#000000" text="#000000" link="#000000" vlink="#000000" alink="#000000"
+topmargin="0" leftmargin="0"
+background="http://ilovehdtv.com/guideimages//newsbkgrndsml.jpg" onload="dynAnimation()">
+<div align="left">
+
+<table border="16" width="750" bgcolor="#FFFFFF" cellspacing="0" cellpadding="0"
+bordercolor="#808080">
+  <tr>
+    <td width="100%"><table border="12" bgcolor="#FFFFFF" cellspacing="0" cellpadding="0"
+    bordercolor="#000080" width="100%" height="100%">
+      <tr>
+        <td width="200" bgcolor="#000000" valign="top" rowspan="2"
+        style="border-left: thick solid rgb(185,185,255); border-right: 0px; border-top: thick solid rgb(185,185,255); border-bottom: thick solid rgb(185,185,255)"
+        height="100%"><img src="http://ilovehdtv.com/guideimages/electlogo200.jpg"
+        alt="electlogo200.jpg (7189 bytes)"><p align="center"><!--webbot bot="ImageMap" startspan
+        rectangle=" (31,206) (125, 223)  http://ilovehdtv.com/hdtvmagazine/contactus.html"
+        rectangle=" (40,186) (103, 196)  http://ilovehdtv.com/hdtvmagazine/history.html"
+        rectangle=" (23,157) (125, 173)  http://ilovehdtv.com/hdtvmagazine/teamhdtv.html"
+        rectangle=" (33,115) (108, 135)  http://ilovehdtv.com/hdtvmagazine/programming.html"
+        rectangle=" (45,96) (102, 111)  http://ilovehdtv.com/hdtvmagazine/chat.html"
+        rectangle=" (35,72) (115, 85)  http://www.network54.com/Hide/Forum/213962"
+        rectangle=" (39,51) (107, 67)  http://www.ilovehdtv.com/hdtvmagazine/news.html"
+        rectangle=" (41,30) (106, 43)  http://www.ilovehdtv.com"
+        src="http://ilovehdtv.com/hdtvmagazine/Image/menulist1.jpg"
+        alt="menulist1.jpg (11011 bytes)" border="0" --><MAP NAME="FrontPageMap0"><AREA SHAPE="RECT" COORDS="31, 206, 125, 223" HREF="http://ilovehdtv.com/hdtvmagazine/contactus.html"><AREA SHAPE="RECT" COORDS="40, 186, 103, 196" HREF="http://ilovehdtv.com/hdtvmagazine/history.html"><AREA SHAPE="RECT" COORDS="23, 157, 125, 173" HREF="http://ilovehdtv.com/hdtvmagazine/teamhdtv.html"><AREA SHAPE="RECT" COORDS="33, 115, 108, 135" HREF="http://ilovehdtv.com/hdtvmagazine/programming.html"><AREA SHAPE="RECT" COORDS="45, 96, 102, 111" HREF="http://ilovehdtv.com/hdtvmagazine/chat.html"><AREA SHAPE="RECT" COORDS="35, 72, 115, 85" HREF="http://www.network54.com/Hide/Forum/213962"><AREA SHAPE="RECT" COORDS="39, 51, 107, 67" HREF="http://www.ilovehdtv.com/hdtvmagazine/news.html"><AREA SHAPE="RECT" COORDS="41, 30, 106, 43" HREF="http://www.ilovehdtv.com"></MAP><img src="http://ilovehdtv.com/hdtvmagazine/Image/menulist1.jpg" alt="menulist1.jpg (11011 bytes)" border="0" usemap="#FrontPageMap0"><!--webbot bot="ImageMap"
+        i-checksum="49163" endspan --><br>
+        <a href="https://secure.ordersecure.com/ssl.ilovehdtv.com/affiliate/donations.html"><img
+        src="http://ilovehdtv.com/guideimages/donations.jpg" alt="donations.jpg (1153 bytes)"></a><a
+        href="https://secure.ordersecure.com/ssl.ilovehdtv.com/affiliate/subscribe.html"><img
+        src="http://ilovehdtv.com/guideimages/SUBSCRIBEGREY.jpg"
+        alt="SUBSCRIBEGREY.jpg (1882 bytes)"></a><br>
+        <small><font color="#C0C0C0">To HDTV Magazine</font></small></p>
+        <hr style="border-top: 1px solid rgb(0,0,255); border-bottom: 1px solid rgb(0,0,255)"
+        size="5" color="#800000">
+        <p align="center"><big><font color="#FF00FF"><strong>Important Links</strong></font></big></p>
+        <hr style="border-top: 1px solid rgb(0,0,255); border-bottom: 1px solid rgb(0,0,255)"
+        size="5" color="#800000">
+        <p align="center"><br>
+        <img src="http://ilovehdtv.com/guideimages/capitalblk.jpg"
+        alt="capitalblk.jpg (2032 bytes)"></p>
+        <p align="center"><a href="http://www.house.gov/tauzin/welcome-english.htm"><strong><font
+        color="#FFFFFF">Rep. Billy Tauzin</font></strong></a></p>
+        <p align="center"><a href="http://ce.org"><strong><font color="#FFFFFF">CEA</font></strong></a></p>
+        <p align="center" dynamicanimation="zoomOut"
+        style="position: relative !important; left: 10000 !important"><a href="http://www.nab.org"><strong><font
+        color="#FFFFFF">NAB</font></strong></a></p>
+        <p align="center"><a href="http://www.sbca.com/"><strong><font color="#FFFFFF">SBCA</font></strong></a></p>
+        <p align="center"><a href="http://ncta.com"><strong><font color="#FFFFFF">NCTA</font></strong></a></p>
+        <p align="center"><a href="http://mstv.org"><strong><font color="#FFFFFF">MSTV</font></strong></a></p>
+        <p align="center"><a href="http://atsc.org"><strong><font color="#FFFFFF">ATSC</font></strong></a></p>
+        <p align="center"><a href="http://www.smpte.org"><strong><font color="#FFFFFF">SMPTE</font></strong></a></p>
+        <hr style="border-top: 1px solid rgb(0,0,255); border-bottom: 1px solid rgb(0,0,255)"
+        size="5" color="#800000">
+        <p align="center"><font color="#FF80FF"><strong>BROADCAST</strong></font></p>
+        <p align="center"><a href="http://cbs.com"><strong><font color="#FFFFFF">CBS</font></strong></a></p>
+        <p align="center"><a href="http://www.fox.com/home.htm"><strong><font color="#FFFFFF">FOX</font></strong></a></p>
+        <p align="center"><a href="http://nbc.com"><strong><font color="#FFFFFF">NBC</font></strong></a></p>
+        <p align="center"><a href="http://pbs.org"><strong><font color="#FFFFFF">PBS</font></strong></a></p>
+        <p align="center"><a href="http://thewb.com"><strong><font color="#FFFFFF">TheWB</font></strong></a></p>
+        <hr style="border-top: 1px solid rgb(0,0,255); border-bottom: 1px solid rgb(0,0,255)"
+        size="5" color="#800000">
+        <p align="center"><strong><font color="#FF00FF">INTERNATIONAL</font></strong></p>
+        <p align="center"><strong><a href="http://"><font color="#FFFFFF">China</font></a></strong></p>
+        <p align="center"><strong><font color="#FFFFFF">Japan</font></strong></p>
+        <p align="center"><a href="http://www.nhk.or.jp/strl/open2003/en/tenji/012.html"><strong><font
+        color="#FFFFFF">NHK</font></strong></a></p>
+        <p align="center"><a href="http://www.atscforum.org/pr/PR-0304-KoreaBroadcasting.pdf"><strong><font
+        color="#FFFFFF">Korea</font></strong></a></p>
+        <p align="center"><a href="http://www.petitiononline.com/mod_perl/signed.cgi?HDTVinEU"><strong><font
+        color="#FFFFFF">Europe</font></strong></a></p>
+        <hr style="border-top: 1px solid rgb(0,0,255); border-bottom: 1px solid rgb(0,0,255)"
+        size="5" color="#800000">
+        <p align="center"><small><strong><font color="#FF80FF">HELP FOR BEGINNERS</font></strong></small></p>
+        <p align="center"><a href="http://www.hdtvprimer.com/"><font color="#FFFFFF"><small><strong>Primer</strong></small></font></a></p>
+        <p align="center">&nbsp;</p>
+        <p align="center"><font color="#FF00FF"><small><strong>DIGITAL TELEVISION NEWS FROM AROUND
+        THE WORLD</strong></small></font></p>
+        <p align="center"><font color="#FFFFFF"><small><strong><a href="http://www.dtg.org.uk/">DIGITAL
+        TELEVISION</a> uk</strong></small></font></p>
+        <p align="center">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="654" valign="top" height="100%"
+        style="border-left: 10px solid rgb(185,185,255); border-right: 10px solid rgb(185,185,255); border-top: 10px solid rgb(185,185,255); border-bottom: thick solid rgb(185,185,255)"><img
+        src="http://ilovehdtv.com/guideimages/newsblue.jpg" alt="newsblue.jpg (9148 bytes)"><div
+        align="center"><center><table border="12" cellpadding="15" cellspacing="0" width="680"
+        style="border-left: 1px solid rgb(0,0,128); border-right: 1px solid rgb(0,0,128)"
+        bordercolor="#000080" height="100%">
+          <tr>
+            <td width="616" valign="top" height="100%">&nbsp;<div align="right"><table border="3"
+            cellpadding="0" cellspacing="0" width="642" bordercolor="#C0C0C0">
+              <tr>
+                <td width="321" valign="top" bgcolor="#F3F3F3" height="100%"><blockquote>
+                  <p align="left"><small><font color="#400080"><strong>Tuesday, Octover 7, 2003</strong></font></small></p>
+                  <p align="left"><big><font color="#400080"><strong><a name="News You Can Use.....">News
+                  You Can Use.....</a>.</strong></font></big></p>
+                  <p align="left"><big><font color="#400080"><strong>Page 2</strong></font></big></p>
+                  <p align="left"><font color="#FF0000"><span style="line-height: 0px; letter-spacing: 3px">INDEX</span></font></p>
+                  <p align="left"><small><a href="#Digital comes to local TV channels">Digital comes to
+                  local TV channels</a></small></p>
+                  <p align="left"><small><a href="#Appeals Court Hears Digital-TV Tuner Dispute">Appeals
+                  Court Hears Digital-TV Tuner Dispute</a></small></p>
+                  <p align="left"><a href="#-EchoStar Communications Corporation"><small>Echo Star</small></a></p>
+                  <p align="left"><small><a href="#ESPN, ECHOSTAR form distribution agreement">ESPN,
+                  ECHOSTAR form distribution agreement</a></small></p>
+                  <p align="left"><a
+                  href="http://www.globeandmail.com/servlet/Page/document/hubsv3/tgamHub?hub=Search&amp;query=hdtv&amp;go.x=10&amp;go.y=11"><small>Canada
+                  CBC going HD</small></a></p>
+                  <p align="left"><small><a href="#Europe's First HD Channel">Europe's First HD Channel</a></small></p>
+                  <p align="left"><small><a href="#Mark Schubin"><small>Mark Sschubin's Weekly Memo</small></a></small></p>
+                  <p align="left"><small><small><a href="#INHD LAUNCHES">INHD Launches</a> 2 24/7 HD
+                  channels</small></small></p>
+                  <p align="left"><small><small><a href="#July Digital Television Sales">July Digital
+                  Television Sales</a></small></small></p>
+                  <p align="left"><small><small><a href="#CABLEVISION CALLS IT VOOM">CABLEVISION CALLS IT
+                  VOOM</a><a href="#DISH Network Expands"> </a></small></small></p>
+                  <p align="left"><a href="#DISH Network Expands"><small><small>DISH Network Expands</small></small></a></p>
+                </blockquote>
+                </td>
+                <td width="321" valign="top" bgcolor="#FFFFFF" height="100%"><font color="#400080"><big><big><strong>Opinion
+                Page...........</strong></big></big></font><p align="center"><img
+                src="http://ilovehdtv.com/guideimages/page2promo.jpg" alt="page2promo.jpg (4435 bytes)"></p>
+                <blockquote>
+                  <p><strong>Past Editions Of Page 2</strong></p>
+                  <p align="center"><font face="Arial" color="#800000"><strong><small><small>| <a
+                  href="http://ilovehdtv.com/hdtvmagazine/Page2shapiro.htm">Sample 1</a> | | <a
+                  href="http://ilovehdtv.com/Page2.2.htm">Sample 2</a> | | <a
+                  href="http://ilovehdtv.com/Page2.3.htm">Sample 3</a> |</small></small> <small><small>|<a
+                  href="http://ilovehdtv.com/Page2.4.htm">Sample4</a> |</small> <small><a
+                  href="http://ilovehdtv.com/hdtvmagazine/Page%25202%252010_17_2002%2520(HTML).htm">| Sample
+                  5 |</a></small> <a href="http://ilovehdtv.com/hdtvmagazine/page232603.html"><small>|Sample
+                  6 |</small></a></small><br>
+                  <small><small><a href="http://ilovehdtv.com/hdtvmagazine/Page2oct02.html">| Sample 7|</a> <a
+                  href="http://ilovehdtv.com/hdtvmagazine/Page2mfranks.html">| Sample 8 |</a></small></small></strong></font></p>
+                  <p align="left"><strong>Important Archives...<br>
+                  <br>
+                  <small><a href="http://ilovehdtv.com/hdtvmagazine/Programmingnews.html">Fox To go HD in
+                  2004</a><font face="Arial" color="#800000"><small><br>
+                  </small></font></small></strong></p>
+                </blockquote>
+                <hr>
+                <blockquote>
+                  <p><a href="http://www.ilovehdtv.com/hdtvmagazine/news.html">RETURN TO TODAY'S NEWS</a></p>
+                </blockquote>
+                </td>
+              </tr>
+            </table>
+            </div><p align="center"><a
+            href="http://www.nab.org/newsroom/issues/digitaltv/DDTV/0903.pdf"><img
+            src="http://ilovehdtv.com/guideimages/destinationdigital.jpg"
+            alt="destinationdigital.jpg (7167 bytes)"></a></p>
+            <blockquote>
+              <p align="left"><strong>&nbsp;</strong></p>
+            </blockquote>
+            <blockquote>
+              <p>Tue Sep 16, 5:05</p>
+            </blockquote>
+            <blockquote>
+              <p><a name="Digital comes to local TV channels"><big><big>Digital comes to local TV
+              channels<br>
+              </big></big></a><br>
+              Mary Vandeveire , ARIZONA DAILY STAR <br>
+              <br>
+              Fans of digital television can celebrate its arrival at some network affiliates in Tucson.
+              They'll be enjoying clearer pictures and enhanced sound, as long as they have the right
+              equipment. <br>
+              </p>
+              <p>As of Monday, four local network affiliate stations had begun launching their digital
+              television transmissions. Making the upgrades were NBC affiliate KVOA, CBS affiliate KOLD
+              and the local FOX and UPN stations. <br>
+              <br>
+              <br>
+              Station officials say that currently the only way to receive the digital transmissions is
+              over the air, which means in addition to a digital TV and tuner, viewers will need an
+              antenna. A simple rooftop antenna or a set of rabbit ears will work if there's no
+              obstruction between the viewer's home and Mount Bigelow, the site from which the stations
+              are transmitting their digital signals - about 30 miles north of Tucson. <a
+              href="http://story.news.yahoo.com/news?tmpl=story&amp;u=/azstar/20030916/lo_azstar/digitalcomestolocaltvchannels">[more]</a><br>
+              </p>
+              <hr>
+              <p><br>
+              Tue Sep 16,&nbsp; 2003</p>
+              <p><a name="Appeals Court Hears Digital-TV Tuner Dispute"><font color="#0000A0"><strong><big><big>Appeals
+              Court Hears Digital-TV Tuner Dispute<br>
+              </big></big></strong></font></a><br>
+              By Andy Sullivan <br>
+              <br>
+              WASHINGTON (Reuters) - Television makers should not be forced to include expensive digital
+              tuners in their TV sets that few viewers will actually use, a consumer-electronics trade
+              group told an appeals court on Tuesday. <a
+              href="http://story.news.yahoo.com/news?tmpl=story&amp;u=/nm/20030916/tc_nm/media_digitaltv_dc_1">[More]</a><br>
+              </p>
+              <hr>
+              <p>September 12, 2003</p>
+              <p><strong><big><a name="ESPN, ECHOSTAR form distribution agreement">ESPN, ECHOSTAR form
+              distribution agreement </a><br>
+              </big></strong><br>
+              <strong>BRISTOL, CONN. AND LITTLETON, COLO.-- ESPN</strong>, The Worldwide Leader in
+              Sports, and EchoStar Communications Corporation and its DISH Network, the nation's fastest
+              growing provider of satellite television services, announced today that they have entered
+              into an agreement for the distribution of ESPN HD. Beginning Sept. 16, 2003, DISH Network
+              will make ESPN HD available to its entire HD-enabled subscriber base. <br>
+              <br>
+              &quot;ESPN HD is enriching the lives of high-definition viewers by providing incredible
+              sports programming detail that only an HDTV signal can provide,&quot; said Steve Raymond,
+              ESPN Senior Vice President, National Accounts, Western Division. &quot;It makes perfect
+              sense to team up with DISH Network, a company that has proven its focus on high-definition
+              television with its offer of a robust package of compelling high-definition content.&quot;
+              <br>
+              <br>
+              ESPN made a significant commitment to spur the growth of high-definition television on
+              March 30, 2003, when it debuted ESPN HD, the first 24-hour high-definition national sports
+              service in the country. Sports have proven to be an ideal showcase for the HDTV viewing
+              experience and ESPN HD features all of the live, high-profile telecasts as ESPN, including
+              games from Major League Baseball, the National Basketball Association, the National
+              Football League, the National Hockey League, and the NCAA Women's Basketball Championship.
+              <br>
+              <br>
+              EchoStar Communications Corporation (NASDAQ: DISH) is the owner of DISH Network, the
+              fastest growing U.S. provider of satellite television entertainment services with 9
+              million customers. DISH Network delivers advanced digital satellite television services,
+              including hundreds of video and audio channels, Interactive TV, digital video recording,
+              HDTV, sports and international programming, professional installation and 24-hour customer
+              service. Visit EchoStar's DISH Network at or call 1-800-333-DISH (3474). <br>
+              <br>
+              ESPN Media Contact: Katina V. Arnold (katina.arnold@espn.com) or (860) 766-7463<br>
+              EchoStar Media Contact: Steve Caulk (steve.caulk@echostar.com) or (303) 723-2010</p>
+            </blockquote>
+            <blockquote>
+              <p><u><strong>Wednesday, September 17, 2003</strong></u></p>
+            </blockquote>
+            <blockquote>
+              <p><small>LITTLETON, Colo.--(BUSINESS WIRE)--Sept. 18, 2003-<a
+              name="-EchoStar Communications Corporation">-EchoStar Communications Corporation</a>
+              (NASDAQ: DISH) today announced that its subsidiary, EchoStar DBS Corporation, is offering
+              approximately $1.5 billion aggregate principal amount of senior debt securities in
+              accordance with Securities and Exchange Commission Rule 144A. The proceeds of the offering
+              are intended to be used to repurchase or redeem EchoStar DBS Corporation's 9-3/8% Senior
+              Notes due 2009 and other outstanding debt securities.<a
+              href="http://www.corporate-ir.net/ireye/ir_site.zhtml?ticker=dish&amp;script=410&amp;layout=-6&amp;item_id=450004">[More]</a></small></p>
+            </blockquote>
+            <hr style="border-top: 1px solid rgb(0,0,255); border-bottom: 1px solid rgb(0,0,255)"
+            size="5" color="#800000">
+            <blockquote>
+              <p><strong><big><a name="Europe's First HD Channel">Europe's First HD Channel</a> Gets
+              Trial Run <br>
+              </big><small><small><small>By DOUGLAS HEINGARTNER, Associated Press Writer <br>
+              </small></small></small></strong><br>
+              <small>AMSTERDAM, Netherlands - Europe's first high-definition television channel went on
+              the air over the weekend with a trial broadcast of music and sports programming. Only next
+              year is the technology set to go mainstream.</small><br>
+              <br>
+              <small>Europe's shift to the sharper images and clearer sound of high-definition TV is
+              moving much slower than in the United States, where several million HDTV sets are already
+              in use.<small> </small>[<a
+              href="http://story.news.yahoo.com/news?tmpl=story&amp;u=/ap/20030915/ap_on_hi_te/europe_hdtv_1">more</a>]<br>
+              </small></p>
+            </blockquote>
+            <hr style="border-top: 1px solid rgb(0,0,255); border-bottom: 1px solid rgb(0,0,255)"
+            size="5" color="#800000">
+            <blockquote>
+              <p><strong><em><small>HDTV MAGAZINE brings you Mark Schubin's weekly Memo for our advanced<br>
+              readers. Mr. Schubin is a well known and respected television engineer and<br>
+              author/historian. He makes his home in New York City.</small><br>
+              </em></strong><br>
+              <br>
+              __________________<a name="Mark Schubin">Mark Schubin</a><br>
+              <br>
+              <br>
+              &nbsp;&nbsp; <small>&nbsp; - DTT reception problems possibly caused by jitter in the<br>
+              studio-transmitter link (STL) - Here's the promised URL:<br>
+              <a
+              href="http://www.topica.com/lists/openDTV/read/message.html?mid=908522591&amp;sort=d&amp;">[Click
+              for more] <br>
+              </a><br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - CEDIA -<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Attendance was over 22,000, up
+              from 19,500 in 2002:<br>
+              [<a href="http://www.epulse.org/cgi-bin/prsearch.cgi?record=3416">Click for more</a>] <br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a
+              href="http://www.hdtvexpert.com/Pages/steamroll.htm">&nbsp; - Here's Peter Putman's view:</a><br>
+              and here's <a href="http://www.hdtvexpert.com/Pages/infocomm2003.htm">more from him on
+              InfoComm</a>:<br>
+              and on <a href="http://www.hdtvexpert.com/Pages/6degrees.htm">an LCD &amp; PDP (plasma)
+              shootout</a>:<br>
+              <br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - IBC - Here are some tidbits from the International Broadcasting<br>
+              Convention in Amsterdam:<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - There's a Grass Valley &quot;TV
+              Station in a Kit&quot; series of<br>
+              packages <a href="http://www.uemedia.com/CPC/article_11735.shtml">starting at about
+              $60,000</a>:<br>
+              <br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - DTT to mobile phones seems to be
+              a hot topic:<br>
+              &lt;<a href="http://www.eetimes.com/sys/news/OEG20030916S0040">http://www.eetimes.com/sys/news/OEG20030916S0040</a>&gt;<br>
+              &lt;<a href="http://www.eetimes.com/sys/news/OEG20030912S0022">http://www.eetimes.com/sys/news/OEG20030912S0022</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - H.264/MPEG-4 Part 10 compression
+              seems to be spreading:<br>
+              &lt;<a href="http://www.eetimes.com/story/OEG20030915S0054">http://www.eetimes.com/story/OEG20030915S0054</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Microsoft is submitting Windows
+              Media 9 to SMPTE for<br>
+              standardization:<br>
+              &lt;<a href="http://news.com.com/2100-1025-5075335.html">http://news.com.com/2100-1025-5075335.html</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Even in Germany, where the DTT
+              transition in Berlin is over,<br>
+              only half-a-percent of the population watches digital, and nationwide<br>
+              analog shutdown is not expected anytime soon (&quot;at least seven years&quot;).<br>
+              In other European countries, it's expected to be even longer.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; The highest current DTT penetrations are said to be 6.5% in<br>
+              Finland, 6.1% in the UK, 4.2% in Sweden, and 1.1% in Spain.&nbsp; No other<br>
+              countries have hit even 1%, and Asia is said to be moving even slower.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; According to Colin Wright of Seven Network in Australia,
+              &quot;We're not<br>
+              making an extra cent on digital.&nbsp; It's all cost.&nbsp; It's costing us a lot<br>
+              of money&quot;:<br>
+              &lt;<a href="http://www.electronicstimes.com/bus/news/OEG20030911S0058">http://www.electronicstimes.com/bus/news/OEG20030911S0058</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - In the UK, there are &quot;more
+              than 80 channels offering either<br>
+              dedicated stand-aloe interactive services or enhanced content with<br>
+              programmes.&quot;&nbsp; France reportedly has 71, Spain 37, Italy 27, and Germany<br>
+              11:<br>
+              &lt;<a href="http://news.bbc.co.uk/1/hi/technology/3104368.stm">http://news.bbc.co.uk/1/hi/technology/3104368.stm</a>&gt;<br>
+              <br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - May 1 -<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - The Association of Public
+              Television Stations still lists<br>
+              180 non-commercial U.S. DTT stations:<br>
+              &lt;<a href="http://www.apts.org/html/digital/dtv/ptv_digitalstations.htm">http://www.apts.org/html/digital/dtv/ptv_digitalstations.htm</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - The Federal Communications
+              Commission (FCC) updated its<br>
+              lists on September 10 (but released them yesterday). Out of 1688<br>
+              stations due on the air by this past May 1, 1605 have been granted<br>
+              construction permits or licenses, and 1230 are supposedly on the air.<br>
+              Seven second extensions for commercial stations are still pending, but<br>
+              167 of the 527 that were granted have requested third extensions.&nbsp; Of<br>
+              non-commercial stations, 73 extension requests are still pending:<br>
+              &lt;<a href="http://www.fcc.gov/mb/video/files/dtvsum.html">http://www.fcc.gov/mb/video/files/dtvsum.html</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - All
+              of the 40 top-ten-market ABC, CBS, Fox, and NBC<br>
+              outlets that were due on the air by May 1, 1999 are on the air except<br>
+              WABC-DT and WNBC-DT, which were knocked out when the World Trade Center<br>
+              fell.&nbsp; No new dates have been assigned to those:<br>
+              &lt;<a href="http://www.fcc.gov/mb/video/files/dtvstat.html">http://www.fcc.gov/mb/video/files/dtvstat.html</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Of
+              the 79 ABC, CBS, Fox, and NBC outlets in markets<br>
+              11-30 (the 80th is in Mexico) that were due on the air November 1, 1999,<br>
+              72 are licensed and four are operating under temporary authority (the<br>
+              list still refers to extensions to August 6):<br>
+              &lt;<a href="http://www.fcc.gov/mb/video/files/dtvstat11.html">http://www.fcc.gov/mb/video/files/dtvstat11.html</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              These are the 677 stations said to be operating (at low<br>
+              power) on temporary authority:<br>
+              &lt;<a href="http://www.fcc.gov/mb/video/files/dtvstas.html">http://www.fcc.gov/mb/video/files/dtvstas.html</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - And
+              these are the 553 said to be fully licensed or on<br>
+              program-test authority:<br>
+              &lt;<a href="http://www.fcc.gov/mb/video/files/dtvonair.html">http://www.fcc.gov/mb/video/files/dtvonair.html</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - The
+              summary chart conveniently lists those 553 out of<br>
+              1688:<br>
+              &lt;<a href="http://www.fcc.gov/mb/video/files/dtvonairsum.html">http://www.fcc.gov/mb/video/files/dtvonairsum.html</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - But
+              Doug Lung's RF Report, using the FCC's own CDBS<br>
+              database, came up with just 425 licensed stations as of September 12,<br>
+              two days AFTER the other lists:<br>
+              &lt;<a href="http://www.tvtechnology.com/dlrf/one.php?id=165">http://www.tvtechnology.com/dlrf/one.php?id=165</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Would that be 425 out of 1688?&nbsp; Not exactly, because<br>
+              some DTT stations weren't part of the original number.&nbsp; For comparison,<br>
+              here are the latest analog TV station figures from the FCC, as of June<br>
+              30:<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              - Full-power ----- 1726<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              - Class A --------&nbsp; 600<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              - Low-Power TV --- 2121<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              - TV translators - 4759<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              -----------------------<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              Total ------------ 9206<br>
+              &lt;<a href="http://www.fcc.gov/mb/audio/totals/bt030630.html">http://www.fcc.gov/mb/audio/totals/bt030630.html</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; So, viewed most optimistically, the U.S. DTT transition is<br>
+              currently at 1230 out of 1688 stations.&nbsp; Viewed another way, it's 425<br>
+              out of 9206.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Within that range, the National
+              Association of Broadcasters<br>
+              (NAB) now lists 1011 U.S. DTT stations operating in 201 markets:<br>
+              &lt;<a href="http://www.nab.org/newsroom/issues/digitaltv/dtvstations.asp">http://www.nab.org/newsroom/issues/digitaltv/dtvstations.asp</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; NAB's September edition of &quot;Destination Digital TV&quot; has
+              now come<br>
+              out:<br>
+              &lt;<a href="http://www.nab.org/newsroom/issues/digitaltv/DDTV/0903.pdf">http://www.nab.org/newsroom/issues/digitaltv/DDTV/0903.pdf</a>&gt;<br>
+              <br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - July 1 - I've decided to move this material, which used to
+              appear<br>
+              in the ads section, up here as we count down to the various July 1<br>
+              dates.&nbsp; All of the information is taken from ads that I have personally<br>
+              seen since the last memo.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - TV sets that would require
+              DTT-reception circuitry starting<br>
+              2004:<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Magnavox MS3652S 36-inch TV at Circuit City $549.99<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Toshiba 36A43 36-inch TV w/leather chair at Best Buy<br>
+              $599.99<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Toshiba 36-inch TV at Sears (#46423) $599.99<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - TV sets that would require
+              DTT-reception circuitry starting<br>
+              2005:<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - RCA
+              F25441 25-inch TV at Best Buy $179.99<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Apex AT2708S 27-inch TV at Audio King $178.95<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Magnavox 27MS343S 27-inch TV at Circuit City $199.99<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Panasonic CT27L8S 27-inch TV at Circuit City $249.99<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Toshiba 27-inch TV at Sears (#47403) $249.99<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Apex AT3208S 32-inch TV at Circuit City $279.99<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - GE
+              32GT740 32-inch TV w/leather chair at Best Buy<br>
+              $279.99<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Sharp 32US60 32-inch TV at Audio King $298.95<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Sylvania 32-inch TV at Sears (#42202) $279.99<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Devices that would require
+              DTT-reception circuitry in 2007:<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Panasonic CT13R38S 13-inch TV at Circuit City $89.99<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Sylvania 13-inch TV at Sears (#43203) $59.99<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Apex PF2020 20-inch flat-screen TV at Circuit City<br>
+              $149.99<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Devices that would require dual
+              DTT-reception circuitry in<br>
+              2007:<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Sylvania 13-inch TV/VCR combo at Sears (#44702) $99.99<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Toshiba MV19N2 19-inch TV/VCR combo at Best Buy $179.99<br>
+              <br>
+              &nbsp;&nbsp;&nbsp;&nbsp; Arguments about why the DTT-reception-circuitry rules should be<br>
+              overturned were to have been heard in court today:<br>
+              &lt;<a href="http://www.mediaweek.com/mediaweek/headlines/article_display.jsp?vnu_conten">http://www.mediaweek.com/mediaweek/headlines/article_display.jsp?vnu_conten</a><br>
+              t_id=1979438&gt;<br>
+              <br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - HDTV and satellite -<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Cablevision's Voom satellite
+              service, which could start next<br>
+              month, is to be heavy on HD, with 39 HD channels, 21 of them exclusive<br>
+              (and NONE of them local broadcast stations; Voom will provide an antenna<br>
+              for those).&nbsp; Equipment is to be about $750.&nbsp; Monthly fees seem to start<br>
+              at about $40 for the HD services:<br>
+              &lt;<a href="http://cableworld.com/ar/cablevision_calls_voom/index.htm">http://cableworld.com/ar/cablevision_calls_voom/index.htm</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Europe1080's official launch is
+              to be with the Vienna New<br>
+              Year's concert, but it was offered during IBC.&nbsp; There are to be &quot;Main&quot;<br>
+              and &quot;Event&quot; channels.&nbsp; Facilities company Alfacam is behind it:<br>
+              &lt;<a href="http://www.euobserver.com/index.phtml?aid=12692">http://www.euobserver.com/index.phtml?aid=12692</a>&gt;<br>
+              &lt;<a href="http://www.euro1080.tv/">http://www.euro1080.tv/</a>&gt;<br>
+              <br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - HDTV and cable -<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - In Demand's two INHD channels
+              have launched, and Comcast is<br>
+              carrying them:<br>
+              &lt;<a href="http://www.washtimes.com/sports/20030914-123855-5207r.htm">http://www.washtimes.com/sports/20030914-123855-5207r.htm</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Clear Creek Telephone and
+              TeleVision, a 90-year-old co-op<br>
+              cable operator serving 1700 rural customers in Oregon, started carrying<br>
+              HD on September 2 and had 18 customers for it in just more than a week:<br>
+              &lt;<a href="http://cableworld.com/ar/little_cable_coop/index.htm">http://cableworld.com/ar/little_cable_coop/index.htm</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - The National Cable &amp;
+              Telecommunications Association (NCTA)<br>
+              said last Wednesday that HDTV was available by cable to 60 million<br>
+              households (it's not clear whether that's subscribers or homes passed),<br>
+              including 19 of the top-20 markets:<br>
+              &lt;<a href="http://www.ncta.com/press/press.cfm?PRid=391&amp;showArticles=ok">http://www.ncta.com/press/press.cfm?PRid=391&amp;showArticles=ok</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; Comcast later made it 20 out of 20 by adding Denver:<br>
+              &lt;<a href="http://www.rockymountainnews.com/drmn/business/article/0,1299,DRMN_4_226227">http://www.rockymountainnews.com/drmn/business/article/0,1299,DRMN_4_226227</a><br>
+              9,00.html&gt;<br>
+              <br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - And now the big one:&nbsp; On
+              Wednesday (the 10th), the FCC<br>
+              approved a slightly modified version of the cable/consumer-electronics<br>
+              &quot;plug-&amp;-play&quot; agreement:<br>
+              &lt;<a href="http://hraunfoss.fcc.gov/edocs_public/attachmatch/DOC-238850A1.doc">http://hraunfoss.fcc.gov/edocs_public/attachmatch/DOC-238850A1.doc</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; As readers of this memo know (but many journalists don't seem to<br>
+              have known), Panasonic (and Hitachi) announced digital-cable-ready TVs<br>
+              long before the FCC acted.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - The
+              FCC did not approve the DFAST content-protection<br>
+              license.&nbsp; Instead, they started a Second Further Notice of Proposed<br>
+              Rulemaking to consider such issues.&nbsp; Similarly, digital broadcast copy<br>
+              protection remains a topic for the future.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; That leaves matters in a very interesting state.&nbsp; The
+              satellite<br>
+              community has relied on the ability to turn off HDTV outputs (selective<br>
+              output control, SOC) for content protection.&nbsp; SOC is now prohibited by<br>
+              the FCC for &quot;all multichannel video programming distributors,&quot; which<br>
+              includes satellite.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; The satellite industry is less than thrilled:&nbsp; &quot;We do
+              not consider<br>
+              today's misguided decision the end of the process and will not allow the<br>
+              cable industry to believe it has scored another victory.&nbsp; SBCA [the<br>
+              Satellite Broadcasting and Communications Association] and its member<br>
+              companies will fully review the Order and leave open our options.&quot;<br>
+              Options include lawsuits:<br>
+              &lt;<a href="http://www.sbca.com/press/091003.htm">http://www.sbca.com/press/091003.htm</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; Meanwhile, the hundreds of thousands of HD-capable satellite<br>
+              receivers that have already left factories now have no content<br>
+              protection at all.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - The
+              FCC says small cable systems can obtain a waiver<br>
+              from meeting the transmission requirements, if they're &quot;unduly<br>
+              burdensome.&quot;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Otherwise, systems &quot;must maintain a sufficient supply&quot;<br>
+              of point-of-deployment security modules (PODs, now called CableCards).<br>
+              Those will presumably be supplied by such companies as Motorola and<br>
+              Scientific-Atlanta (S-A), making it strange that S-A stock was said to<br>
+              have fallen as a result of the FCC action (especially since the fall<br>
+              began before the decision).&nbsp; The full story requires a paid<br>
+              subscription:<br>
+              &lt;<a
+              href="http://www.multichannel.com/index.asp?layout=document&amp;doc_id=126108&amp;display">http://www.multichannel.com/index.asp?layout=document&amp;doc_id=126108&amp;display</a><br>
+              =breakingNews&gt;<br>
+              <br>
+              &nbsp;&nbsp;&nbsp;&nbsp; Furthermore, the agreement (and order) covers only one-way
+              digital<br>
+              cable.&nbsp; That means that impulse pay-per-view, video-on-demand, and the<br>
+              typical digital-cable electronic program guides still require a cable<br>
+              box.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Broadcasters are happy because the order (according to<br>
+              the FCC press release) says that &quot;DTV televisions labeled 'Digital Cable<br>
+              Ready' must include an over-the-air DTV tuner&quot;:<br>
+              &lt;<a href="http://www.nab.org/Newsroom/PressRel/statements/S1203.htm">http://www.nab.org/Newsroom/PressRel/statements/S1203.htm</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; Zenith is happy, too, as that's where their intellectual-property<br>
+              fees apply:<br>
+              &lt;<a
+              href="http://www.prnewswire.com/cgi-bin/stories.pl?ACCT=104&amp;STORY=/www/story/09-1">http://www.prnewswire.com/cgi-bin/stories.pl?ACCT=104&amp;STORY=/www/story/09-1</a><br>
+              0-2003/0002014870&amp;EDATE=&gt;<br>
+              <br>
+              &nbsp;&nbsp;&nbsp;&nbsp; That was a modification of the original agreement.&nbsp; But the
+              wording<br>
+              is strange.&nbsp; Instead of saying TVs equipped for digital cable must have<br>
+              ATSC-reception capability, it says that those LABELED as Digital Cable<br>
+              Ready need it.&nbsp; Does that mean sets could be sold with cable-only<br>
+              digital reception as long as they're not labeled Digital Cable Ready?<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Like SOC, down-resolution (another content-protection<br>
+              technique) is prohibited, but only for broadcast programming.<br>
+              Down-resolution for non-broadcast programming is to be addressed in the<br>
+              future.&nbsp; Those who want to use it before the issue is resolved are to<br>
+              notify the FCC at least 30 days in advance.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              So-called &quot;encoding rules&quot; (which relate to copy<br>
+              protection and apply to both cable and satellite) are said to be:<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              - Copy never: pay-per-view, video-on-demand<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              - Copy once: basic- and extended-basic cable<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              - Unrestricted copying: broadcasts<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; I wonder where HBO, The Movie Channel, and Showtime fall. &nbsp;
+              As<br>
+              reported earlier here, Starz Encore is not happy about this<br>
+              categorization:<br>
+              &lt;<a href="http://www.cedmagazine.com/cedailydirect/0903/cedaily030910.htm#1">http://www.cedmagazine.com/cedailydirect/0903/cedaily030910.htm#1</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; And, of course, there are no &quot;encoding rules&quot; for
+              analog outputs:<br>
+              &lt;<a href="http://www.cedmagazine.com/cedailydirect/0903/cedaily030911.htm#1">http://www.cedmagazine.com/cedailydirect/0903/cedaily030911.htm#1</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Despite the modifications, the main cable and<br>
+              consumer-electronics associations hailed the FCC order (although they<br>
+              were not direct parties to the original agreement):<br>
+              &lt;<a href="http://www.ce.org/press_room/press_release_detail.asp?id=10313">http://www.ce.org/press_room/press_release_detail.asp?id=10313</a>&gt;<br>
+              &lt;<a href="http://www.ncta.com/press/press.cfm?PRid=392&amp;showArticles=ok">http://www.ncta.com/press/press.cfm?PRid=392&amp;showArticles=ok</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Given the lack of content protection, the Motion<br>
+              Picture Association of America did not offer celebratory comments:<br>
+              &lt;<a
+              href="http://www.reuters.com/newsArticle.jhtml?type=industryNews&amp;storyID=3424562">http://www.reuters.com/newsArticle.jhtml?type=industryNews&amp;storyID=3424562</a>&gt;<br>
+              <br>
+              - Fox is adopting HDCAM SR technology for network program delivery:<br>
+              &lt;<a href="http://www.uemedia.com/CPC/article_11808.shtml">http://www.uemedia.com/CPC/article_11808.shtml</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; Meanwhile, they're buying Panasonic D-5 HD recorders:<br>
+              &lt;<a href="http://www.uemedia.com/CPC/article_11777.shtml">http://www.uemedia.com/CPC/article_11777.shtml</a>&gt;<br>
+              <br>
+              - WNVT, a non-commercial station in Goldvein, Virginia (Washington, D.C.<br>
+              market), received permission from the FCC to shut down its analog<br>
+              service and operate digital-only:<br>
+              &lt;<a href="http://www.tvtechnology.com/dlrf/one.php?id=152">http://www.tvtechnology.com/dlrf/one.php?id=152</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; Only 3,000 households reportedly watched the analog signal:<br>
+              &lt;<a href="http://www.tvtechnology.com/dlrf/one.php?id=160">http://www.tvtechnology.com/dlrf/one.php?id=160</a>&gt;<br>
+              <br>
+              - WNET, the largest non-commercial station in the New York market, has<br>
+              received a grant (initially $500,000) from the National Imagery and<br>
+              Mapping Agency to use its DTT and ITFS spectrum for emergency<br>
+              public-safety purposes:<br>
+              &lt;<a href="http://www.tvtechnology.com/dlrf/one.php?id=153">http://www.tvtechnology.com/dlrf/one.php?id=153</a>&gt;<br>
+              <br>
+              - Based on Consumer Electronics Association (CEA) figures, sales to U.S.<br>
+              dealers of (supposedly) non-H/DTV projection TVs were still down 53% for<br>
+              the first 35 weeks of 2003 relative to the same period in 2002 (VCRs<br>
+              were down even more -- still 54.5%).&nbsp; My ten-week running average was<br>
+              down 63.1%.&nbsp; Direct-view was down 12.9%.&nbsp; My ten-week running average<br>
+              was down 24.9%.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; So-called &quot;DTV product&quot; sales to U.S. dealers for the
+              35th week<br>
+              were 149,142 units.&nbsp; The total for the 35-week period was 2,125,886.<br>
+              &quot;DTV products&quot; (most of which are HDTV displays without DTT-reception<br>
+              capability) accounted for about 12.1% of the total TVs sold to U.S.<br>
+              dealers this year.<br>
+              <br>
+              - CEA has released the mid-year edition of &quot;U.S. Consumer Electronics<br>
+              Sales &amp; Forecasts 1999-2004.&quot;&nbsp; I think it's too early for estimated unit<br>
+              sales for 2003, but I think the estimated average wholesale prices are<br>
+              probably okay (because the estimates come from those setting the<br>
+              prices):<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - Direct-view analog TVs are $237, down from $273 last year<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - The overall average for so-called &quot;digital&quot; TVs
+              (mostly HDTV) is<br>
+              $1367<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - &quot;Digital&quot; direct-view is $1047<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - &quot;Digital&quot; projection is $1317<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - Analog projection is $1046<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - DBS receivers are $139<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - PVRs are $312 (and, if the estimate is anywhere near correct,<br>
+              fewer will be sold this year than in 2000)<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - DVD players are $125<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; Household penetrations as of July 1, based on telephone surveys,<br>
+              are:<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - Color TV ------------- 98%<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - VCR ------------------ 89% (down from a high of 94%)<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - TV with stereo sound - 71%<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - Computers ------------ 64%<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - Modems --------------- 56%<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - DVD players ---------- 41%<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - Home theater audio --- 30%<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - TV/VCR combos -------- 25%<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - Satellite receivers -- 22%<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - Projection TV -------- 18% (very slow growth)<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - LCD TV --------------- 14%<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - So-called &quot;DTV&quot; ------&nbsp; 5%<br>
+              <br>
+              - I saw one ad this week for a stand-alone ATSC receiver/decoder, the<br>
+              Samsung SIRT151 at Circuit City.&nbsp; Audio King also offered the Hughes as<br>
+              part of a two-room DirecTV package.&nbsp; Last week (but in this week's ads<br>
+              list), Magnolia offered a Samsung SIR-TS160 with a Terk antenna.<br>
+              <br>
+              - The ads:<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; The same-store, same-brand, same-size, same-shape,
+              same-resolution,<br>
+              same-model-year premium for DTT reception for the Mitsubishi WS55513<br>
+              over the WS55413 at Audio King was $450.&nbsp; Audio King prices ending in a<br>
+              6 are calculated based on a 10% discount.&nbsp; The Sylvania 6613LD was<br>
+              advertised as being HDTV.&nbsp; Audio King advertised local HD programming on<br>
+              four channels in the TV schedule section.&nbsp; They also had an Apex AD1225<br>
+              DVD player for $38.95.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; The Norcent DP-302V DVD player was $39.99 after rebate at<br>
+              amazon.com.&nbsp; As it's now becoming common to see DVD players for as low<br>
+              as about $35, I will stop mentioning them until another price<br>
+              breakthrough appears.&nbsp; FYI, Fry's had a DVD+R/RW recorder for $369.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; Best Buy advertised Comcast HD packages.&nbsp; In Washington,
+              they also<br>
+              advertised an old-equipment &quot;recycling event.&quot;<br>
+              &nbsp; - Audio King (Minneapolis Star Tribune, appropriate disclaimers):<br>
+              &nbsp;&nbsp;&nbsp; - Apex Digital GB51HD09 51-inch 4:3 projection TV $998.95<br>
+              &nbsp;&nbsp;&nbsp; - DirecTV 2-room/1-HD (Hughes) package w/$50 gift card $399.90**<br>
+              &nbsp;&nbsp;&nbsp; - Hitachi 42HDT50 42-inch 16:9 plasma display $5399.96<br>
+              &nbsp;&nbsp;&nbsp; - JVC AV56WP74 56-inch 16:9 projection TV $1519.96**<br>
+              &nbsp;&nbsp;&nbsp; - Mitsubishi LT220 (sic) 20-inch 16:9 direct-view LCD TV $2699.96<br>
+              &nbsp;&nbsp;&nbsp; - Mitsubishi LT3020 30-inch 16:9 direct-view LCD TV $4499.96<br>
+              &nbsp;&nbsp;&nbsp; - Mitsubishi WS55413 55-inch 16:9 CRT projection TV $2069.96<br>
+              &nbsp;&nbsp;&nbsp; - Mitsubishi WS55513 55-inch 16:9 integrated projection DTV $2519.96<br>
+              <br>
+              &nbsp;&nbsp;&nbsp; - Mitsubishi WS73411 73-inch 16:9 CRT projection TV $4049.96<br>
+              &nbsp;&nbsp;&nbsp; - Mitsubishi WT42313 42-inch 16:9 CRT projection TV $1529.96<br>
+              &nbsp;&nbsp;&nbsp; - Panasonic CT36HL43 36-inch 4:3 direct-view CRT TV $1439.96<br>
+              &nbsp;&nbsp;&nbsp; - Panasonic PT42PHD4P 42-inch 16:9 plasma panel $5999.95<br>
+              &nbsp;&nbsp;&nbsp; - Panasonic PT45LC12 45-inch LCD projection TV w/stand $2499.95<br>
+              &nbsp;&nbsp;&nbsp; - Panasonic PT47WX53 47-inch 16:9 projection TV $1349.96<br>
+              &nbsp;&nbsp;&nbsp; - Panasonic PT56WX53 56-inch 16:9 CRT projection TV $1799.96<br>
+              &nbsp;&nbsp;&nbsp; - Panasonic TC22LT1 22-inch 16:9 LCD TV $1999.95<br>
+              &nbsp;&nbsp;&nbsp; - Samsung HCN5529WH 47-inch 16:9 CRT integrated projection DTV<br>
+              $2069.96<br>
+              &nbsp;&nbsp;&nbsp; - Samsung LTM1535 15-inch 4:3 direct-view LCD TV $539.96<br>
+              &nbsp;&nbsp;&nbsp; - Samsung TXN2745FP 27-inch 4:3 direct-view CRT TV $449.96<br>
+              &nbsp;&nbsp;&nbsp; - Samsung TXN3275WHF 32-inch 4:3 direct-view CRT TV $809.96<br>
+              &nbsp;&nbsp;&nbsp; - Sharp LC37HV4U 37-inch 16:9 LCD direct-view monitor $6299.96<br>
+              &nbsp;&nbsp;&nbsp; - Sharp XVZ90U DLP projector $2069.96<br>
+              &nbsp;&nbsp;&nbsp; - Sharp XVZ10000 16:9 DLP projector $9899.96<br>
+              &nbsp;&nbsp;&nbsp; - Sony KDP57WS550 57-inch 16:9 integrated projection DTV $2609.96<br>
+              &nbsp;&nbsp;&nbsp; - Sony KE32TS2 32-inch 16:9 plasma display $3599.96<br>
+              &nbsp;&nbsp;&nbsp; - Sony KP51WS510 51-inch 16:9 projection TV $1619.96<br>
+              &nbsp;&nbsp;&nbsp; - Sylvania 6613LD 13-inch 4:3 direct-view LCD TV $378.95<br>
+              &nbsp;&nbsp;&nbsp; - Zenith L17W36 17-inch 16:9 direct-view LCD TV $1169.96<br>
+              &nbsp;&nbsp;&nbsp; - Zenith L20V26 20-inch 4:3 LCD TV $999.95<br>
+              &nbsp;&nbsp;&nbsp; - Zenith P42W22B 42-inch 16:9 plasma display $2998.95<br>
+              &nbsp;&nbsp;&nbsp; ** price after mail-in rebate<br>
+              &nbsp; - amazon.com (no disclaimer):<br>
+              &nbsp;&nbsp;&nbsp; - JVC AV48WP74 48-inch 16:9 projection TV $999.99**<br>
+              &nbsp; - Best Buy (appropriate disclamers):<br>
+              &nbsp;&nbsp;&nbsp; - Mitsubishi WS-55313 55-inch 16:9 projection TV $2099.99<br>
+              &nbsp;&nbsp;&nbsp; - Mitsubishi WS-65313 65-inch 16:9 projection TV $2599.99<br>
+              &nbsp;&nbsp;&nbsp; - Philips 30PW850H 30-inch 16:9 direct-view CRT TV $999.99***<br>
+              &nbsp;&nbsp;&nbsp; - Pioneer PDP5031HD 50-inch 16:9 plasma panel $9999.99<br>
+              &nbsp;&nbsp;&nbsp; - Samsung HCN-5529WH 47-inch 16:9 CRT integrated projection DTV<br>
+              $2299.99<br>
+              &nbsp;&nbsp;&nbsp; - Samsung SPN4235 42-inch 16:9 plasma TV $3999.95<br>
+              &nbsp;&nbsp;&nbsp; - Sharp LC-22SV2U 22-inch 16:9 LCD direct-view TV $1999.99<br>
+              &nbsp;&nbsp;&nbsp; - Sony KE42TS2 42-inch 16:9 plasma display $5999.99<br>
+              &nbsp;&nbsp;&nbsp; - Sony KP51WS510 51-inch 16:9 projection TV $1799.99<br>
+              &nbsp;&nbsp;&nbsp; - Sony KP57WS510 57-inch 16:9 projection TV $2199.99<br>
+              &nbsp;&nbsp;&nbsp; - Sony KV32HS510 32-inch 4:3 direct-view CRT TV $1299.99***<br>
+              &nbsp;&nbsp;&nbsp; - Sony KV36FS100 36-inch 4:3 direct-view CRT TV $999.99***<br>
+              &nbsp;&nbsp;&nbsp; - Sony KV36HS510 36-inch 4:3 direct-view CRT TV $1799.99***<br>
+              &nbsp;&nbsp;&nbsp; - Toshiba 24AF41 24-inch 4:3 direct-view CRT TV $329.99<br>
+              &nbsp;&nbsp;&nbsp; - Toshiba 46H83 46-inch 16:9 projection TV $1699.99<br>
+              &nbsp;&nbsp;&nbsp; *** price includes leather chair<br>
+              &nbsp; - Big Screen Store (Washington Post, no disclamer):<br>
+              &nbsp;&nbsp;&nbsp; - Mitsubishi 55-inch 16:9 projection TV<br>
+              &nbsp;&nbsp;&nbsp; - Mitsubishi 65-inch 16:9 projection TV<br>
+              &nbsp;&nbsp;&nbsp; - Mitsubishi 73-inch 16:9 projection TV<br>
+              &nbsp; - Circuit City (appropriate disclaimers):<br>
+              &nbsp;&nbsp;&nbsp; - Hitachi 57F500 57-inch 16:9 CRT projection TV $2099.99<br>
+              &nbsp;&nbsp;&nbsp; - Panasonic CT32HXC43 32-inch 4:3 direct-view CRT TV $924.99<br>
+              &nbsp;&nbsp;&nbsp; - Panasonic TH42PA20U 42-inch 16:9 plasma display $4299.99<br>
+              &nbsp;&nbsp;&nbsp; - Samsung HCN4226W 42-inch 16:9 CRT projection TV $1324.99<br>
+              &nbsp;&nbsp;&nbsp; - Samsung LTN1565 15-inch 4:3 direct-view LCD TV $649.99<br>
+              &nbsp;&nbsp;&nbsp; - Samsung SIRT151 ATSC receiver/decoder $299.99**<br>
+              &nbsp;&nbsp;&nbsp; - Sharp LC22SV2U 22-inch 16:9 LCD direct-view TV $1899.99<br>
+              &nbsp;&nbsp;&nbsp; - Sony KDP57WS550 57-inch 16:9 integrated projection DTV $2799.99<br>
+              &nbsp;&nbsp;&nbsp; - Sony KLV30XBR900 30-inch 16:9 direct-view LCD TV $4799.99<br>
+              &nbsp;&nbsp;&nbsp; - Sony KP43HT20 43-inch 4:3 CRT projection TV $1324.99<br>
+              &nbsp;&nbsp;&nbsp; - Sony KP51WS510 51-inch 16:9 projection TV $1724.99<br>
+              &nbsp;&nbsp;&nbsp; - Zenith L17W36 17-inch 16:9 direct-view LCD TV $1224.99<br>
+              &nbsp;&nbsp;&nbsp; ** price after mail-in rebate<br>
+              &nbsp; - Fry's (Los Angeles Times, no disclaimer):<br>
+              &nbsp;&nbsp;&nbsp; - &quot;Major Brand Name&quot; 60-inch 16:9 projection TV $1499<br>
+              &nbsp; - Good Guys (Los Angeles Times, appropriate disclaimers):<br>
+              &nbsp;&nbsp;&nbsp; - Fujitsu P50XHA10U 50-inch 16:9 plasma display $9999<br>
+              &nbsp;&nbsp;&nbsp; - JVC AV48WP74 48-inch 16:9 projection TV $1599<br>
+              &nbsp;&nbsp;&nbsp; - Mitsubishi LT3020 30-inch 16:9 direct-view LCD TV $4999<br>
+              &nbsp;&nbsp;&nbsp; - Mitsubishi WS65413 65-inch 16:9 projection TV $2799****<br>
+              &nbsp;&nbsp;&nbsp; - Philips 34PW850H 34-inch 16:9 direct-view CRT TV $1499<br>
+              &nbsp;&nbsp;&nbsp; - Philips 60PW9753 60-inch 16:9 projection TV $2699****<br>
+              &nbsp;&nbsp;&nbsp; - Sony KDP57WS550 57-inch 16:9 integrated projection DTV $2899****<br>
+              &nbsp;&nbsp;&nbsp; - Sony KE32TS2 32-inch 16:9 plasma display $3999<br>
+              &nbsp;&nbsp;&nbsp; - Sony KV32HS510 32-inch 4:3 direct-view CRT TV $1299<br>
+              &nbsp;&nbsp;&nbsp; - Sony KV34XBR910 34-inch 16:9 direct-view CRT TV $2499<br>
+              &nbsp;&nbsp;&nbsp; **** price includes Minolta 2Mpixel digital still camera<br>
+              &nbsp; - Harvey (New York Times, no disclaimer):<br>
+              &nbsp;&nbsp;&nbsp; - Fujitsu P42HHA10WS 42-inch 16:9 plasma display $6999<br>
+              &nbsp;&nbsp;&nbsp; - Fujitsu P50XHA10US 50-inch 16:9 plasma display $9999<br>
+              &nbsp;&nbsp;&nbsp; - Fujitsu PDS6101WS 61-inch 16:9 plasma display $24,999<br>
+              &nbsp;&nbsp;&nbsp; - Loewe Aventos 30-inch 16:9 direct-view CRT TV $1999<br>
+              &nbsp;&nbsp;&nbsp; - Loewe Aconda 9383 38-inch 16:9 direct-view CRT TV $4999<br>
+              &nbsp;&nbsp;&nbsp; - Mitsubishi LT2220 20-inch 16:9 direct-view LCD TV $2999<br>
+              &nbsp;&nbsp;&nbsp; - Mitsubishi LT3020 30-inch 16:9 direct-view LCD TV $4999<br>
+              &nbsp;&nbsp;&nbsp; - Pioneer PRO1000HD 50-inch 16:9 plasma panel $10,999<br>
+              &nbsp;&nbsp;&nbsp; - Samsung HLN567 56-inch 16:9 DLP projection TV $4499<br>
+              &nbsp;&nbsp;&nbsp; - Samsung HLN617W 61-inch 16:9 DLP projection TV $4999<br>
+              &nbsp;&nbsp;&nbsp; - SharpVision LC20S2US 20-inch 4:3 LCD direct-view monitor $1399<br>
+              &nbsp;&nbsp;&nbsp; - SharpVision LC30HV4U 30-inch 16:9 LCD direct-view monitor $3999<br>
+              &nbsp;&nbsp;&nbsp; - SharpVision LC37HV4U 37-inch 16:9 LCD direct-view monitor $6999<br>
+              &nbsp;&nbsp;&nbsp; - SharpVision XVZ10000U DLP projector $10,999<br>
+              &nbsp;&nbsp;&nbsp; - Sony KE32TS2 32-inch 16:9 plasma display $3999<br>
+              &nbsp;&nbsp;&nbsp; - Sony KE42TS2 42-inch 16:9 plasma display $5999<br>
+              &nbsp;&nbsp;&nbsp; - Sony KE42XBR900 42-inch 16:9 plasma display $8999<br>
+              &nbsp;&nbsp;&nbsp; - Sony KE50XBR900 50-inch 16:9 plasma display $12,999<br>
+              &nbsp;&nbsp;&nbsp; - Sony KF50XBR800 50-inch 16:9 LCD projection TV $3999<br>
+              &nbsp;&nbsp;&nbsp; - Sony KF60XBR800 60-inch 16:9 LCD projection TV $4999<br>
+              &nbsp;&nbsp;&nbsp; - Sony KLV15SR1 15-inch 4:3 direct-view LCD TV $799<br>
+              &nbsp;&nbsp;&nbsp; - Sony KLV23HR1 23-inch 16:9 direct-view LCD TV $2299<br>
+              &nbsp;&nbsp;&nbsp; - Sony KLV30XBR900 30-inch 16:9 direct-view LCD TV $4999<br>
+              &nbsp; - J&amp;R (New York Times, no disclaimer):<br>
+              &nbsp;&nbsp;&nbsp; - LG Electronics 295LM 22-inch 16:10 LCD monitor $1299.99<br>
+              &nbsp;&nbsp;&nbsp; - Panasonic TC-20LA1 20-inch 4:3 LCD TV $1149.99<br>
+              &nbsp;&nbsp;&nbsp; - Philips 20PF9925 20-inch 4:3 LCD display<br>
+              &nbsp;&nbsp;&nbsp; - Philips 30DVG93R 30-inch 16:9 direct-view TV w/DVD player $999.99<br>
+              &nbsp;&nbsp;&nbsp; - Philips 32FD9954 32-inch 16:9 plasma monitor<br>
+              &nbsp;&nbsp;&nbsp; - Sampo PME-42S6 42-inch 16:9 plasma display $2799.99<br>
+              &nbsp;&nbsp;&nbsp; - Samsung LTN1785 17-inch 15:9 direct-view LCD TV<br>
+              &nbsp;&nbsp;&nbsp; - Sharp LC-37HV4U 37-inch 16:9 LCD direct-view monitor<br>
+              &nbsp;&nbsp;&nbsp; - Sony KLV-15SR1 15-inch 4:3 direct-view LCD TV<br>
+              &nbsp;&nbsp;&nbsp; - Zenith L15V26 15-inch 4:3 LCD TV $499.99<br>
+              &nbsp;&nbsp;&nbsp; - Zenith L20V26 20-inch 4:3 LCD TV $999.99<br>
+              &nbsp; - Ken Crane's (Los Angeles Times, no disclaimer):<br>
+              &nbsp;&nbsp;&nbsp; - Mitsubishi WS-55511 55-inch 16:9 integrated projection DTV $2498<br>
+              &nbsp;&nbsp;&nbsp; - Panasonic PT-53WX53 53-inch 16:9 CRT projection TV $1698<br>
+              &nbsp;&nbsp;&nbsp; - Sony KV-36XBR800 36-inch 4:3 direct-view CRT TV $1998<br>
+              &nbsp; - Magnolia (Los Angeles Times, no disclaimer - includes last week):<br>
+              &nbsp;&nbsp;&nbsp; - Mitsubishi WS-55311 55-inch 16:9 projection TV $1798<br>
+              &nbsp;&nbsp;&nbsp; - Panasonic CT-36HL42 36-inch 4:3 direct-view CRT TV $1399<br>
+              &nbsp;&nbsp;&nbsp; - Samsung HLN437 43-inch 16:9 DLP projection TV $3499<br>
+              &nbsp;&nbsp;&nbsp; - Samsung HPL5025K 50-inch 16:9 plasma display $5998<br>
+              &nbsp;&nbsp;&nbsp; - Samsung SIR-TS160 ATSC/DirecTV recvr. w/Terk TRK525 ant. $499**<br>
+              &nbsp;&nbsp;&nbsp; - Sony KP-46WT500 46-inch 16:9 projection TV $1499<br>
+              &nbsp;&nbsp;&nbsp; ** price after rebate (includes installation)<br>
+              &nbsp; - MyerEmco (Washington Post, no disclaimer):<br>
+              &nbsp;&nbsp;&nbsp; - Samsung HLN567W 56-inch 16:9 DLP projection TV $4299<br>
+              &nbsp;&nbsp;&nbsp; - Sharp LC30HV4U 30-inch 16:9 LCD direct-view monitor<br>
+              &nbsp;&nbsp;&nbsp; - Sony KE-32TS2 32-inch 16:9 plasma display $4499<br>
+              &nbsp;&nbsp;&nbsp; - Sony KLV-15SR1 15-inch 4:3 direct-view LCD TV $799<br>
+              &nbsp; - Sears (Minneapolis Star Tribune, no disclaimer):<br>
+              &nbsp;&nbsp;&nbsp; - Philips 32-inch 16:9 plasma TV, Sears #75333 $3999.99##<br>
+              &nbsp;&nbsp;&nbsp; - Philips 55-inch 16:9 projection TV, Sears #54333 $1899.99##<br>
+              &nbsp;&nbsp;&nbsp; - Samsung 42-inch 16:9 projection TV, Sears #54003 $1399.99<br>
+              &nbsp;&nbsp;&nbsp; - Toshiba 36-inch 4:3 direct-view TV, Sears #46483 $1599.99<br>
+              &nbsp;&nbsp;&nbsp; - Toshiba 51-inch 16:9 projection TV, Sears #54433 $1799.99<br>
+              &nbsp;&nbsp;&nbsp; ## price includes DVD/LCD combo after rebate<br>
+              &nbsp; - Sony (New York Times, no disclaimer):<br>
+              &nbsp;&nbsp;&nbsp; - Sony KLV-23HR1 23-inch 16:9 direct-view LCD TV<br>
+              <br>
+              - Other satellite news:<br>
+              <br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - The slides from the FCC International Bureau's
+              &quot;Perspective on<br>
+              the Commercial Satellite Industry&quot; are available:<br>
+              &lt;<a href="http://hraunfoss.fcc.gov/edocs_public/attachmatch/DOC-238835A1.doc">http://hraunfoss.fcc.gov/edocs_public/attachmatch/DOC-238835A1.doc</a>&gt;<br>
+              <br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - Household penetration of digital broadcast satellite service in<br>
+              Japan is running at about 43% of projections:<br>
+              &lt;<a href="http://www.japantoday.com/e/?content=feature&amp;id=505">http://www.japantoday.com/e/?content=feature&amp;id=505</a>&gt;<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - Security cards for the service may be needed by April:<br>
+              &lt;<a href="http://www.newsalert.com/bin/story?StoryId=Cp2pNWaics1KTreLhsvrbtc1cuK9bren">http://www.newsalert.com/bin/story?StoryId=Cp2pNWaics1KTreLhsvrbtc1cuK9bren</a><br>
+              bu1q&amp;Topic=Digital%20TV&amp;Nav=pr-prmynews-&amp;StoryTitle=Digital%20TV&gt;<br>
+              <br>
+              - DVD news:<br>
+              <br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - According to CEA, sales of DVD players to U.S. dealers for the<br>
+              first 35 weeks of 2003 were up 25.8% over the same period in 2002.&nbsp; My<br>
+              ten-week running average was up 30.4%.&nbsp; Wow!<br>
+              <br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - Warren Communications News reported last week that 48 models of<br>
+              DVD+RW recorders were shown at the big consumer-electronics show in<br>
+              Germany, with 36 models coming from 20 brands that were NOT among the<br>
+              &quot;format's founders.&quot;&nbsp; The story is no longer on the site:<br>
+              &lt;<a href="http://www.warren-news.com/">http://www.warren-news.com/</a>&gt;<br>
+              <br>
+              - A Memory Stick TV recorder for Sony PDAs:<br>
+              &lt;<a href="http://www.forbes.com/2003/09/11/cx_ah_0911tentech.html">http://www.forbes.com/2003/09/11/cx_ah_0911tentech.html</a>&gt;<br>
+              <br>
+              - Like Gateway, Dell is planning to offer consumer-electronics products:<br>
+              <br>
+              &lt;<a href="http://finance.lycos.com/home/news/story.asp?story=35647815">http://finance.lycos.com/home/news/story.asp?story=35647815</a>&gt;<br>
+              <br>
+              - SMPTE in New York in November:&nbsp; If you need a complimentary exhibits<br>
+              registration form, let me know and I will forward one.<br>
+              <br>
+              - Upcoming Dates (DTV and non-DTV):<br>
+              <br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - Through September 16, RAI, Amsterdam, IBC &lt;<a
+              href="http://www.ibc.org">http://www.ibc.org</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - Through September 18, Library and Archives of Canada, Ottawa,<br>
+              Preservation of Electronic Records<br>
+              &lt;<a href="http://www.cci-icc.gc.ca/symposium2003/index_e.shtml">http://www.cci-icc.gc.ca/symposium2003/index_e.shtml</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - September 24-25, CBI Convention Centre, London, The Connected<br>
+              Home &lt;<a href="http://www.the-connected-home.co.uk/">http://www.the-connected-home.co.uk/</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - September 29 - October 2, Orlando World Center Marriott,
+              ShowEast<br>
+              &lt;<a href="http://www.showeast.com/">http://www.showeast.com/</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - September 30, Helmsley Park Lane Hotel, New York, Kagan Digital<br>
+              Household Economics conference<br>
+              &lt;<a href="http://www.kagan.com/cgi-bin/pkcat/dhe03f">http://www.kagan.com/cgi-bin/pkcat/dhe03f</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - October 8-9, Doubletree San Jose, California, Digital Imaging
+              '03<br>
+              &lt;<a href="http://www.capv.com/home/InfoTrends/itEvents/DIC03/DIC03Home.html">http://www.capv.com/home/InfoTrends/itEvents/DIC03/DIC03Home.html</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - October 10-13, Javits Center, New York, Audio Engineering
+              Society<br>
+              convention &lt;<a href="http://www.aes.org/events/115/">http://www.aes.org/events/115/</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - October 10-11, Ramada, Williamsburg, Virginia, WEBE/SMPTE Fall<br>
+              Convention &quot;Getting Past Getting On The Air,&quot; Mike Marno, +1 703<br>
+              926-3602, &lt;<a href="mailto:mic.mar@comcast.net">mic.mar@comcast.net</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - October 13-15, La Costa Resort, Carlsbad, California, CEA<br>
+              Industry Forum<br>
+              &lt;<a href="http://www.ce.org/events/event_info/default.asp?eventID=FALL03">http://www.ce.org/events/event_info/default.asp?eventID=FALL03</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - October 15-17, Hotel Washington, Washington, D.C., IEEE
+              Broadcast<br>
+              Symposium &lt;<a href="http://www.ieee.org/btsymposium">http://www.ieee.org/btsymposium</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - October 20-24, MPEG meetings, Brisbane, Australia<br>
+              &lt;<a href="http://mpeg.telecomitalialab.com/meetings/brisbane03/auagenda.htm">http://mpeg.telecomitalialab.com/meetings/brisbane03/auagenda.htm</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - October 22-23, Embassy Suites, Alexandria, Virginia, ATSC PSIP<br>
+              and Closed Captioning University &lt;<a href="http://www.atsc.org/seminars.html">http://www.atsc.org/seminars.html</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - *October 28-30, Hotel Fort Des Moines, Des Moines, Iowa, 9th<br>
+              annual DTV Symposium &lt;<a href="http://www.iptv.org/dtv/2003/">http://www.iptv.org/dtv/2003/</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - October 29-30, Bryant Park Hotel, New York, ETA Expo<br>
+              &lt;<a href="http://www.etaexpo.com/">http://www.etaexpo.com/</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - October 30, Waldorf-Astoria, New York, SkyForum<br>
+              &lt;<a href="http://www.sbca.com/skytrends/forum.html">http://www.sbca.com/skytrends/forum.html</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - November 10-12, Tribeca Grand Hotel, Global Society for Asset<br>
+              Management conference &lt;<a href="http://www.g-sam.org">http://www.g-sam.org</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - November 10-13, Long Beach Convention Center, California,<br>
+              Electronic House Expo &lt;<a href="http://www.ehexpo.com/">http://www.ehexpo.com/</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - November 12-13, Marina del Rey Marriott, California,
+              &quot;Enabling<br>
+              HDTV from the Factory to the Home&quot;<br>
+              &lt;<a href="http://www.displaysearch.com/hdtvforum/">http://www.displaysearch.com/hdtvforum/</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - November 12-15, New York Hilton, 145th SMPTE Technical
+              Conference<br>
+              &lt;<a href="http://www.smpte.org/conferences/145tech.cfm">http://www.smpte.org/conferences/145tech.cfm</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - November 28-29, Milan Fair, IBTS, SMPTE International
+              Conference<br>
+              &quot;D-Cinema and Beyond&quot;<br>
+              &lt;<a href="http://www.smpte.org/conferences/International03.cfm">http://www.smpte.org/conferences/International03.cfm</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - December 2-5, Anaheim Convention Center, BroadbandPlus<br>
+              &lt;<a href="http://www.broadbandplus.org/">http://www.broadbandplus.org/</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - December 3 &amp; 4, 2003, Washington DC Convention Center,
+              Government<br>
+              Video Technology Expo &lt;<a href="http://www.gvexpo.com">http://www.gvexpo.com</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - December 8-12, MPEG meetings, Waikaloa, Hawaii.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - January 8-11, Las Vegas, Consumer Electronics Show<br>
+              &lt;<a href="http://www.cesweb.org/">http://www.cesweb.org/</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - January 18-23, Sheraton Hacienda del Mar, Cabo del Sol, Los<br>
+              Cabos, Mexico, The Executive Retreat Forum<br>
+              &lt;<a href="http://www.ExecutiveRetreatForums.com">http://www.ExecutiveRetreatForums.com</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - ***February 4-6, La Quinta Resort, California, ***The
+              Technology<br>
+              Retreat*** &lt;<a href="http://www.hpaonline.com">http://www.hpaonline.com</a>&gt;.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - March 15-19, MPEG meetings, Munich.<br>
+              &nbsp;&nbsp;&nbsp;&nbsp; - *June 5-11, Georgia World Congress Center, Atlanta, InfoComm<br>
+              &lt;<a href="http://infocomm03.expoexchange.com/">http://infocomm03.expoexchange.com/</a>&gt;.<br>
+              <br>
+              * - new or revised listing</small><br>
+              <br>
+              <small>TTFN,<br>
+              Mark<br>
+              <br>
+              PS&nbsp; Permission is granted to forward this or any other Monday Memo.<br>
+              Next week's memo might be a little late.<br>
+              </small><br>
+              <br>
+              <br>
+              <small><strong><a href="#News You Can Use.....">Return To Top</a></strong></small></p>
+              <hr style="border-top: 1px solid rgb(0,0,255); border-bottom: 1px solid rgb(0,0,255)"
+              size="7" color="#800000">
+              <p><br>
+              <br>
+              <font color="#0000A0"><strong><a name="CABLEVISION CALLS IT VOOM">CABLEVISION CALLS IT
+              VOOM</a><br>
+              <br>
+              BY MAVIS SCANLON AND SHIRLEY BRADY<br>
+              </strong></font><br>
+              <small>Cable World, Sep 15, 2003 <br>
+              <br>
+              <br>
+              Cablevision Systems' direct broadcast satellite service, which has been viewed with
+              skepticism on Wall Street and in the cable industry, is about to become a reality &#151;
+              as soon as Oct. 1. Cablevision has formed a partnership with retailing giant Sears to
+              launch the long-anticipated service just as the crucial holiday selling season heats up.<br>
+              <br>
+              The service will be called VOOM, according to a person familiar with Cablevision's plans.
+              On Sept. 5, VOOM.com was registered with Network Solutions by Cablevision. According to an
+              internal Sears memo sent out to managers at the local stores, the details of which were
+              obtained by Cable World, the service will feature 39 HDTV channels, including 21 VOOM
+              exclusives. An initial suggested retail price of $749 covers all hardware, an off-air
+              antenna for local channel HDTV reception, professional installation and a two-year
+              warranty. On Friday, wiring for the service was being installed in the electronics
+              departments at several Sears stores in the New York area, according to two separate Sears
+              &#147;Brand Central&#148; salespeople contacted by Cable World. <a
+              href="http://cableworld.com/microsites/magazinearticle.asp?mode=print&amp;magazinearticleid=182501&amp;releaseid=&amp;srid=11602&amp;magazineid=1&amp;siteid=20">[The
+              rest of the story]</a><br>
+              </small><br>
+              <a href="#News You Can Use....."><strong><small>Return to Index</small></strong></a></p>
+            </blockquote>
+            <hr noshade color="#0000FF"
+            style="border-top: 1px solid rgb(0,0,255); border-bottom: 2px solid rgb(255,0,0)">
+            <p>&nbsp;</p>
+            <p><u><strong>Monday, September 15, 2003</strong></u></p>
+            <p align="center"><img alt="inhd250.jpg (7326 bytes)"
+            src="http://ilovehdtv.com/guideimages/inhd250.jpg"></p>
+            <p><font SIZE="5"><b>&nbsp;</p>
+            <blockquote>
+              <p align="center"><font SIZE="4"><span style="LINE-HEIGHT: normal"><a name="INHD LAUNCHES">INHD
+              LAUNCHES</a> FIRST-EVER MULTI-PROGRAMMING 24/7 HIGH-DEFINITION TELEVISION NETWORKS ON
+              DIGITAL CABLE</span></font></b></font></p>
+            </blockquote>
+            <blockquote>
+              <blockquote>
+                <blockquote>
+                  <i><b><font size="3"><p align="center"></font><font size="2">INHD Bolsters Cable&#146;s
+                  Ample HD Offering Featuring The Most ExtensiveHi-Def Content Including Hollywood Films,
+                  Major League Baseball, College Sports &amp; Concert Events</p>
+                  </font></b></i>
+                </blockquote>
+              </blockquote>
+            </blockquote>
+            <p><b><i><font SIZE="4">&nbsp;</p>
+            <blockquote>
+              <blockquote>
+                <p align="left">Channels To Begin Launching On Comcast, Time Warner, <font size="2"></p>
+                </font>
+              </blockquote>
+              </font>
+            </blockquote>
+            <blockquote>
+              <font size="2"><p align="left">Cox Communications &amp; Brighthouse On September 15, 2003</font><font
+              SIZE="4"></p>
+              </font>
+            </blockquote>
+            <p><font SIZE="4">&nbsp;</p>
+            <blockquote>
+              <p align="justify"><font size="2">NEW YORK, September 15, 2003 &#150; INHD is taking the
+              lead in the high-definition revolution with the launch of two linear, 24/7 HD television
+              networks to Comcast, Time Warner, Cox Communications and Brighthouse digital cable
+              systems. The networks, INHD and INHD2, will feature the most comprehensive and compelling
+              mix of HD programming on television, including commercial-free hit movies, sports,
+              documentaries, family programming, special events, concerts and theatrical movie previews.
+              </font></font></i></b></p>
+            </blockquote>
+            <blockquote>
+              <p align="justify"><small>Recognizing the enormous growth and potential of
+              high-definition, INHD is making a major investment in the category. INHD has already
+              secured a diversified hi-def programming library through partnerships with such
+              high-profile companies as Paramount Pictures, Major League Baseball (MLB), National
+              Basketball Association (NBA), College Sports Television (CSTV), Hallmark Entertainment and
+              the Tennis Channel. During the September launch, <b>INHD </b>and <b>INHD2</b> will deliver
+              an exciting line-up with: box office action hits like <i>Full Metal Jacket </i>and<i>
+              Natural Born Killers</i>; live MLB games during the heightened play-off stretch drive and
+              college football.<i> </i>Additionally, the <b>INHD2</b> channel will enable local cable
+              operators to pre-empt scheduled programming to showcase local profes</small>sional
+              sporting events of interest to their subscribers.</p>
+              <p align="justify"><small>&#147;The launch of these channels on Comcast, Time Warner and
+              Cox shows how committed the cable industry is to embracing the rapid deployment of
+              high-definition to its customers,&#148; states Rob Jacobson, Chief Operating Officer,
+              INHD. &#147;Industry analysts are projecting a boom in the purchase of high-definition
+              televisions this holiday season so we saw a great opportunity to do something
+              groundbreaking with the launch of these channels. We are evolving quickly to meet the
+              changes of the industry and the big winner will be the customer, because we can deliver
+              the best quality and quantity of HD programming on television.&#148; </small></p>
+              <p align="justify"><small>INHD will develop a strategic programming schedule to ensure <b>INHD
+              </b>and <b>INHD2</b> have a distinctive brand presence and programming sensibility &#150;
+              elements that have been non-existent on satellite HD alternatives. The INHD look is clean,
+              sharp and modern. The attitude is not high-tech it&#146;s Hi-Def which is about an
+              enhanced viewing experience. The network identity rewards viewers for the investment
+              they&#146;ve made in the technology with graphics and ID&#146;s that show off the visual
+              and audio &#147;WOW&#148; factor of texture, color, clarity and sound that they get with
+              INHD. </small></p>
+              <u><p align="justify"><strong><small>Movies The Way They Were Meant To Been Seen </small></strong></u></p>
+              <p align="justify"><small>Digital cable subscribers will now have the ability to see hit
+              Hollywood films and exclusive television programming the way they were meant to be seen,
+              in high-definition and commercial free. <b>INHD </b>and <b>INHD2 </b>have great slate of
+              film favorites from Warner Brothers, Paramount Pictures and Artisan Entertainment that
+              will be making their HD premiere including <i>Full Metal Jacket,</i> <i>A Clock Work
+              Orange, The Candidate, Natural Born Killers, The Postman Always Rings Twice</i>, <i>Waiting
+              For Guffman, Drugstore Cowboy, Alice Doesn't Live Here Anymore </i>and<i> The World
+              According To Garp</i>. </small></p>
+              <p align="justify"><small>Exclusive to the networks is <i>Farther Than the Eye Can See</i>,
+              Erik Weihenmayer&#146;s documentary of the world-renowned climb of Mt. Everest in 2001 and
+              episodes of the new <i>Twilight Zone</i> television series. The <b>INHD </b>networks will
+              also showcase the award-winning films from Hallmark Entertainment, the largest producer of
+              television movies and miniseries which have garnered 95 Emmy® Awards, 13 Golden Globes
+              and numerous Peabody, Christopher and Genesis Awards, in a weekly spotlight feature. <i>Return
+              to</i> <i>Lonesome Dove</i>, <i>Mark Twain&#146;s Roughing It, Captains Courageous </i>and
+              <i>A Promise Kept: The Oksana Baiul Story</i> among the popular, high-profile specials to
+              be showcased in <b>INHD&#146;s</b> weekly Hallmark spotlight<i>. </i></small></p>
+              <u><p align="justify"><strong><small>INHD Scores With Sports In HD</small></strong></u></p>
+              <p align="justify"><small>The networks will feature a potent sports line-up for its hi-def
+              launch. <b>INHD </b>and <b>INHD2</b> will present all of the chills and thrills of this
+              year&#146;s suspenseful baseball play-off stretch drive with three high-profile MLB games
+              each week starting in September. Local cable operators will be able to pre-empt <b>INHD2</b>
+              to air local MLB games if they are not scheduled on INHD.</small></p>
+              <p align="justify"><small>College sports fans looking for their live events will get their
+              fill through an exciting amount of content from College Sports Television (CSTV).
+              Beginning in September, <b>INHD </b>and <b>INHD2</b> will present a college football
+              &#147;Game of the Week.&#148; Throughout the year, the networks will also present a broad
+              range of Division I college sporting events such as basketball, hockey. </small></p>
+              <p align="justify"><small>Additionally, content from the Tennis Channel will keep
+              passionate tennis fans in play with high definition world class action. Leading the way
+              will be the high-definition airing of the Fed Cup quarterfinal round, which featured the
+              national women&#146;s teams from the United States vs. Italy.</small></p>
+              <u><p align="justify"><strong><small>Special Events on INHD</small></strong></u></p>
+              <p align="justify"><small>Above and beyond movies, professional and college sports, and
+              general interest programming that maximize the HD experience, <b>INHD </b>and <b>INHD2</b>
+              will also present exciting special events. Working with Nation Mobile Television&#146;s
+              fleet of mobile production trucks, INHD will produce and edit content programming such as
+              sporting events and music concerts in the hi-def format. Upcoming special hi-def events
+              already scheduled to air on the networks include <i>Melissa Etheridge</i> and <i>The
+              Pretenders</i> concerts.</small></p>
+              <u><b><p align="justify"></b><strong><small>INHD Means Quality</u> </small></strong></p>
+              <p align="justify"><small>All content provided on <b>INHD </b>and <b>INHD2</b> will be
+              available in wide screen, high-resolution format with Dolby Digital 5.1 audio when
+              available. While the audio is equivalent to most DVDs, the picture quality is superior. </small></p>
+              <u><p align="justify"><strong><small>HD In High Demand</small></strong></u></p>
+              <p align="justify"><small>The demand for HD programming is on the rise according to a
+              recent CTAM survey, with digital cable subscribers having the highest unaided awareness of
+              HDTV among multi-channel TV consumers at 79%. Ninety-two percent of adults who have seen
+              HDTV or are broadband users have unaided awareness of the technology. HDTV&#146;s picture
+              quality, which is five times sharper than standard definition TV, is cited by 66 % of
+              consumers as the most appealing attribute of HDTV. The price for HDTVs have dropped by 50%
+              since the beginning of 2003 and statistics project another 50% drop by the end of the
+              year.</small></p>
+              <p align="justify"><small>INHD is the new 24-hour HD linear television network owned and
+              operated by iN DEMAND. In addition to MLB, INHD will also feature HD telecasts of college
+              sports &#150; including college football, basketball and hockey -- and professional
+              tennis, as well as movies and other entertainment programming. Further information on INHD
+              can be found at <strong><a href="http://www.INHD.com">www.INHD.com</a>. <a
+              href="#News You Can Use.....">Return to Index</a></strong></small></p>
+            </blockquote>
+            <hr style="border-top: 1px solid rgb(0,0,255); border-bottom: 1px solid rgb(0,0,255)"
+            color="#800000">
+            <blockquote>
+              <p><font color="#0000A0"><strong><a name="DISH Network Expands">DISH Network Expands</a>
+              High-Def Offerings; HD Leader Packages Four Channels, Prepares Rollout of Receivers<br>
+              </strong></font><br>
+              <small>LITTLETON, Colo Sept. 5, 2003--EchoStar Communications Corporation (NASDAQ: DISH)
+              announced today that the company's DISH Network(TM), America's fastest growing satellite
+              subscription television service, will begin offering four channels of high-definition
+              entertainment in a single, low-priced package Sept. 16.<br>
+              <br>
+              Further establishing itself as the leader in high-definition initiatives, DISH Network
+              will offer ESPN HD, Discovery HD Theater, HDNet and HDNet Movies in a new package for
+              $9.99 per month or $109.89 annually, the lowest prices in the industry. DISH Network also
+              offers high-definition channels such as CBS-HD, HBO-HD, Showtime HD, and DISH-On-Demand
+              pay-per-view HD movies.<br>
+              <br>
+              DISH Network's entry-level DISH 811, designed as the first affordable high-definition
+              receiver/decoder, will be available this fall at an MSRP of only $399.<br>
+              <br>
+              DISH Network will further strengthen a high-definition product line that currently
+              includes the popular model 6000 with the release of the DISH Player-DVR 921, available by
+              the end of October. The first-of-its-kind high-definition digital video recorder (DVR)
+              will carry an MSRP of $999. It will feature a 250-gigabyte hard drive capable of recording
+              up to 25 hours of high-definition video or up to 180 hours of standard-definition content,
+              or some combination of both.<br>
+              <br>
+              The state-of-the-art DISH Player-DVR 921 contains all the features of DISH Network's
+              complete line of DVRs, plus a dual tuner that allows the user to record two different
+              shows while viewing a third pre-recorded show. The DISH Player-DVR 921 also includes a
+              picture-in-picture feature on any TV. No other pay TV company offers the innovative
+              combination of HD and DVR features -- including rewind, fast-forward, pause, and 30-second
+              skip-ahead -- as the DISH Player-DVR 921. Winner of the Best of Show in the Innovations
+              Design and Engineering category at the Consumer Electronics Show in Las Vegas, the DISH
+              Player-DVR 921 also offers:<br>
+              <br>
+              -- DISHWire connection for future downloading and storage of content<br>
+              <br>
+              -- Electronic program guide with computerized search function<br>
+              <br>
+              -- Throughput of 480i, 480p, 720p and 1080i resolutions<br>
+              <br>
+              -- Slow motion and frame-by-frame replay<br>
+              <br>
+              -- All DISH Video-On-Demand functionality.<br>
+              <br>
+              With the DISH Player-DVR 921, DISH Network customers will enhance their enjoyment of
+              sports programming on the new ESPN HD and HDNet and the exciting variety of movies and
+              general entertainment on HDNet Movies and Discovery HD Theater.<br>
+              <br>
+              For information on DISH Network and its products or services call 1-800-333-DISH (3474),
+              visit www.dishnetwork.com or contact your local DISH Network retailer.</small></p>
+              <p><a href="#News You Can Use....."><strong><small>Return to Index</small></strong></a></p>
+              <hr style="border-top: 1px solid rgb(0,0,255); border-bottom: 1px solid rgb(0,0,255)"
+              size="7" color="#800000">
+              <p><a name="Dear Readers:">Dear Readers:<br>
+              </a><br>
+              The CEA reports on the sales of &quot;DTV&quot; products. This press release (below) is
+              just in and offers still more evidence of the product category's strength. In an economy
+              that many think is being cored out and grasping for life support HDTV continues up the
+              mountain like an old cog wheel full of eager skiers. I can assure you that ten years ago
+              there were few executives in television in the United States, Japan, or Europe who thought
+              we would be as far along with HDTV as we are today. Still, there are some signs to note
+              with some caution, especially the mild increase reported in the July 2002 to July 2003
+              increase pegged at just 8%.The year-to-year comparison is much stronger but some analysis
+              should be given to the question of why July to July was not stronger. _Dale Cripps<br>
+              <br>
+              <a href="#News You Can Use....."><strong><small>Return to Index</small></strong></a>____________________________________<br>
+              <br>
+              <font color="#0000A0"><strong><big><a name="July Digital Television Sales">July Digital
+              Television Sales</a> Stay Hot<br>
+              <br>
+              Unit Sales Up 56 Percent Year-to-Date<br>
+              </big></strong></font><br>
+              <small>Arlington, Va., September 5, 2003 - Manufacturer-to-dealer sales of digital
+              television (DTV) products during the month of July remained on track for a record year,
+              according to figures released today by the Consumer Electronics Association (CEA). Factory
+              shipments totaled 238,835 units with revenues of nearly $354.8 million for the month.<br>
+              <br>
+              Unit sales for the month of July increased by eight percent compared to the same period in
+              2002, while dollar revenues on DTV product sales remained level.<br>
+              <br>
+              Overall, year-to-date factory sales of DTV products now total 1,677,548 units with dollar
+              revenues of more than $2.5 billion. Compared to sales during the same period in 2002, unit
+              sales have increased 56 percent and dollar sales have increased 34 percent.<br>
+              <br>
+              &quot;This definitely bodes well for year-end estimates,&quot; said Sean Wargo, senior
+              industry analyst for CEA. &quot;We're already ahead of pace compared to the banner year in
+              2002 and are in position to see record-breaking totals for 2003 year-end figures.&quot;<br>
+              <br>
+              CEA recently announced upwardly revised projections for DTV unit sales, which now show
+              that 4.3 million units will be sold in 2003, 5.8 million in 2004, 8.3 million in 2005,
+              11.9 million in 2006 and 16.2 million in 2007.<br>
+              <br>
+              Data cited in this release is available for purchase through CEA's Market Activity Reports
+              and Analysis (MARA) program. Visit www.eBrain.org/mara.<br>
+              <br>
+              <br>
+              HDTV MAGAZINE WWW.ILOVEHDTV.COM<br>
+              <br>
+              Copyright 2003</small></p>
+              <hr>
+            </blockquote>
+            </td>
+          </tr>
+        </table>
+        </center></div></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+</table>
+</div>
+</body>
+</html>
